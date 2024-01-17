@@ -62,7 +62,7 @@
     "eslint-plugin-storybook": "0.6.15",
     "eslint-plugin-unused-imports": "3.0.0",
     "eslint-plugin-vue": "9.20.0",
-    "eslint-plugin-vue-scoped-css": "2.6.1",
+    "eslint-plugin-vue-scoped-css": "2.7.2",
     "husky": "8.0.3",
     "is-ci": "3.0.1",
     "jsdom": "23.2.0",
