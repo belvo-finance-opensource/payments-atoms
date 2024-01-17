@@ -1,0 +1,22 @@
+{
+  "git": {
+    "requireBranch": "main",
+    "commitMessage": "chore: release v${version}",
+    "changelog": "npx auto-changelog --stdout --commit-limit false --unreleased --template https://raw.githubusercontent.com/release-it/release-it/main/templates/changelog-compact.hbs"
+  },
+  "hooks": {
+    "before:init": ["git pull", "npm run lint", "npm run type-check", "npm run test:ci", "npm run build", "git update-index -q --refresh"],
+    "after:bump": "npx auto-changelog -p"
+  },
+  "npm": {
+    "publish": true
+  },
+  "plugins": {
+    "@release-it/conventional-changelog": {
+      "preset": {
+        "name": "angular"
+      },
+      "infile": "CHANGELOG.md"
+    }
+  }
+}

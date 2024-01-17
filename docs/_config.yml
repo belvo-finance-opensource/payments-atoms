@@ -1,0 +1,10 @@
+title: Belvo Payments Atoms
+theme: just-the-docs
+logo: "/assets/images/belvo-logo-developers.svg"
+favicon_ico: "/assets/images/favicon.ico"
+plugins:
+  - jekyll-feed
+callouts:
+  note:
+    title: Note
+    color: purple

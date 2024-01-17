@@ -1,0 +1,78 @@
+.belvo-payments-grid {
+  display: grid;
+  margin: 0;
+  grid-template-columns: var(--belvo-payments-grid-template-columns, 1fr);
+  grid-template-rows: var(--belvo-payments-grid-template-rows, 1fr 1fr 1fr 1fr);
+  padding: var(--belvo-payments-grid-padding, 1rem);
+  border-style: var(--belvo-payments-grid-border-style, solid);
+  border-width: var(--belvo-payments-grid-border-width, 0.0125rem);
+  border-color: var(--belvo-payments-grid-border-color, #e2e2e2);
+  border-radius: var(--belvo-payments-grid-border-radius, 0.25rem);
+  background-color: var(--belvo-payments-grid-background-color, #ffffff);
+  gap: var(--belvo-payments-grid-gap, 1rem);
+
+  &__card {
+    display: flex;
+    align-items: var(--belvo-payments-grid-card-align-items, center);
+    justify-content: var(--belvo-payments-grid-card-justify-content, flex-start);
+    cursor: var(--belvo-payments-grid-card-cursor, pointer);
+    border-style: var(--belvo-payments-grid-card-border-style, solid);
+    border-width: var(--belvo-payments-grid-card-border-width, 0.0125rem);
+    border-color: var(--belvo-payments-grid-card-border-color, #e2e2e2);
+    border-radius: var(--belvo-payments-grid-card-border-radius, 0.25rem);
+    background-color: var(--belvo-payments-grid-card-background-color, #f0f2f4);
+    padding: var(--belvo-payments-grid-card-padding, 0.5rem);
+    transition-duration: var(--belvo-payments-grid-card-transition-duration, 300ms);
+    transition-property: var(
+      --belvo-payments-grid-card-transition-property,
+      border-color,
+      box-shadow
+    );
+    transition-timing-function: var(
+      --belvo-payments-grid-card-transition-timing-function,
+      cubic-bezier(0.4, 0, 0.2, 1)
+    );
+
+    &:hover:not(&--selected) {
+      box-shadow: var(--belvo-payments-grid-card-hover-box-shadow, 0 0 0 6px #9cc1fc);
+      background-color: var(--belvo-payments-grid-card-hover-background-color, #e6effe);
+    }
+
+    &--selected {
+      box-shadow: var(
+        --belvo-payments-grid-card-selected-box-shadow,
+        0 0 0 2px #0663f9,
+        0 0 0 6px #9cc1fc
+      );
+    }
+
+    &:not(&--another-institution) {
+      span {
+        display: var(--belvo-payments-grid-card-institution-text-display, inherit);
+        font-family: var(--belvo-payments-grid-card-institution-text-font-family, inherit);
+        font-size: var(--belvo-payments-grid-card-institution-text-font-size, 1rem);
+        font-weight: var(--belvo-payments-grid-card-institution-text-font-weight, 600);
+        color: var(--belvo-payments-grid-card-institution-text-color, #000000);
+      }
+
+      img {
+        display: var(--belvo-payments-grid-card-institution-image-display, inherit);
+        width: var(--belvo-payments-grid-card-institution-image-width, 2rem);
+        height: var(--belvo-payments-grid-card-institution-image-height, 2rem);
+        margin-right: var(--belvo-payments-grid-card-institution-image-margin-right, 0.25rem);
+      }
+    }
+
+    &--another-institution {
+      justify-content: var(--belvo-payments-grid-card-another-institution-justify-content, center);
+
+      span {
+        display: var(--belvo-payments-grid-card-another-institution-text-display, inherit);
+        font-family: var(--belvo-payments-grid-card-another-institution-text-font-family, inherit);
+        font-size: var(--belvo-payments-grid-card-another-institution-text-font-size, 1rem);
+        font-weight: var(--belvo-payments-grid-card-another-institution-text-font-weight, 600);
+        color: var(--belvo-payments-grid-card-another-institution-text-color, #000000);
+      }
+    }
+  }
+}
