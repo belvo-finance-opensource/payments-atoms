@@ -1,0 +1,36 @@
+{
+  "COL": [
+    {
+      "id": "0b0b9051-d5c6-4d96-9768-b492ac6e4888",
+      "display_name": "Bancolombia",
+      "icon_logo": "https://statics.belvo.io/institutions/icon_logos/bancolombia.svg"
+    },
+    {
+      "id": "2f0c4787-d869-412c-92f7-28b9b3e9367f",
+      "display_name": "Daviplata",
+      "icon_logo": "https://statics.belvo.io/institutions/icon_logos/daviplata_icon.svg"
+    },
+    {
+      "id": "aaa29512-5a13-4763-9878-538a59f162a6",
+      "display_name": "Nequi",
+      "icon_logo": "https://statics.belvo.io/institutions/icon_logos/nequi_icon.svg"
+    }
+  ],
+  "BRA": [
+    {
+      "id": "12b8611a-e66a-413a-b819-deb3dc6c62de",
+      "display_name": "Nubank",
+      "icon_logo": "https://statics.belvo.io/institutions/icon_logos/nubank_icon.svg"
+    },
+    {
+      "id": "1701f9d9-e8b3-4c88-ad2f-7fb4d32867d4",
+      "display_name": "Caixa",
+      "icon_logo": "https://statics.belvo.io/institutions/icon_logos/caixa.svg"
+    },
+    {
+      "id": "7def383a-f956-4010-b934-a8bfe0ac7dbf",
+      "display_name": "Banco do Brasil",
+      "icon_logo": "https://statics.belvo.io/institutions/icon_logos/bancodobrasil.svg"
+    }
+  ]
+}

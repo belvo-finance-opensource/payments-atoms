@@ -1,0 +1,34 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "sunday"
+    rebase-strategy: "disabled"
+    reviewers:
+      - "belvo-finance/frontend"
+    commit-message:
+      prefix: "[Changed]: "
+    versioning-strategy: increase
+    open-pull-requests-limit: 100
+    groups:
+      storybook:
+        patterns:
+        - "@storybook*"
+        update-types:
+        - "minor"
+        - "patch"
+      vue:
+        patterns:
+        - "@vue*"
+        update-types:
+        - "minor"
+        - "patch"
+      types:
+        patterns:
+        - "@types*"
+        update-types:
+        - "minor"
+        - "patch"
+
