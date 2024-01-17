@@ -1,0 +1,6 @@
+# The PR title should include the correct label
+if !github.pr_title.match(/\[Snyk\]/) &&
+	!github.pr_labels.include?("dependencies") &&
+	!github.pr_title.match(/^(?:build|chore|ci|docs|feat|fix|perf|refactor)/)
+	raise "Please provide a valid PR title label: build/chore/ci/docs/feat/fix/perf/refactor."
+end
