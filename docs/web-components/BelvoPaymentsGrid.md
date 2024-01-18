@@ -27,7 +27,7 @@ permalink: /web-components/belvo-payments-grid/
 ```
 
 {: .note }
-> You can also play around with `BelvoPaymentsGrid` on Storybook, which can be accessed [here](https://belvo-finance.github.io/belvo-payments-atoms/storybook/?path=/story/components-belvopaymentsgrid--default).
+> You can also play around with `BelvoPaymentsGrid` on Storybook, which can be accessed [here](https://belvo-finance-opensource.github.io/payments-atoms/storybook/?path=/story/components-belvopaymentsgrid--default).
 
 ## Attributes
 

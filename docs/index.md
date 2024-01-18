@@ -12,7 +12,7 @@ Belvo Payments Atoms is a library that provides a set of native web components t
 {: .fs-6 .fw-300 }
 
 [Get started now](#getting-started){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
-[View it on GitHub][Belvo Payments Atoms Repository]{: .btn .fs-5 .mb-4 .mb-md-0 }
+[View it on GitHub][Repository]{: .btn .fs-5 .mb-4 .mb-md-0 }
 
 ---
 
@@ -50,14 +50,14 @@ Once initialized, simply add the desired web component wherever you wish in your
 
 ### License
 
-Belvo Payments Atoms is distributed by an [MIT license](https://github.com/belvo-finance/belvo-payments-atoms/blob/main/LICENSE).
+Belvo Payments Atoms is distributed by an [MIT license](https://github.com/belvo-finance-opensource/payments-atoms/blob/main/LICENSE).
 
 ### Contributing
 
-If you wish to contribute to this repository, you can read more about how to do so in [our GitHub repository](https://github.com/belvo-finance/belvo-payments-atoms?tab=readme-ov-file#busts_in_silhouette-contributing).
+If you wish to contribute to this repository, you can read more about how to do so in [our GitHub repository](https://github.com/belvo-finance-opensource/payments-atoms?tab=readme-ov-file#busts_in_silhouette-contributing).
 
 ### Code of Conduct
 
-[Check out our Code of Conduct](https://github.com/belvo-finance/belvo-payments-atoms/blob/main/CODE_OF_CONDUCT) in our GitHub repository.
+[Check out our Code of Conduct](https://github.com/belvo-finance-opensource/payments-atoms/blob/main/CODE_OF_CONDUCT) in our GitHub repository.
 
-[Belvo Payments Atoms Repository]: https://github.com/belvo-finance/belvo-payments-atoms
+[Repository]: https://github.com/belvo-finance-opensource/payments-atoms

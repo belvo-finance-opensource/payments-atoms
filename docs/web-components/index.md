@@ -15,4 +15,4 @@ In order to have a library compatible with the whole JavaScript ecossystem, we p
 ---
 
 {: .note }
-> Web Components are registered in the DOM once Belvo Payments Atoms is initialized, which means that they will be ready to use all across your web application. You can also play around with Belvo Payments Atoms Web Components on Storybook, which can be accessed [here](https://belvo-finance.github.io/belvo-payments-atoms/storybook/).
+> Web Components are registered in the DOM once Belvo Payments Atoms is initialized, which means that they will be ready to use all across your web application. You can also play around with Belvo Payments Atoms Web Components on Storybook, which can be accessed [here](https://belvo-finance-opensource.github.io/payments-atoms/storybook/).
