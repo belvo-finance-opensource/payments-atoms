@@ -29,8 +29,6 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Release
         run: |
-          git config --global user.name "evandroguedes-belvo"
-          git config --global user.email "evandro.guedes@belvo.com"
           npm run release --ci
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
