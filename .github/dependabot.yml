@@ -7,7 +7,7 @@ updates:
       day: "sunday"
     rebase-strategy: "disabled"
     reviewers:
-      - "belvo-finance/frontend"
+      - "belvo-finance-opensource/frontend"
     commit-message:
       prefix: "[Changed]: "
     versioning-strategy: increase
