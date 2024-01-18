@@ -1,10 +1,11 @@
 # belvo-payments-atoms
+
 ![Release](https://github.com/belvo-finance-opensource/payments-atoms/actions/workflows/release.yml/badge.svg)
 ![CodeQL](https://github.com/belvo-finance-opensource/payments-atoms/actions/workflows/codeql.yml/badge.svg)
 
 > Library of native web components that aims to facilitate integrating with Belvo's Payments Widget.
 
-Visit [Belvo Payments Atoms Docs](https://belvo-finance.github.io/belvo-payments-atoms/docs/) for more detailed instructions.
+Visit [Belvo Payments Atoms Docs](https://belvo-finance-opensource.github.io/payments-atoms/docs/) for more detailed instructions.
 
 ## 🚀 Getting started
 
@@ -58,16 +59,16 @@ If you wish to submit a pull request, please be sure check the items on this lis
 
 ### Setting up the project
 
-1. Clone the belvo-payments-atoms repo:
+1. Fork the repository and clone it.
+2. Install the dependencies on the repository:
+
+    ```bash
+    npm install
+    ```
+
+3. Start storybook:
 
    ```bash
-   git clone git@github.com:belvo-finance/belvo-payments-atoms.git
-   ```
-
-2. Starting storybook:
-
-   ```bash
-   npm install
    npm run storybook
    ```
 
