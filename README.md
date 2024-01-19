@@ -1,4 +1,4 @@
-# belvo-payments-atoms
+# Belvo Payments Atoms
 
 <p>
   <img src="https://github.com/belvo-finance-opensource/payments-atoms/actions/workflows/release.yml/badge.svg" alt="Release">
@@ -14,15 +14,15 @@ Visit [Belvo Payments Atoms Docs](https://belvo-finance-opensource.github.io/pay
 ### Installation
 
 ```bash
-npm install belvo-payments-atoms
+npm install @belvo/payments-atoms
 ```
 
 ### Initialization
 
-Add a default import from `belvo-payments-atoms` and call its `init` function with a callback so you're able to retrieve the selected payer institution. For example:
+Add a default import from `@belvo/payments-atoms` and call its `init` function with a callback so you're able to retrieve the selected payer institution. For example:
 
 ```js
-import BelvoPaymentsAtoms from 'belvo-payments-atoms'
+import BelvoPaymentsAtoms from '@belvo/payments-atoms'
 
 BelvoPaymentsAtoms.init({
   bankShortcuts: {
@@ -46,7 +46,7 @@ Once initialized, simply add the desired web component wherever you wish in your
 Belvo Payments Atoms has TypeScript support and provides a set of types that you can import into your project. We export them by default and you are able to import them as named imports like:
 
 ```typescript
-import type { Callback, Country, Institution } from 'belvo-payments-atoms'
+import type { Callback, Country, Institution } from '@belvo/payments-atoms'
 ```
 
 ## :busts_in_silhouette: Contributing
