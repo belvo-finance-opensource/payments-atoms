@@ -8,7 +8,7 @@
 
 > Library of native web components that aims to facilitate integrating with Belvo's Payments Widget.
 
-Visit [our documentation](https://belvo-finance-opensource.github.io/payments-atoms/docs/) for more detailed instructions or [Storybook](https://belvo-finance-opensource.github.io/payments-atoms/storybook/) if you want to play around with the web components.
+Visit the [documentation](https://belvo-finance-opensource.github.io/payments-atoms/docs/) for more detailed instructions or [Storybook](https://belvo-finance-opensource.github.io/payments-atoms/storybook/) if you want to play around with the web components.
 
 ## 🚀 Getting started
 
