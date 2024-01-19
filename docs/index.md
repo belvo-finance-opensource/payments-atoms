@@ -21,15 +21,15 @@ Belvo Payments Atoms is a library that provides a set of native web components t
 ### Installation
 
 ```bash
-npm install belvo-payments-atoms
+npm install @belvo/payments-atoms
 ```
 
 ### Initialization
 
-Add a default import from `belvo-payments-atoms` and call its `init` function with a callback so you're able to retrieve the selected payer institution. For example:
+Add a default import from `@belvo/payments-atoms` and call its `init` function with a callback so you're able to retrieve the selected payer institution. For example:
 
 ```js
-import BelvoPaymentsAtoms from 'belvo-payments-atoms'
+import BelvoPaymentsAtoms from '@belvo/payments-atoms'
 
 BelvoPaymentsAtoms.init({
   bankShortcuts: {
