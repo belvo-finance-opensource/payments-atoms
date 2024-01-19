@@ -15,10 +15,10 @@ Belvo Payments Atoms has TypeScript support and provides a set of types that you
 
 ## Usage Example
 
-Simply import the types you need from `belvo-payments-atoms`. For example:
+Simply import the types you need from `@belvo/payments-atoms`. For example:
 
 ```typescript
-import type { Callback, Country, Institution } from 'belvo-payments-atoms'
+import type { Callback, Country, Institution } from '@belvo/payments-atoms'
 ```
 
 ## Type Declarations

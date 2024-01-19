@@ -1,26 +1,29 @@
-# belvo-payments-atoms
+# Belvo Payments Atoms
 
-![Release](https://github.com/belvo-finance-opensource/payments-atoms/actions/workflows/release.yml/badge.svg)
-![CodeQL](https://github.com/belvo-finance-opensource/payments-atoms/actions/workflows/codeql.yml/badge.svg)
+<p>
+  <a href="https://www.npmjs.com/package/@belvo/payments-atoms"><img src="https://img.shields.io/npm/v/@belvo/payments-atoms.svg" alt="NPM Version"></a>
+  <img src="https://github.com/belvo-finance-opensource/payments-atoms/actions/workflows/release.yml/badge.svg" alt="Release">
+  <img src="https://github.com/belvo-finance-opensource/payments-atoms/actions/workflows/codeql.yml/badge.svg" alt="CodeQL">
+</p>
 
 > Library of native web components that aims to facilitate integrating with Belvo's Payments Widget.
 
-Visit [Belvo Payments Atoms Docs](https://belvo-finance-opensource.github.io/payments-atoms/docs/) for more detailed instructions.
+Visit the [documentation](https://belvo-finance-opensource.github.io/payments-atoms/docs/) for more detailed instructions or [Storybook](https://belvo-finance-opensource.github.io/payments-atoms/storybook/) if you want to play around with the web components.
 
 ## 🚀 Getting started
 
 ### Installation
 
 ```bash
-npm install belvo-payments-atoms
+npm install @belvo/payments-atoms
 ```
 
 ### Initialization
 
-Add a default import from `belvo-payments-atoms` and call its `init` function with a callback so you're able to retrieve the selected payer institution. For example:
+Add a default import from `@belvo/payments-atoms` and call its `init` function with a callback so you're able to retrieve the selected payer institution. For example:
 
 ```js
-import BelvoPaymentsAtoms from 'belvo-payments-atoms'
+import BelvoPaymentsAtoms from '@belvo/payments-atoms'
 
 BelvoPaymentsAtoms.init({
   bankShortcuts: {
@@ -44,7 +47,7 @@ Once initialized, simply add the desired web component wherever you wish in your
 Belvo Payments Atoms has TypeScript support and provides a set of types that you can import into your project. We export them by default and you are able to import them as named imports like:
 
 ```typescript
-import type { Callback, Country, Institution } from 'belvo-payments-atoms'
+import type { Callback, Country, Institution } from '@belvo/payments-atoms'
 ```
 
 ## :busts_in_silhouette: Contributing

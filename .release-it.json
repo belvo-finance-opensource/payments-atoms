@@ -1,22 +1,29 @@
 {
   "git": {
+    "requireCleanWorkingDir": false,
     "requireBranch": "main",
-    "commitMessage": "chore: release v${version}",
+    "commit": false,
+    "requireCommits": false,
+    "tag": true,
+    "push": true,
     "changelog": "npx auto-changelog --stdout --commit-limit false --unreleased --template https://raw.githubusercontent.com/release-it/release-it/main/templates/changelog-compact.hbs"
   },
   "hooks": {
-    "before:init": ["npm run lint", "npm run type-check", "npm run test:ci", "git status"],
-    "after:bump": ["git status", "npm run build", "git status", "git update-index -q --refresh", "npx auto-changelog -p"]
+    "before:init": ["npm run lint", "npm run type-check", "npm run test:ci", "npm run build"],
+    "after:bump": "npx auto-changelog -p"
   },
   "npm": {
-    "publish": true
+    "publish": true,
+    "ignoreVersion": true
+  },
+  "github": {
+    "release": true
   },
   "plugins": {
     "@release-it/conventional-changelog": {
       "preset": {
         "name": "angular"
-      },
-      "infile": "CHANGELOG.md"
+      }
     }
   }
 }
