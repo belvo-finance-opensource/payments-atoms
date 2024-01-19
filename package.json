@@ -1,6 +1,6 @@
 {
   "name": "@belvo/belvo-payments-atoms",
-  "version": "",
+  "version": "0.0.8",
   "private": false,
   "type": "module",
   "publishConfig": {
