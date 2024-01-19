@@ -1,9 +1,10 @@
 {
   "name": "@belvo/payments-atoms",
   "description": "Library of native web components that aims to facilitate integrating with Belvo's Payments Widget.",
+  "homepage": "https://belvo-finance-opensource.github.io/payments-atoms/docs/",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/belvo-finance-opensource/payments-atoms.git"
+    "url": "git+https://github.com/belvo-finance-opensource/payments-atoms.git/"
   },
   "license": "MIT",
   "version": "1.0.0",

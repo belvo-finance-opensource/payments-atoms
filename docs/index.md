@@ -11,8 +11,8 @@ permalink: /
 Belvo Payments Atoms is a library that provides a set of native web components that aims to facilitate integrating with Belvo's Payments Widget.
 {: .fs-6 .fw-300 }
 
-[Get started now](#getting-started){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
-[View it on GitHub][Repository]{: .btn .fs-5 .mb-4 .mb-md-0 }
+[Storybook](https://belvo-finance-opensource.github.io/payments-atoms/storybook/){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
+[View it on GitHub](https://github.com/belvo-finance-opensource/payments-atoms){: .btn .fs-5 .mb-4 .mb-md-0 }
 
 ---
 
