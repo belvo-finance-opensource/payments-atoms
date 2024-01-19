@@ -33,6 +33,6 @@ jobs:
           git config --global user.email "gustavo.mancuzo@belvo.com"
           npm run release
         env:
-          GITHUB_TOKEN: ${{ secrets.CI_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: End message
         run: echo "All done!"
