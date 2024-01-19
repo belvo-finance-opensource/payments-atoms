@@ -9,5 +9,8 @@
   "npm": {
     "publish": true,
     "ignoreVersion": true
+  },
+  "github": {
+    "release": true
   }
 }
