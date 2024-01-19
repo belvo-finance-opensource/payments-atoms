@@ -21,8 +21,7 @@
     "@release-it/conventional-changelog": {
       "preset": {
         "name": "angular"
-      },
-      "infile": false
+      }
     }
   }
 }
