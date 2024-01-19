@@ -1,7 +1,9 @@
 # belvo-payments-atoms
 
-![Release](https://github.com/belvo-finance-opensource/payments-atoms/actions/workflows/release.yml/badge.svg)
-![CodeQL](https://github.com/belvo-finance-opensource/payments-atoms/actions/workflows/codeql.yml/badge.svg)
+<p>
+  <img src="https://github.com/belvo-finance-opensource/payments-atoms/actions/workflows/release.yml/badge.svg" alt="Release">
+  <img src="https://github.com/belvo-finance-opensource/payments-atoms/actions/workflows/codeql.yml/badge.svg" alt="CodeQL">
+</p>
 
 > Library of native web components that aims to facilitate integrating with Belvo's Payments Widget.
 
