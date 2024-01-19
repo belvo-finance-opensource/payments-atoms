@@ -1,6 +1,7 @@
 # Belvo Payments Atoms
 
 <p>
+  <a href="https://www.npmjs.com/package/@belvo/payments-atoms"><img src="https://img.shields.io/npm/v/@belvo/payments-atoms.svg" alt="NPM Version"></a>
   <img src="https://github.com/belvo-finance-opensource/payments-atoms/actions/workflows/release.yml/badge.svg" alt="Release">
   <img src="https://github.com/belvo-finance-opensource/payments-atoms/actions/workflows/codeql.yml/badge.svg" alt="CodeQL">
 </p>
