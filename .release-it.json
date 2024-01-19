@@ -12,7 +12,7 @@
   },
   "npm": {
     "publish": true,
-    "ignoreVersion": false
+    "ignoreVersion": true
   },
   "github": {
     "release": true
