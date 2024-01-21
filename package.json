@@ -86,7 +86,7 @@
     "release-it": "17.0.1",
     "sass": "1.69.7",
     "sass-loader": "13.3.3",
-    "storybook": "7.6.7",
+    "storybook": "7.6.10",
     "typescript": "5.3.3",
     "uuid": "9.0.1",
     "vite": "5.0.11",
