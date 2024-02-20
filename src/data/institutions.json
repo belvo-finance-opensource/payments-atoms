@@ -23,6 +23,11 @@
       "icon_logo": "https://statics.belvo.io/institutions/icon_logos/nubank_icon.svg"
     },
     {
+      "id": "ecdae9f4-4b40-49a6-97b9-05312b4b2759",
+      "display_name": "Santander",
+      "icon_logo": "https://statics.belvo.io/institutions/icon_logos/santander.svg"
+    },
+    {
       "id": "1701f9d9-e8b3-4c88-ad2f-7fb4d32867d4",
       "display_name": "Caixa",
       "icon_logo": "https://statics.belvo.io/institutions/icon_logos/caixa.svg"
@@ -31,6 +36,11 @@
       "id": "7def383a-f956-4010-b934-a8bfe0ac7dbf",
       "display_name": "Banco do Brasil",
       "icon_logo": "https://statics.belvo.io/institutions/icon_logos/bancodobrasil.svg"
+    },
+    {
+      "id": "40f23107-b5c3-4c0a-8d78-6542a6d57640",
+      "display_name": "Bradesco",
+      "icon_logo": "https://statics.belvo.io/institutions/icon_logos/bradesco.svg"
     }
   ]
 }
