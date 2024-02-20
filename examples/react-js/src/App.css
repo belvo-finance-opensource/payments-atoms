@@ -1,5 +1,5 @@
 :root {
-  /* --belvo-payments-grid-card-hover-box-shadow: 0 0 0 4px #a1a3f6;
+  --belvo-payments-grid-card-hover-box-shadow: 0 0 0 4px #a1a3f6;
   --belvo-payments-grid-card-selected-box-shadow: 0 0 0 1px #a1a3f6, 0 0 0 4px #6366f1;
   --belvo-payments-grid-card-background-color: #f3f4f6;
   --belvo-payments-grid-card-hover-background-color: #efeffd;
@@ -10,5 +10,5 @@
   --belvo-payments-grid-card-justify-content: center;
   --belvo-payments-grid-card-institution-text-display: none;
   --belvo-payments-grid-card-image-margin-right: 0;
-  --belvo-payments-grid-card-other-text-font-size: 0.875rem; */
+  --belvo-payments-grid-card-other-text-font-size: 0.875rem;
 }

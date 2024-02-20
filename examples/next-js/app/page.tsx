@@ -1,3 +1,4 @@
+'use client' // This is a client component
 import BelvoPaymentsAtoms from '@belvo/payments-atoms'
 import { useEffect, useState } from 'react'
 
