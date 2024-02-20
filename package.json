@@ -7,7 +7,7 @@
     "url": "git+https://github.com/belvo-finance-opensource/payments-atoms.git/"
   },
   "license": "MIT",
-  "version": "1.0.0",
+  "version": "0.0.29",
   "private": false,
   "type": "module",
   "publishConfig": {
