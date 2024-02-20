@@ -45,7 +45,9 @@ describe('BelvoPaymentsGrid', () => {
     expect(institutionsListItems[0].text()).toBe(institutions['BRA'][0].display_name)
     expect(institutionsListItems[1].text()).toBe(institutions['BRA'][1].display_name)
     expect(institutionsListItems[2].text()).toBe(institutions['BRA'][2].display_name)
-    expect(institutionsListItems[3].text()).toBe('Another institution')
+    expect(institutionsListItems[3].text()).toBe(institutions['BRA'][3].display_name)
+    expect(institutionsListItems[4].text()).toBe(institutions['BRA'][4].display_name)
+    expect(institutionsListItems[5].text()).toBe('Another institution')
   })
 
   it('should render component correctly with anotherInstitutionText prop', () => {

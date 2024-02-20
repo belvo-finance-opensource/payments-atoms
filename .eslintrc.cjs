@@ -14,6 +14,7 @@ module.exports = {
     '@vue/eslint-config-prettier',
     'plugin:storybook/recommended'
   ],
+  ignorePatterns: ['examples/**/*'],
   rules: {
     'vue/no-unused-properties': [
       'warn',

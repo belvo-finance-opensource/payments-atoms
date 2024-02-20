@@ -12,14 +12,13 @@
   },
   "npm": {
     "publish": true,
-    "ignoreVersion": false
+    "ignoreVersion": true
   },
   "github": {
     "release": true
   },
   "plugins": {
     "@release-it/conventional-changelog": {
-      "ignoreRecommendedBump": true,
       "preset": {
         "name": "conventionalcommits",
         "types": [
