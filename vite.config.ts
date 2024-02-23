@@ -51,7 +51,8 @@ export default defineConfig({
         '**/*.stories.*',
         '.storybook/**',
         'src/types/**',
-        'src/components/index.ts'
+        'src/components/index.ts',
+        'examples/**'
       ]
     }
   },
