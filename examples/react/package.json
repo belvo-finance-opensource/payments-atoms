@@ -1,17 +1,17 @@
 {
-  "name": "my-second-react-app",
+  "name": "react",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@belvo/payments-atoms": "*",
-    "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-hot-toast": "^2.4.1",
+    "@belvo/payments-atoms": "0.0.36",
+    "@testing-library/jest-dom": "6.4.2",
+    "@testing-library/react": "14.2.1",
+    "@testing-library/user-event": "14.5.2",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-hot-toast": "2.4.1",
     "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "3.5.2"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -32,7 +32,7 @@
     ]
   },
   "devDependencies": {
-    "tailwindcss": "^3.3.5",
-    "@babel/plugin-proposal-private-property-in-object": "7.21.11"
+    "@babel/plugin-proposal-private-property-in-object": "7.21.11",
+    "tailwindcss": "3.4.1"
   }
 }
