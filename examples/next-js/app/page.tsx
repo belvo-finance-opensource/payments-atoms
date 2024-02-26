@@ -64,7 +64,7 @@ export default function Home() {
                 </div>
                 <form className="space-y-3">
                   {/* Belvo Payments Atoms */}
-                  <belvo-payments-grid country="BRA" another-institution-text="Outra instituição" />
+                  <belvo-payments-grid country="BRA" another-institution-text="Another bank" />
                   <button
                     disabled={isButtonDisabled}
                     onClick={handleFetch}
