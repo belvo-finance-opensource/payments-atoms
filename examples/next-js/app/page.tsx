@@ -1,9 +1,11 @@
 'use client' // This is a client component
-import BelvoPaymentsAtoms from '@belvo/payments-atoms'
+import BelvoPaymentsAtoms, { Institution } from '@belvo/payments-atoms'
 import { useEffect, useState } from 'react'
 
 export default function Home() {
-  const [payerInstitutionID, setPayerInstitutionID] = useState(null)
+  type PayerInstitutionID = Institution['id'] | '' | null
+
+  const [payerInstitutionID, setPayerInstitutionID] = useState<PayerInstitutionID>(null)
   const [isLoading, setIsLoading] = useState(false)
 
   const isButtonDisabled = payerInstitutionID === null || isLoading

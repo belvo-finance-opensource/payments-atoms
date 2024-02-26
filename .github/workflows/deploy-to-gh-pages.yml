@@ -38,11 +38,19 @@ jobs:
         run: npm ci
       - name: Build Storybook
         run: npm run build-storybook
-      - name: Move storybook-static and docs/_site to gh-pages folder
+      - name: Build Next.js example
+        run: npm run build
+        working-directory: ./examples/next-js
+      - name: Build React example
+        run: npm run build
+        working-directory: ./examples/react
+      - name: Move static pages to gh-pages folder
         run: |
           mkdir gh-pages
           mv docs/_site gh-pages/docs
           mv storybook-static gh-pages/storybook
+          mv examples/next-js/out gh-pages/next-js
+          mv examples/react/build gh-pages/react
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
