@@ -1,4 +1,4 @@
-name: Deploy Docs and Storybook to GitHub Pages
+name: Deploy Docs, Storybook and Examples to GitHub Pages
 
 on:
   push:
@@ -34,15 +34,12 @@ jobs:
         env:
           JEKYLL_ENV: production
         working-directory: ./docs
-      - name: Install NPM dependencies
-        run: npm ci
-      - name: Build Storybook
-        run: npm run build-storybook
+        run: npm ci && npm run build-storybook
       - name: Build Next.js example
-        run: npm run build
+        run: npm ci && npm run build
         working-directory: ./examples/next-js
       - name: Build React example
-        run: npm run build
+        run: npm ci && npm run build
         working-directory: ./examples/react
       - name: Move static pages to gh-pages folder
         run: |
