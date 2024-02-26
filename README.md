@@ -10,6 +10,18 @@
 
 Visit the [documentation](https://belvo-finance-opensource.github.io/payments-atoms/docs/) for more detailed instructions or [Storybook](https://belvo-finance-opensource.github.io/payments-atoms/storybook/) if you want to play around with the web components.
 
+## 📙 Examples
+
+### React
+
+* [Code](https://github.com/belvo-finance-opensource/payments-atoms/tree/main/examples/react)
+* [Live](https://belvo-finance-opensource.github.io/payments-atoms/react/)
+
+### Next.js
+
+* [Code](https://github.com/belvo-finance-opensource/payments-atoms/tree/main/examples/next-js)
+* [Live](https://belvo-finance-opensource.github.io/payments-atoms/next-js/)
+
 ## 🚀 Getting started
 
 ### Installation
