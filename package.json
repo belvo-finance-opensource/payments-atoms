@@ -17,14 +17,14 @@
     "dist"
   ],
   "main": "./dist/belvo-payments-atoms.umd.js",
-  "module": "./dist/belvo-payments-atoms.es.js",
+  "module": "./dist/belvo-payments-atoms.js",
   "exports": {
     ".": {
-      "import": "./dist/belvo-payments-atoms.es.js",
+      "import": "./dist/belvo-payments-atoms.js",
       "require": "./dist/belvo-payments-atoms.umd.js"
     }
   },
-  "types": "./dist/main.d.ts",
+  "types": "./dist/belvo-payments-atoms.d.ts",
   "scripts": {
     "build-only": "vite build",
     "build": "run-p type-check \"build-only {@}\" --",

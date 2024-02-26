@@ -19,7 +19,7 @@ export default defineConfig({
       entry: 'src/components/main.ts',
       name: 'BelvoPaymentsAtoms',
       formats: ['es', 'cjs', 'umd'],
-      fileName: (format) => `belvo-payments-atoms.${format}.js`
+      fileName: 'belvo-payments-atoms'
     },
     rollupOptions: {
       input: {
