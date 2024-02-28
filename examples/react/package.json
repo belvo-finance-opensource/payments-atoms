@@ -1,7 +1,7 @@
 {
   "name": "react",
   "version": "0.1.0",
-  "homepage": "https://belvo-finance-opensource.github.io/payments-atoms/react",
+  "homepage": "https://belvo-finance-opensource.github.io/payments-atoms/examples/react",
   "private": true,
   "dependencies": {
     "@belvo/payments-atoms": "0.0.39",
