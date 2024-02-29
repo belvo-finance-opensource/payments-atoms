@@ -15,12 +15,12 @@ Visit the [documentation](https://belvo-finance-opensource.github.io/payments-at
 ### React
 
 * [Code](https://github.com/belvo-finance-opensource/payments-atoms/tree/main/examples/react)
-* [Live](https://belvo-finance-opensource.github.io/payments-atoms/react/)
+* [Live](https://belvo-finance-opensource.github.io/payments-atoms/examples/react/)
 
 ### Next.js
 
 * [Code](https://github.com/belvo-finance-opensource/payments-atoms/tree/main/examples/next-js)
-* [Live](https://belvo-finance-opensource.github.io/payments-atoms/next-js/)
+* [Live](https://belvo-finance-opensource.github.io/payments-atoms/examples/next-js/)
 
 ## 🚀 Getting started
 

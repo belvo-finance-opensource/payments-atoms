@@ -44,11 +44,11 @@ jobs:
         working-directory: ./examples/react
       - name: Move static pages to gh-pages folder
         run: |
-          mkdir gh-pages
+          mkdir gh-pages && mkdir gh-pages/examples
           mv docs/_site gh-pages/docs
           mv storybook-static gh-pages/storybook
-          mv examples/next-js/out gh-pages/next-js
-          mv examples/react/build gh-pages/react
+          mv examples/next-js/out gh-pages/examples/next-js
+          mv examples/react/build gh-pages/examples/react
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

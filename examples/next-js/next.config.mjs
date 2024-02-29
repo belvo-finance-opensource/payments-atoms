@@ -2,7 +2,7 @@
 const nextConfig = {
   output: 'export',
   reactStrictMode: true,
-  basePath: "/payments-atoms/next-js"
+  basePath: "/payments-atoms/examples/next-js"
 }
 
 export default nextConfig
