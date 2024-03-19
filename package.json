@@ -50,7 +50,7 @@
     "@storybook/addon-essentials": "8.00",
     "@storybook/addon-interactions": "8.00",
     "@storybook/addon-links": "8.00",
-    "@storybook/blocks": "8.00",
+    "@storybook/blocks": "8.0",
     "@storybook/test": "8.00",
     "@storybook/vue3": "8.00",
     "@storybook/vue3-vite": "8.00",
