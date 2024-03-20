@@ -4,6 +4,7 @@
   <a href="https://www.npmjs.com/package/@belvo/payments-atoms"><img src="https://img.shields.io/npm/v/@belvo/payments-atoms.svg" alt="NPM Version"></a>
   <img src="https://github.com/belvo-finance-opensource/payments-atoms/actions/workflows/release.yml/badge.svg" alt="Release">
   <img src="https://github.com/belvo-finance-opensource/payments-atoms/actions/workflows/codeql.yml/badge.svg" alt="CodeQL">
+  <img src="https://github.com/belvo-finance-opensource/payments-atoms/actions/workflows/deploy-to-gh-pages.yml/badge.svg" alt="Deploy Docs, Storybook and Examples to GitHub Pages">
 </p>
 
 > Library of native web components that aims to facilitate integrating with Belvo's Payments Widget.
