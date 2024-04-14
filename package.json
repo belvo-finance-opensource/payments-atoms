@@ -85,7 +85,7 @@
     "react-dom": "18.2.0",
     "release-it": "17.1.1",
     "sass": "1.72.0",
-    "sass-loader": "14.1.1",
+    "sass-loader": "14.2.0",
     "storybook": "8.0.5",
     "typescript": "5.4.3",
     "uuid": "9.0.1",
