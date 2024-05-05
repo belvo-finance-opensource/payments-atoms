@@ -41,7 +41,7 @@
     "release": "release-it --verbose --ci"
   },
   "dependencies": {
-    "vue": "3.4.21"
+    "vue": "3.4.26"
   },
   "devDependencies": {
     "@commitlint/cli": "19.2.1",
