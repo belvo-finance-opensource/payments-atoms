@@ -64,7 +64,7 @@
     "@vue/eslint-config-typescript": "13.0.0",
     "@vue/test-utils": "2.4.5",
     "@vue/tsconfig": "0.5.1",
-    "auto-changelog": "2.4.0",
+    "auto-changelog": "2.5.0",
     "autoprefixer": "10.4.19",
     "commitlint-plugin-function-rules": "4.0.0",
     "eslint": "8.57.0",
