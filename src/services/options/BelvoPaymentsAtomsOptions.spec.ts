@@ -19,12 +19,12 @@ describe('BelvoPaymentsAtomsOptions', () => {
   it('should always return the same instance', () => {
     const options = {
       bankShortcuts: {
-        callback: () => {}
+        callback: vi.fn()
       }
     }
     const newOptions = {
       bankShortcuts: {
-        callback: () => {}
+        callback: vi.fn()
       }
     }
     const instance = BelvoPaymentsAtomsOptions.getInstance(options)
@@ -37,7 +37,7 @@ describe('BelvoPaymentsAtomsOptions', () => {
   it('should reset the instance', () => {
     const options = {
       bankShortcuts: {
-        callback: () => {}
+        callback: vi.fn()
       }
     }
     const instance = BelvoPaymentsAtomsOptions.getInstance(options)
