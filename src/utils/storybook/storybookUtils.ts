@@ -24,6 +24,6 @@ export const setArgTypesCategory = (args: Args, category: ArgTypesCategory) =>
 export const getArgsByCategory = (args: Args, argTypes: ArgTypes, category: ArgTypesCategory) =>
   Object.fromEntries(
     Object.entries(args).filter(([key]) => {
-      return argTypes[key]?.table.category === category
+      return argTypes[key]?.table?.category === category
     })
   )
