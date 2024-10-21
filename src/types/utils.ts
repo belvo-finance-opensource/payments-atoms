@@ -2,7 +2,7 @@ import { AllowedComponentProps, Component, VNodeProps } from 'vue'
 
 export type UUID = `${string}-${string}-${string}-${string}-${string}`
 
-export type ComponentProps<C extends Component> = C extends new (...args: any) => any
+export type ComponentProps<C extends Component> = C extends new (...args: unknown[]) => unknown
   ? Omit<InstanceType<C>['$props'], keyof VNodeProps | keyof AllowedComponentProps>
   : never
 
