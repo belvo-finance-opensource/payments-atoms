@@ -1,6 +1,6 @@
 import { defineCustomElement, type DefineComponent } from 'vue'
 
-export type Component = DefineComponent<{}, {}, any>
+export type Component = DefineComponent<{}, {}, any> // eslint-disable-line
 
 export const defineWebComponent = (componentName: string, componentSetup: Component) => {
   if (customElements.get(componentName)) return
