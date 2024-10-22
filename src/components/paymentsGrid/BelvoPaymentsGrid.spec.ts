@@ -70,7 +70,7 @@ describe('BelvoPaymentsGrid', () => {
     expect(institutionsListItems[1].classes().length).toBe(1)
     expect(institutionsListItems[2].classes().length).toBe(1)
     expect(institutionsListItems[3].classes().length).toBe(3)
-    expect(belvoPaymentsAtomsOptions.options?.bankShortcuts.callback).toBe(undefined)
+    expect(belvoPaymentsAtomsOptions.options).toBe(undefined)
   })
 
   it('should handle institution selection correctly', async () => {

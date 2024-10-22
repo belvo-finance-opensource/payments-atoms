@@ -37,7 +37,7 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "precommit": "lint-staged",
-    "prepare": "is-ci || husky install",
+    "prepare": "is-ci || husky",
     "release": "release-it --verbose --ci"
   },
   "dependencies": {
