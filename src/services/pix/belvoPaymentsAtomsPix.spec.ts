@@ -1,4 +1,4 @@
-import { register } from './BelvoPaymentsAtomsPix'
+import { register, signals } from './BelvoPaymentsAtomsPix'
 
 process.env.TZ = 'America/Sao_Paulo'
 
@@ -61,16 +61,30 @@ describe('BelvoPaymentsAtomsPix', () => {
         attestation: 'direct'
       })
     ).toEqual({
-      credential: {
-        authenticatorAttachment: 'cross-platform',
-        id: '447Q86f_XlFK0IBPVdf-giJUXs8pwmFCqqp0M3Q2PqM',
-        rawId: 'base64',
-        response: {
-          attestationObject: 'base64',
-          clientDataJSON: 'base64',
-          type: 'public-key'
-        }
+      authenticatorAttachment: 'cross-platform',
+      id: '447Q86f_XlFK0IBPVdf-giJUXs8pwmFCqqp0M3Q2PqM',
+      rawId: 'base64',
+      response: {
+        attestationObject: 'base64',
+        clientDataJSON: 'base64',
+        type: 'public-key'
       }
+    })
+  })
+
+  describe('signals', () => {
+    it('should return the signals', async () => {
+      expect(await signals('1')).toEqual({
+        deviceId: 'visitorId',
+        osVersion: 'Unix 7.1.0',
+        userTimeZoneOffset: -3,
+        language: 'pt-BR',
+        screenDimensions: {
+          height: 768,
+          width: 1024
+        },
+        accountTenure: '1'
+      })
     })
   })
 

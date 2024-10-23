@@ -23,9 +23,7 @@ export type PublicKeyCredentialWithAttestationResponse = PublicKeyCredential & {
   response: AuthenticatorAttestationResponse
 }
 
-export type RegisterResponse = {
-  credential: Credential | null
-}
+export type RegisterResponse = Credential | null
 
 export type PixUser = {
   id: string
