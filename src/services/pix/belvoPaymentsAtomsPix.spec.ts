@@ -1,4 +1,4 @@
-import { register, signals } from './BelvoPaymentsAtomsPix'
+import { login, register, signals } from './BelvoPaymentsAtomsPix'
 
 process.env.TZ = 'America/Sao_Paulo'
 
@@ -33,7 +33,10 @@ vi.stubGlobal('navigator', {
         type: 'public-key'
       }
     }),
-    get: vi.fn().mockResolvedValue({})
+    get: vi.fn().mockResolvedValue({
+      id: 'base64',
+      type: 'public'
+    })
   },
   userAgent:
     'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36',
@@ -46,32 +49,6 @@ vi.stubGlobal('screen', {
 })
 
 describe('BelvoPaymentsAtomsPix', () => {
-  beforeEach(() => {})
-
-  it('should sucessfully register credentials', async () => {
-    vi.stubGlobal('PublicKeyCredential', { get: () => ({}) })
-
-    expect(
-      await register({
-        challenge: 'Y2hhbGxlbmdl',
-        rp: { id: 'belvo.com', name: 'Belvo' },
-        user: { id: 'dXNlci1pZA==', name: 'name', displayName: 'displayName' },
-        pubKeyCredParams: [{ alg: -7, type: 'public-key' }],
-        accountTenure: '1',
-        attestation: 'direct'
-      })
-    ).toEqual({
-      authenticatorAttachment: 'cross-platform',
-      id: '447Q86f_XlFK0IBPVdf-giJUXs8pwmFCqqp0M3Q2PqM',
-      rawId: 'base64',
-      response: {
-        attestationObject: 'base64',
-        clientDataJSON: 'base64',
-        type: 'public-key'
-      }
-    })
-  })
-
   describe('signals', () => {
     it('should return the signals', async () => {
       expect(await signals('1')).toEqual({
@@ -84,6 +61,56 @@ describe('BelvoPaymentsAtomsPix', () => {
           width: 1024
         },
         accountTenure: '1'
+      })
+    })
+  })
+
+  describe('register', () => {
+    it('should sucessfully register credentials', async () => {
+      vi.stubGlobal('PublicKeyCredential', { get: vi.fn() })
+
+      expect(
+        await register({
+          challenge: 'Y2hhbGxlbmdl',
+          rp: { id: 'belvo.com', name: 'Belvo' },
+          user: { id: 'dXNlci1pZA==', name: 'name', displayName: 'displayName' },
+          pubKeyCredParams: [{ alg: -7, type: 'public-key' }],
+          accountTenure: '1',
+          attestation: 'direct'
+        })
+      ).toEqual({
+        authenticatorAttachment: 'cross-platform',
+        id: '447Q86f_XlFK0IBPVdf-giJUXs8pwmFCqqp0M3Q2PqM',
+        rawId: 'base64',
+        response: {
+          attestationObject: 'base64',
+          clientDataJSON: 'base64',
+          type: 'public-key'
+        }
+      })
+    })
+  })
+
+  describe('login', () => {
+    it('should sucessfully login', async () => {
+      vi.stubGlobal('PublicKeyCredential', { get: vi.fn() })
+
+      expect(
+        await login({
+          challenge: 'Y2hhbGxlbmdl',
+          timeout: 6000,
+          rpId: 'belvo.com',
+          allowCredentials: [
+            {
+              id: 'base64',
+              type: 'public-key'
+            }
+          ],
+          userVerification: 'required'
+        })
+      ).toEqual({
+        id: 'base64',
+        type: 'public'
       })
     })
   })
@@ -105,7 +132,7 @@ describe('BelvoPaymentsAtomsPix', () => {
     })
 
     it('should not register credentials if the challenge is not a Base64 string', async () => {
-      vi.stubGlobal('PublicKeyCredential', { get: () => ({}) })
+      vi.stubGlobal('PublicKeyCredential', { get: vi.fn() })
       vi.stubGlobal('navigator', {
         credentials: {
           create: vi.fn().mockResolvedValue({
@@ -138,7 +165,7 @@ describe('BelvoPaymentsAtomsPix', () => {
     })
 
     it('should not register credentials if the user ID is not a Base64 string', async () => {
-      vi.stubGlobal('PublicKeyCredential', { get: () => ({}) })
+      vi.stubGlobal('PublicKeyCredential', { get: vi.fn() })
       vi.stubGlobal('navigator', {
         credentials: {
           create: vi.fn().mockResolvedValue({

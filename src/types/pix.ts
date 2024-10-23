@@ -7,6 +7,17 @@ export type RegisterOptions = {
   attestation?: PublicKeyCredentialCreationOptions['attestation']
 }
 
+export type LoginOptions = {
+  challenge: string
+  timeout?: number
+  rpId?: string
+  allowCredentials?: {
+    id: string
+    type: string
+  }[]
+  userVerification: UserVerificationRequirement
+}
+
 export type CredentialSignals = {
   deviceId: string
   osVersion: string

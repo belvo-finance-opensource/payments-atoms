@@ -1,5 +1,6 @@
 import BelvoPaymentsGrid from '@/components/paymentsGrid/BelvoPaymentsGrid.ce.vue'
 import BelvoPaymentsAtomsOptions from '@/services/options/BelvoPaymentsAtomsOptions'
+import { register, signals } from '@/services/pix/BelvoPaymentsAtomsPix'
 import { defineWebComponents } from '@/utils/webComponents/webComponentsUtils'
 import BelvoPaymentsAtoms, { InitializationOptions } from './main'
 
@@ -13,7 +14,7 @@ describe('main.spec.ts', () => {
         bankShortcuts: {
           callback: vitest.fn()
         }
-      } as InitializationOptions
+      } as unknown as InitializationOptions
       BelvoPaymentsAtoms.init(mockInitOptions)
 
       expect(BelvoPaymentsAtomsOptions.getInstance).toHaveBeenCalledWith(mockInitOptions)
@@ -24,12 +25,24 @@ describe('main.spec.ts', () => {
         bankShortcuts: {
           callback: vitest.fn()
         }
-      } as InitializationOptions
+      } as unknown as InitializationOptions
       BelvoPaymentsAtoms.init(mockInitOptions)
 
       expect(defineWebComponents).toHaveBeenCalledWith([
         { name: 'belvo-payments-grid', setup: BelvoPaymentsGrid }
       ])
+    })
+  })
+
+  describe('biometricPix', () => {
+    it('should return signals and register', () => {
+      expect(BelvoPaymentsAtoms.biometricPix).toEqual({
+        credentials: {
+          signals,
+          register,
+          login: expect.any(Function)
+        }
+      })
     })
   })
 })
