@@ -105,6 +105,14 @@ export const register = async (options: RegisterOptions): Promise<RegisterRespon
   return parseCredential(await createCredential(buildCreateCredentialOptions(options)))
 }
 
+export const login = async (options: RegisterOptions): Promise<RegisterResponse> => {
+  if (!isWebAuthnAvailable()) throw new Error('WebAuthn is not available')
+  if (!isValidBase64URL(options.challenge)) throw new Error('Invalid challenge')
+  if (!isValidBase64URL(options.user.id)) throw new Error('Invalid user id')
+
+  return parseCredential(await createCredential(buildCreateCredentialOptions(options)))
+}
+
 export const signals = async (accountTenure: string): Promise<CredentialSignals> => {
   if (!accountTenure) throw new Error('Account tenure is required')
 
