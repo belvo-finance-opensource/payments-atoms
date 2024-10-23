@@ -17,4 +17,10 @@ export type InitializationOptions = {
   bankShortcuts: {
     callback: Callback
   }
+  pix: {
+    credentials: {
+      signUp: () => void
+      signIn: () => void
+    }
+  }
 }
