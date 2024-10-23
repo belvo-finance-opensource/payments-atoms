@@ -1,5 +1,6 @@
 import {
   CredentialSignals,
+  LoginOptions,
   PublicKeyCredentialParsed,
   PublicKeyCredentialWithAttestationResponse,
   RegisterOptions,
@@ -52,7 +53,7 @@ const buildSignals = async (accountTenure: string): Promise<CredentialSignals> =
   }
 }
 
-const parseCredential = (
+const parseRegisterOptions = (
   credential: PublicKeyCredentialWithAttestationResponse | null
 ): PublicKeyCredentialParsed | null => {
   if (!credential) return null
@@ -70,7 +71,21 @@ const parseCredential = (
   }
 }
 
-const createCredential = async (
+const parseLoginOptions = (options: LoginOptions): PublicKeyCredentialRequestOptions => {
+  return {
+    ...options,
+    challenge: base64JS.toByteArray(options.challenge),
+    allowCredentials: options.allowCredentials?.map(
+      (credential) =>
+        ({
+          id: base64JS.toByteArray(credential.id),
+          type: credential.type
+        }) as PublicKeyCredentialDescriptor
+    )
+  }
+}
+
+const registerCredential = async (
   publicKey: PublicKeyCredentialCreationOptions
 ): Promise<PublicKeyCredentialWithAttestationResponse | null> => {
   try {
@@ -84,7 +99,7 @@ const createCredential = async (
   }
 }
 
-const buildCreateCredentialOptions = (options: RegisterOptions) =>
+const buildRegisterCredentialOptions = (options: RegisterOptions) =>
   ({
     challenge: base64JS.toByteArray(options.challenge),
     rp: options.rp,
@@ -97,24 +112,30 @@ const buildCreateCredentialOptions = (options: RegisterOptions) =>
     attestation: options.attestation || 'direct'
   }) as PublicKeyCredentialCreationOptions
 
+const getCredential = async (
+  publicKey: CredentialRequestOptions['publicKey']
+): Promise<Credential | null> => {
+  try {
+    return await navigator.credentials.get({ publicKey })
+  } catch (error) {
+    throw new Error(`Error during login: ${error}`)
+  }
+}
+
 export const register = async (options: RegisterOptions): Promise<RegisterResponse> => {
   if (!isWebAuthnAvailable()) throw new Error('WebAuthn is not available')
   if (!isValidBase64URL(options.challenge)) throw new Error('Invalid challenge')
   if (!isValidBase64URL(options.user.id)) throw new Error('Invalid user id')
 
-  return parseCredential(await createCredential(buildCreateCredentialOptions(options)))
+  return parseRegisterOptions(await registerCredential(buildRegisterCredentialOptions(options)))
 }
 
-export const login = async (options: RegisterOptions): Promise<RegisterResponse> => {
+export const login = async (options: LoginOptions): Promise<Credential | null> => {
   if (!isWebAuthnAvailable()) throw new Error('WebAuthn is not available')
-  if (!isValidBase64URL(options.challenge)) throw new Error('Invalid challenge')
-  if (!isValidBase64URL(options.user.id)) throw new Error('Invalid user id')
 
-  return parseCredential(await createCredential(buildCreateCredentialOptions(options)))
+  return await getCredential(parseLoginOptions(options))
 }
 
 export const signals = async (accountTenure: string): Promise<CredentialSignals> => {
-  if (!accountTenure) throw new Error('Account tenure is required')
-
   return await buildSignals(accountTenure)
 }
