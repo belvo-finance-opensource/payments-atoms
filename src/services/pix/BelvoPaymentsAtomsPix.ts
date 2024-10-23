@@ -102,9 +102,7 @@ export const register = async (options: RegisterOptions): Promise<RegisterRespon
   if (!isValidBase64URL(options.challenge)) throw new Error('Invalid challenge')
   if (!isValidBase64URL(options.user.id)) throw new Error('Invalid user id')
 
-  return {
-    credential: parseCredential(await createCredential(buildCreateCredentialOptions(options)))
-  }
+  return parseCredential(await createCredential(buildCreateCredentialOptions(options)))
 }
 
 export const signals = async (accountTenure: string): Promise<CredentialSignals> => {
