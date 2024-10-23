@@ -1,6 +1,6 @@
 import BelvoPaymentsGrid from '@/components/paymentsGrid/BelvoPaymentsGrid.ce.vue'
 import BelvoPaymentsAtomsOptions from '@/services/options/BelvoPaymentsAtomsOptions'
-import { register, signals } from '@/services/pix/belvoPaymentsAtomsPix'
+import { register, signals } from '@/services/pix/BelvoPaymentsAtomsPix'
 import type { InitializationOptions } from '@/types/lib'
 import { defineWebComponents, type Component } from '@/utils/webComponents/webComponentsUtils'
 
