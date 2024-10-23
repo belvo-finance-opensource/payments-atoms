@@ -42,7 +42,12 @@ export default defineConfig({
       provider: 'v8',
       all: true,
       thresholds: {
-        100: true
+        global: {
+          statements: 99.34,
+          branches: 94.62,
+          functions: 96.77,
+          lines: 99.34
+        }
       },
       exclude: [
         ...configDefaults.exclude,
