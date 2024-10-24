@@ -21,7 +21,7 @@ export type LoginOptions = {
 export type CredentialSignals = {
   deviceId: string
   osVersion: string
-  userTimeZoneOffset: number
+  userTimeZoneOffset: string
   language: string
   screenDimensions: {
     height: number

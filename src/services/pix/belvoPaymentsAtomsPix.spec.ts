@@ -51,17 +51,21 @@ vi.stubGlobal('screen', {
 describe('BelvoPaymentsAtomsPix', () => {
   describe('signals', () => {
     it('should return the signals', async () => {
-      expect(await signals('1')).toEqual({
+      expect(await signals('2024-12-31')).toEqual({
         deviceId: 'visitorId',
         osVersion: 'Unix 7.1.0',
-        userTimeZoneOffset: -3,
+        userTimeZoneOffset: '-03',
         language: 'pt-BR',
         screenDimensions: {
           height: 768,
           width: 1024
         },
-        accountTenure: '1'
+        accountTenure: '2024-12-31'
       })
+    })
+
+    it('should validate account tenure', async () => {
+      await expect(signals('1')).rejects.toThrowError('Invalid account tenure')
     })
   })
 

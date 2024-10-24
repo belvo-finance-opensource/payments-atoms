@@ -8,8 +8,17 @@ import {
 } from '@/types/pix'
 import FingerprintJS from '@fingerprintjs/fingerprintjs'
 import base64JS from 'base64-js'
+import { isValid, parse } from 'date-fns'
 import { getTimezoneOffset } from 'date-fns-tz'
 import { UAParser } from 'ua-parser-js'
+
+const isValidDate = (date: string): boolean => isValid(parse(date, 'yyyy-MM-dd', new Date()))
+
+const padNumber = (number: number, totalDigits = 2, paddingCharacter = '0') =>
+  (number + '').length <= totalDigits
+    ? ['', '-'][+(number < 0)] +
+      (paddingCharacter.repeat(totalDigits) + Math.abs(number)).slice(-1 * totalDigits)
+    : number + ''
 
 const isValidBase64URL = (value: string): boolean => {
   try {
@@ -35,8 +44,11 @@ const buildSignals = async (accountTenure: string): Promise<CredentialSignals> =
   const userAgentParser = new UAParser(navigator.userAgent)
   const milisecondsToHours = (miliseconds: number): number => miliseconds / 1000 / 60 / 60
   const getUserTimeZoneOffset = () =>
-    milisecondsToHours(
-      getTimezoneOffset(Intl.DateTimeFormat().resolvedOptions().timeZone, new Date())
+    padNumber(
+      milisecondsToHours(
+        getTimezoneOffset(Intl.DateTimeFormat().resolvedOptions().timeZone, new Date())
+      ),
+      2
     )
   const osVersion = `${userAgentParser.getOS().name} ${userAgentParser.getOS().version}`
 
@@ -137,5 +149,7 @@ export const login = async (options: LoginOptions): Promise<Credential | null> =
 }
 
 export const signals = async (accountTenure: string): Promise<CredentialSignals> => {
+  if (!isValidDate(accountTenure)) throw new Error('Invalid account tenure')
+
   return await buildSignals(accountTenure)
 }
