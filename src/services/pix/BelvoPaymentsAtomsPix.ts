@@ -1,10 +1,10 @@
 import {
-  CredentialSignals,
+  CredentialSignalsResponse,
   LoginOptions,
-  PublicKeyCredentialParsed,
+  LoginResponse,
+  PublicKeyCredentialParsedResponse,
   PublicKeyCredentialWithAttestationResponse,
-  RegisterOptions,
-  RegisterResponse
+  RegisterOptions
 } from '@/types/pix'
 import FingerprintJS from '@fingerprintjs/fingerprintjs'
 import base64JS from 'base64-js'
@@ -14,11 +14,9 @@ import { UAParser } from 'ua-parser-js'
 
 const isValidDate = (date: string): boolean => isValid(parse(date, 'yyyy-MM-dd', new Date()))
 
-const padNumber = (number: number, totalDigits = 2, paddingCharacter = '0') =>
-  (number + '').length <= totalDigits
-    ? ['', '-'][+(number < 0)] +
-      (paddingCharacter.repeat(totalDigits) + Math.abs(number)).slice(-1 * totalDigits)
-    : number + ''
+const padTimeZoneOfsset = (number: number, totalDigits = 2, paddingCharacter = '0') =>
+  ['', '-'][+(number < 0)] +
+  (paddingCharacter.repeat(totalDigits) + Math.abs(number)).slice(-1 * totalDigits)
 
 const isValidBase64URL = (value: string): boolean => {
   try {
@@ -40,48 +38,44 @@ const getDeviceId = async (): Promise<string> => {
   return result.visitorId
 }
 
-const buildSignals = async (accountTenure: string): Promise<CredentialSignals> => {
+const buildSignals = async (accountTenure: string): Promise<CredentialSignalsResponse> => {
   const userAgentParser = new UAParser(navigator.userAgent)
   const milisecondsToHours = (miliseconds: number): number => miliseconds / 1000 / 60 / 60
   const getUserTimeZoneOffset = () =>
-    padNumber(
+    padTimeZoneOfsset(
       milisecondsToHours(
         getTimezoneOffset(Intl.DateTimeFormat().resolvedOptions().timeZone, new Date())
-      ),
-      2
+      )
     )
   const osVersion = `${userAgentParser.getOS().name} ${userAgentParser.getOS().version}`
 
   return {
-    deviceId: await getDeviceId(),
-    osVersion,
-    userTimeZoneOffset: getUserTimeZoneOffset(),
+    device_id: await getDeviceId(),
+    os_version: osVersion,
+    user_time_zone_offset: getUserTimeZoneOffset(),
     language: navigator.language,
-    screenDimensions: {
+    screen_dimensions: {
       height: window.screen.height,
       width: window.screen.width
     },
-    accountTenure
+    account_tenure: accountTenure
   }
 }
 
 const parseRegisterOptions = (
-  credential: PublicKeyCredentialWithAttestationResponse | null
-): PublicKeyCredentialParsed | null => {
-  if (!credential) return null
-
-  return {
-    ...credential,
-    rawId: base64JS.fromByteArray(new Uint8Array(credential.rawId)),
-    response: {
-      ...credential.response,
-      attestationObject: base64JS.fromByteArray(
-        new Uint8Array(credential.response.attestationObject)
-      ),
-      clientDataJSON: base64JS.fromByteArray(new Uint8Array(credential.response.clientDataJSON))
-    }
+  credential: PublicKeyCredentialWithAttestationResponse
+): PublicKeyCredentialParsedResponse | null => ({
+  id: credential.id,
+  type: credential.type,
+  authenticator_attachment: credential.authenticatorAttachment as AuthenticatorAttachment,
+  raw_id: base64JS.fromByteArray(new Uint8Array(credential.rawId)),
+  response: {
+    attestation_object: base64JS.fromByteArray(
+      new Uint8Array(credential.response.attestationObject)
+    ),
+    client_data_json: base64JS.fromByteArray(new Uint8Array(credential.response.clientDataJSON))
   }
-}
+})
 
 const parseLoginOptions = (options: LoginOptions): PublicKeyCredentialRequestOptions => {
   return {
@@ -99,7 +93,7 @@ const parseLoginOptions = (options: LoginOptions): PublicKeyCredentialRequestOpt
 
 const registerCredential = async (
   publicKey: PublicKeyCredentialCreationOptions
-): Promise<PublicKeyCredentialWithAttestationResponse | null> => {
+): Promise<PublicKeyCredentialWithAttestationResponse> => {
   try {
     const credential = await navigator.credentials.create({
       publicKey
@@ -121,7 +115,7 @@ const buildRegisterCredentialOptions = (options: RegisterOptions) =>
     },
     pubKeyCredParams: options.pubKeyCredParams,
     timeout: 60000,
-    attestation: options.attestation || 'direct'
+    attestation: options.attestation
   }) as PublicKeyCredentialCreationOptions
 
 const getCredential = async (
@@ -134,7 +128,9 @@ const getCredential = async (
   }
 }
 
-export const register = async (options: RegisterOptions): Promise<RegisterResponse> => {
+export const register = async (
+  options: RegisterOptions
+): Promise<PublicKeyCredentialParsedResponse | null> => {
   if (!isWebAuthnAvailable()) throw new Error('WebAuthn is not available')
   if (!isValidBase64URL(options.challenge)) throw new Error('Invalid challenge')
   if (!isValidBase64URL(options.user.id)) throw new Error('Invalid user id')
@@ -142,13 +138,13 @@ export const register = async (options: RegisterOptions): Promise<RegisterRespon
   return parseRegisterOptions(await registerCredential(buildRegisterCredentialOptions(options)))
 }
 
-export const login = async (options: LoginOptions): Promise<Credential | null> => {
+export const login = async (options: LoginOptions): Promise<LoginResponse | null> => {
   if (!isWebAuthnAvailable()) throw new Error('WebAuthn is not available')
 
   return await getCredential(parseLoginOptions(options))
 }
 
-export const signals = async (accountTenure: string): Promise<CredentialSignals> => {
+export const signals = async (accountTenure: string): Promise<CredentialSignalsResponse> => {
   if (!isValidDate(accountTenure)) throw new Error('Invalid account tenure')
 
   return await buildSignals(accountTenure)
