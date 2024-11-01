@@ -1,6 +1,6 @@
 import BelvoPaymentsGrid from '@/components/paymentsGrid/BelvoPaymentsGrid.ce.vue'
 import BelvoPaymentsAtomsOptions from '@/services/options/BelvoPaymentsAtomsOptions'
-import { register, signals } from '@/services/pix/BelvoPaymentsAtomsPix'
+import { login, register, signals } from '@/services/pix/BelvoPaymentsAtomsPix'
 import type { InitializationOptions } from '@/types/lib'
 import { defineWebComponents, type Component } from '@/utils/webComponents/webComponentsUtils'
 
@@ -15,9 +15,9 @@ export default {
   },
   biometricPix: {
     credentials: {
-      signals,
-      register,
-      login: () => {}
+      collectEnrollmentInformation: signals,
+      requestEnrollmentConfirmation: register,
+      authorizePayment: login
     }
   }
 }
