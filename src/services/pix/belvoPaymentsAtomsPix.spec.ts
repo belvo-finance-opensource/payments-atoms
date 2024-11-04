@@ -35,8 +35,16 @@ vi.stubGlobal('navigator', {
       }
     }),
     get: vi.fn().mockResolvedValue({
-      id: 'base64',
-      type: 'public'
+      authenticatorAttachment: 'cross-platform',
+      id: 'string',
+      rawId: new Uint8Array([1, 2, 3, 4]),
+      response: {
+        authenticatorData: new Uint8Array([1, 2, 3, 4]),
+        clientDataJSON: new Uint8Array([1, 2, 3, 4]),
+        signature: new Uint8Array([1, 2, 3, 4]),
+        userHandle: new Uint8Array([1, 2, 3, 4])
+      },
+      type: 'public-key'
     })
   },
   userAgent:
@@ -115,8 +123,60 @@ describe('BelvoPaymentsAtomsPix', () => {
           userVerification: 'required'
         })
       ).toEqual({
-        id: 'base64',
-        type: 'public'
+        id: 'string',
+        rawId: 'base64',
+        response: {
+          authenticatorData: 'base64',
+          clientDataJSON: 'base64',
+          signature: 'base64',
+          userHandle: 'base64'
+        },
+        type: 'public-key'
+      })
+    })
+
+    it('should set the userHandle to null if it is not present', async () => {
+      vi.stubGlobal('PublicKeyCredential', { get: vi.fn() })
+
+      vi.stubGlobal('navigator', {
+        credentials: {
+          get: vi.fn().mockResolvedValue({
+            authenticatorAttachment: 'cross-platform',
+            id: 'string',
+            rawId: new Uint8Array([1, 2, 3, 4]),
+            response: {
+              authenticatorData: new Uint8Array([1, 2, 3, 4]),
+              clientDataJSON: new Uint8Array([1, 2, 3, 4]),
+              signature: new Uint8Array([1, 2, 3, 4])
+            },
+            type: 'public-key'
+          })
+        }
+      })
+
+      expect(
+        await login({
+          challenge: 'Y2hhbGxlbmdl',
+          timeout: 6000,
+          rpId: 'belvo.com',
+          allowCredentials: [
+            {
+              id: 'base64',
+              type: 'public-key'
+            }
+          ],
+          userVerification: 'required'
+        })
+      ).toEqual({
+        id: 'string',
+        rawId: 'base64',
+        response: {
+          authenticatorData: 'base64',
+          clientDataJSON: 'base64',
+          signature: 'base64',
+          userHandle: null
+        },
+        type: 'public-key'
       })
     })
   })
@@ -133,25 +193,6 @@ describe('BelvoPaymentsAtomsPix', () => {
           pubKeyCredParams: [{ alg: -7, type: 'public-key' }],
           accountTenure: '1',
           attestation: 'direct'
-        })
-      ).rejects.toThrowError('WebAuthn is not available')
-    })
-
-    it('should not login if WebAuthn API is not available', async () => {
-      vi.unstubAllGlobals()
-
-      await expect(
-        login({
-          challenge: 'Y2hhbGxlbmdl',
-          timeout: 6000,
-          rpId: 'belvo.com',
-          allowCredentials: [
-            {
-              id: 'base64',
-              type: 'public-key'
-            }
-          ],
-          userVerification: 'required'
         })
       ).rejects.toThrowError('WebAuthn is not available')
     })
@@ -313,6 +354,50 @@ describe('BelvoPaymentsAtomsPix', () => {
           userVerification: 'required'
         })
       ).rejects.toThrowError('Error getting credentials')
+    })
+
+    it('should not login if WebAuthn API is not available', async () => {
+      vi.unstubAllGlobals()
+
+      await expect(
+        login({
+          challenge: 'Y2hhbGxlbmdl',
+          timeout: 6000,
+          rpId: 'belvo.com',
+          allowCredentials: [
+            {
+              id: 'base64',
+              type: 'public-key'
+            }
+          ],
+          userVerification: 'required'
+        })
+      ).rejects.toThrowError('WebAuthn is not available')
+    })
+
+    it('should not login with invalid credential', async () => {
+      vi.unstubAllGlobals()
+      vi.stubGlobal('PublicKeyCredential', { get: vi.fn() })
+      vi.stubGlobal('navigator', {
+        credentials: {
+          get: vi.fn().mockResolvedValue(null)
+        }
+      })
+
+      await expect(
+        login({
+          challenge: 'Y2hhbGxlbmdl',
+          timeout: 6000,
+          rpId: 'belvo.com',
+          allowCredentials: [
+            {
+              id: 'base64',
+              type: 'public-key'
+            }
+          ],
+          userVerification: 'required'
+        })
+      ).rejects.toThrowError('Invalid credential')
     })
   })
 })
