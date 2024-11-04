@@ -35,8 +35,16 @@ vi.stubGlobal('navigator', {
       }
     }),
     get: vi.fn().mockResolvedValue({
-      id: 'base64',
-      type: 'public'
+      authenticatorAttachment: 'cross-platform',
+      id: 'string',
+      rawId: new Uint8Array([1, 2, 3, 4]),
+      response: {
+        authenticatorData: new Uint8Array([1, 2, 3, 4]),
+        clientDataJSON: new Uint8Array([1, 2, 3, 4]),
+        signature: new Uint8Array([1, 2, 3, 4]),
+        userHandle: new Uint8Array([1, 2, 3, 4])
+      },
+      type: 'public-key'
     })
   },
   userAgent:
@@ -115,8 +123,15 @@ describe('BelvoPaymentsAtomsPix', () => {
           userVerification: 'required'
         })
       ).toEqual({
-        id: 'base64',
-        type: 'public'
+        id: 'string',
+        rawId: 'base64',
+        response: {
+          authenticatorData: 'base64',
+          clientDataJSON: 'base64',
+          signature: 'base64',
+          userHandle: 'base64'
+        },
+        type: 'public-key'
       })
     })
   })

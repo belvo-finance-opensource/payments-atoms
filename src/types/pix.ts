@@ -1,3 +1,9 @@
+export type PixUser = {
+  id: string
+  name: PublicKeyCredentialCreationOptions['user']['name']
+  displayName: PublicKeyCredentialCreationOptions['user']['displayName']
+}
+
 export type RegisterOptions = {
   challenge: string
   rp: PublicKeyCredentialCreationOptions['rp']
@@ -30,19 +36,19 @@ export type CredentialSignals = {
   accountTenure: string
 }
 
-export type PublicKeyCredentialWithAttestationResponse = PublicKeyCredential & {
-  response: AuthenticatorAttestationResponse
-}
-
-export type RegisterResponse = Credential | null
-
-export type PixUser = {
+export type PublicKeyCredentialWithAuthenticatorAssertionResponse = {
   id: string
-  name: PublicKeyCredentialCreationOptions['user']['name']
-  displayName: PublicKeyCredentialCreationOptions['user']['displayName']
+  rawId: string
+  response: {
+    authenticatorData: string
+    clientDataJSON: string
+    signature: string
+    userHandle: string | null
+  }
+  type: string
 }
 
-export type PublicKeyCredentialParsed = {
+export type PublicKeyCredentialWithAttestationAssertionResponse = {
   id?: string
   rawId: string
   response: {
