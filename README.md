@@ -7,7 +7,7 @@
   <img src="https://github.com/belvo-finance-opensource/payments-atoms/actions/workflows/deploy-to-gh-pages.yml/badge.svg" alt="Deploy Docs, Storybook and Examples to GitHub Pages">
 </p>
 
-> Library of native web components that aims to facilitate integrating with Belvo's Payments Widget.
+> Library of native web components and utilities that aims to facilitate integrating with Belvo's Payments products.
 
 Visit the [documentation](https://belvo-finance-opensource.github.io/payments-atoms/docs/) for more detailed instructions or [Storybook](https://belvo-finance-opensource.github.io/payments-atoms/storybook/) if you want to play around with the web components.
 
