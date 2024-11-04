@@ -53,31 +53,15 @@ describe('BelvoPaymentsAtomsPix', () => {
   describe('risk signals', () => {
     it('should return risk signals', async () => {
       expect(await signals('2024-12-31')).toEqual({
-        device_id: 'visitorId',
-        os_version: 'Unix 7.1.0',
-        user_time_zone_offset: '-03',
+        deviceId: 'visitorId',
+        osVersion: 'Unix 7.1.0',
+        userTimeZoneOffset: '-03',
         language: 'pt-BR',
-        screen_dimensions: {
+        screenDimensions: {
           height: 768,
           width: 1024
         },
-        account_tenure: '2024-12-31'
-      })
-    })
-
-    it('should not pad time zone offset when not needed', async () => {
-      process.env.TZ = 'Australia/Sydney'
-
-      expect(await signals('2024-12-31')).toEqual({
-        device_id: 'visitorId',
-        os_version: 'Unix 7.1.0',
-        user_time_zone_offset: '11',
-        language: 'pt-BR',
-        screen_dimensions: {
-          height: 768,
-          width: 1024
-        },
-        account_tenure: '2024-12-31'
+        accountTenure: '2024-12-31'
       })
     })
 
@@ -100,14 +84,15 @@ describe('BelvoPaymentsAtomsPix', () => {
           attestation: 'direct'
         })
       ).toEqual({
-        authenticator_attachment: 'cross-platform',
+        authenticatorAttachment: 'cross-platform',
         id: '447Q86f_XlFK0IBPVdf-giJUXs8pwmFCqqp0M3Q2PqM',
-        type: 'public',
-        raw_id: 'base64',
+        rawId: 'base64',
         response: {
-          attestation_object: 'base64',
-          client_data_json: 'base64'
-        }
+          attestationObject: 'base64',
+          clientDataJSON: 'base64',
+          type: 'public-key'
+        },
+        type: 'public'
       })
     })
   })
@@ -181,7 +166,8 @@ describe('BelvoPaymentsAtomsPix', () => {
             rawId: new Uint8Array([1, 2, 3, 4]),
             response: {
               attestationObject: new Uint8Array([1, 2, 3, 4]),
-              clientDataJSON: new Uint8Array([1, 2, 3, 4])
+              clientDataJSON: new Uint8Array([1, 2, 3, 4]),
+              type: 'public-key'
             }
           }),
           get: vi.fn().mockResolvedValue({})

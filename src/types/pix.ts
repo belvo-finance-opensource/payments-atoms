@@ -18,16 +18,16 @@ export type LoginOptions = {
   userVerification: UserVerificationRequirement
 }
 
-export type CredentialSignalsResponse = {
-  device_id: string
-  os_version: string
-  user_time_zone_offset: string
+export type CredentialSignals = {
+  deviceId: string
+  osVersion: string
+  userTimeZoneOffset: string
   language: string
-  screen_dimensions: {
+  screenDimensions: {
     height: number
     width: number
   }
-  account_tenure: string
+  accountTenure: string
 }
 
 export type PublicKeyCredentialWithAttestationResponse = PublicKeyCredential & {
@@ -35,7 +35,6 @@ export type PublicKeyCredentialWithAttestationResponse = PublicKeyCredential & {
 }
 
 export type RegisterResponse = Credential | null
-export type LoginResponse = RegisterResponse
 
 export type PixUser = {
   id: string
@@ -43,13 +42,12 @@ export type PixUser = {
   displayName: PublicKeyCredentialCreationOptions['user']['displayName']
 }
 
-export type PublicKeyCredentialParsedResponse = {
-  id: string
-  raw_id: string
-  authenticator_attachment: AuthenticatorAttachment
+export type PublicKeyCredentialParsed = {
+  id?: string
+  rawId: string
   response: {
-    attestation_object: string
-    client_data_json: string
+    attestationObject: string
+    clientDataJSON: string
   }
-  type: string
+  type?: string
 }
