@@ -1,8 +1,8 @@
 import {
   CredentialSignals,
   LoginOptions,
-  PublicKeyCredentialParsed,
-  PublicKeyCredentialWithAttestationResponse,
+  PublicKeyCredentialWithAttestationAssertionResponse,
+  PublicKeyCredentialWithAuthenticatorAssertionResponse,
   RegisterOptions
 } from '@/types/pix'
 import FingerprintJS from '@fingerprintjs/fingerprintjs'
@@ -63,8 +63,8 @@ const buildSignals = async (accountTenure: string): Promise<CredentialSignals> =
 }
 
 const parseRegisterOptions = (
-  credential: PublicKeyCredentialWithAttestationResponse
-): PublicKeyCredentialParsed => ({
+  credential: PublicKeyCredential & { response: AuthenticatorAttestationResponse }
+): PublicKeyCredentialWithAttestationAssertionResponse => ({
   ...credential,
   rawId: base64JS.fromByteArray(new Uint8Array(credential.rawId)),
   response: {
@@ -90,15 +90,33 @@ const parseLoginOptions = (options: LoginOptions): PublicKeyCredentialRequestOpt
   }
 }
 
+const parseLoginResponse = (
+  credential: PublicKeyCredential & { response: AuthenticatorAssertionResponse }
+): PublicKeyCredentialWithAuthenticatorAssertionResponse => ({
+  id: credential.id,
+  rawId: base64JS.fromByteArray(new Uint8Array(credential.rawId)),
+  response: {
+    authenticatorData: base64JS.fromByteArray(
+      new Uint8Array(credential.response.authenticatorData)
+    ),
+    clientDataJSON: base64JS.fromByteArray(new Uint8Array(credential.response.clientDataJSON)),
+    signature: base64JS.fromByteArray(new Uint8Array(credential.response.signature)),
+    userHandle: credential.response.userHandle
+      ? base64JS.fromByteArray(new Uint8Array(credential.response.userHandle))
+      : null
+  },
+  type: credential.type
+})
+
 const registerCredential = async (
   publicKey: PublicKeyCredentialCreationOptions
-): Promise<PublicKeyCredentialWithAttestationResponse> => {
+): Promise<PublicKeyCredential & { response: AuthenticatorAttestationResponse }> => {
   try {
     const credential = await navigator.credentials.create({
       publicKey
     })
 
-    return credential as PublicKeyCredentialWithAttestationResponse
+    return credential as PublicKeyCredential & { response: AuthenticatorAttestationResponse }
   } catch (error) {
     throw new Error(`Error during sign up: ${error}`)
   }
@@ -119,15 +137,19 @@ const buildRegisterCredentialOptions = (options: RegisterOptions) =>
 
 const getCredential = async (
   publicKey: CredentialRequestOptions['publicKey']
-): Promise<Credential | null> => {
+): Promise<(PublicKeyCredential & { response: AuthenticatorAssertionResponse }) | null> => {
   try {
-    return await navigator.credentials.get({ publicKey })
+    return (await navigator.credentials.get({
+      publicKey
+    })) as PublicKeyCredential & { response: AuthenticatorAssertionResponse }
   } catch (error) {
     throw new Error(`Error during login: ${error}`)
   }
 }
 
-export const register = async (options: RegisterOptions): Promise<PublicKeyCredentialParsed> => {
+export const register = async (
+  options: RegisterOptions
+): Promise<PublicKeyCredentialWithAttestationAssertionResponse> => {
   if (!isWebAuthnAvailable()) throw new Error('WebAuthn is not available')
   if (!isValidBase64URL(options.challenge)) throw new Error('Invalid challenge')
   if (!isValidBase64URL(options.user.id)) throw new Error('Invalid user id')
@@ -135,10 +157,16 @@ export const register = async (options: RegisterOptions): Promise<PublicKeyCrede
   return parseRegisterOptions(await registerCredential(buildRegisterCredentialOptions(options)))
 }
 
-export const login = async (options: LoginOptions): Promise<Credential | null> => {
+export const login = async (
+  options: LoginOptions
+): Promise<PublicKeyCredentialWithAuthenticatorAssertionResponse | null> => {
   if (!isWebAuthnAvailable()) throw new Error('WebAuthn is not available')
 
-  return await getCredential(parseLoginOptions(options))
+  const credential = await getCredential(parseLoginOptions(options))
+
+  if (!credential) throw new Error('Invalid credential')
+
+  return parseLoginResponse(credential)
 }
 
 export const signals = async (accountTenure: string): Promise<CredentialSignals> => {

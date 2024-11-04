@@ -9,7 +9,7 @@
     "resolveJsonModule": true,
     "sourceMap": true,
     "noEmit": true,
-    "types": ["node"],
+    "types": ["node", "@types/webappsec-credential-management"],
     "declaration": true,
     "outDir": "dist",
     "declarationDir": "dist",
