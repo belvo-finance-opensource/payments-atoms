@@ -39,7 +39,7 @@
     "precommit": "lint-staged",
     "prepare": "is-ci || husky",
     "release": "release-it --verbose --ci",
-    "typeconv": "npx typeconv -f ts -t oapi -o ./ 'src/types/**/pix.ts'"
+    "typeconv": "npx typeconv -f ts -t oapi -o schemas/open-api 'src/types/**/pix.ts'"
   },
   "dependencies": {
     "vue": "3.5.12"
