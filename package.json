@@ -38,7 +38,8 @@
     "build-storybook": "storybook build",
     "precommit": "lint-staged",
     "prepare": "is-ci || husky",
-    "release": "release-it --verbose --ci"
+    "release": "release-it --verbose --ci",
+    "typeconv": "npx typeconv -f ts -t oapi -o ./ 'src/types/**/pix.ts'"
   },
   "dependencies": {
     "vue": "3.5.12"
@@ -95,6 +96,7 @@
     "sass": "1.80.5",
     "sass-loader": "16.0.3",
     "storybook": "8.4.1",
+    "typeconv": "2.3.1",
     "typescript": "5.6.3",
     "ua-parser-js": "1.0.39",
     "uuid": "11.0.2",

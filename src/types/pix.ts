@@ -4,7 +4,7 @@ export type PixUser = {
   displayName: PublicKeyCredentialCreationOptions['user']['displayName']
 }
 
-export type RegisterOptions = {
+export type BiometricRegistrationRequest = {
   challenge: string
   rp: PublicKeyCredentialCreationOptions['rp']
   user: PixUser
@@ -13,7 +13,7 @@ export type RegisterOptions = {
   attestation?: PublicKeyCredentialCreationOptions['attestation']
 }
 
-export type LoginOptions = {
+export type BiometricPaymentRequest = {
   challenge: string
   timeout?: number
   rpId?: string
@@ -24,7 +24,7 @@ export type LoginOptions = {
   userVerification: UserVerificationRequirement
 }
 
-export type CredentialSignals = {
+export type EnrollmentInformation = {
   deviceId: string
   osVersion: string
   userTimeZoneOffset: string
@@ -36,7 +36,7 @@ export type CredentialSignals = {
   accountTenure: string
 }
 
-export type PublicKeyCredentialWithAuthenticatorAssertionResponse = {
+export type BiometricAuthorization = {
   id: string
   rawId: string
   response: {
@@ -48,11 +48,11 @@ export type PublicKeyCredentialWithAuthenticatorAssertionResponse = {
   type: string
 }
 
-export type PublicKeyCredentialWithAttestationAssertionResponse = {
+export type BiometricRegistrationConfirmation = {
   rawId: string
   response: {
     attestationObject: string
     clientDataJSON: string
   }
-  type?: string
+  type: string
 }

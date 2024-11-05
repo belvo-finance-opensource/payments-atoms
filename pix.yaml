@@ -1,0 +1,202 @@
+openapi: 3.0.0
+info:
+  title: Converted from pix.yaml with typeconv
+  version: '1'
+  x-id: pix.yaml
+  x-comment: >-
+    Generated from src/types/pix.ts by core-types-json-schema
+    (https://github.com/grantila/core-types-json-schema) on behalf of typeconv
+    (https://github.com/grantila/typeconv)
+paths: {}
+components:
+  schemas:
+    PixUser:
+      properties:
+        id:
+          title: PixUser.id
+          type: string
+        name:
+          title: PixUser.name
+        displayName:
+          title: PixUser.displayName
+      required:
+        - id
+        - name
+        - displayName
+      additionalProperties: false
+      title: PixUser
+      type: object
+    BiometricRegistrationRequest:
+      properties:
+        challenge:
+          title: BiometricRegistrationRequest.challenge
+          type: string
+        rp:
+          title: BiometricRegistrationRequest.rp
+        user:
+          $ref: '#/components/schemas/PixUser'
+          title: BiometricRegistrationRequest.user
+        pubKeyCredParams:
+          title: BiometricRegistrationRequest.pubKeyCredParams
+        accountTenure:
+          title: BiometricRegistrationRequest.accountTenure
+          type: string
+        attestation:
+          title: BiometricRegistrationRequest.attestation
+      required:
+        - challenge
+        - rp
+        - user
+        - pubKeyCredParams
+        - accountTenure
+      additionalProperties: false
+      title: BiometricRegistrationRequest
+      type: object
+    BiometricPaymentRequest:
+      properties:
+        challenge:
+          title: BiometricPaymentRequest.challenge
+          type: string
+        timeout:
+          title: BiometricPaymentRequest.timeout
+          type: number
+        rpId:
+          title: BiometricPaymentRequest.rpId
+          type: string
+        allowCredentials:
+          items:
+            properties:
+              id:
+                title: BiometricPaymentRequest.allowCredentials.[].id
+                type: string
+              type:
+                title: BiometricPaymentRequest.allowCredentials.[].type
+                type: string
+            required:
+              - id
+              - type
+            additionalProperties: false
+            title: BiometricPaymentRequest.allowCredentials.[]
+            type: object
+          title: BiometricPaymentRequest.allowCredentials
+          type: array
+        userVerification:
+          title: BiometricPaymentRequest.userVerification
+      required:
+        - challenge
+        - userVerification
+      additionalProperties: false
+      title: BiometricPaymentRequest
+      type: object
+    EnrollmentInformation:
+      properties:
+        deviceId:
+          title: EnrollmentInformation.deviceId
+          type: string
+        osVersion:
+          title: EnrollmentInformation.osVersion
+          type: string
+        userTimeZoneOffset:
+          title: EnrollmentInformation.userTimeZoneOffset
+          type: string
+        language:
+          title: EnrollmentInformation.language
+          type: string
+        screenDimensions:
+          properties:
+            height:
+              title: EnrollmentInformation.screenDimensions.height
+              type: number
+            width:
+              title: EnrollmentInformation.screenDimensions.width
+              type: number
+          required:
+            - height
+            - width
+          additionalProperties: false
+          title: EnrollmentInformation.screenDimensions
+          type: object
+        accountTenure:
+          title: EnrollmentInformation.accountTenure
+          type: string
+      required:
+        - deviceId
+        - osVersion
+        - userTimeZoneOffset
+        - language
+        - screenDimensions
+        - accountTenure
+      additionalProperties: false
+      title: EnrollmentInformation
+      type: object
+    BiometricAuthorization:
+      properties:
+        id:
+          title: BiometricAuthorization.id
+          type: string
+        rawId:
+          title: BiometricAuthorization.rawId
+          type: string
+        response:
+          properties:
+            authenticatorData:
+              title: BiometricAuthorization.response.authenticatorData
+              type: string
+            clientDataJSON:
+              title: BiometricAuthorization.response.clientDataJSON
+              type: string
+            signature:
+              title: BiometricAuthorization.response.signature
+              type: string
+            userHandle:
+              title: BiometricAuthorization.response.userHandle
+              nullable: true
+              type: string
+          required:
+            - authenticatorData
+            - clientDataJSON
+            - signature
+            - userHandle
+          additionalProperties: false
+          title: BiometricAuthorization.response
+          type: object
+        type:
+          title: BiometricAuthorization.type
+          type: string
+      required:
+        - id
+        - rawId
+        - response
+        - type
+      additionalProperties: false
+      title: BiometricAuthorization
+      type: object
+    BiometricRegistrationConfirmation:
+      properties:
+        rawId:
+          title: BiometricRegistrationConfirmation.rawId
+          type: string
+        response:
+          properties:
+            attestationObject:
+              title: BiometricRegistrationConfirmation.response.attestationObject
+              type: string
+            clientDataJSON:
+              title: BiometricRegistrationConfirmation.response.clientDataJSON
+              type: string
+          required:
+            - attestationObject
+            - clientDataJSON
+          additionalProperties: false
+          title: BiometricRegistrationConfirmation.response
+          type: object
+        type:
+          title: BiometricRegistrationConfirmation.type
+          type: string
+      required:
+        - rawId
+        - response
+        - type
+      additionalProperties: false
+      title: BiometricRegistrationConfirmation
+      type: object
