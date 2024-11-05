@@ -7,7 +7,7 @@
   <img src="https://github.com/belvo-finance-opensource/payments-atoms/actions/workflows/deploy-to-gh-pages.yml/badge.svg" alt="Deploy Docs, Storybook and Examples to GitHub Pages">
 </p>
 
-> Library of native web components that aims to facilitate integrating with Belvo's Payments Widget.
+> Library of native web components and utilities that aims to facilitate integrating with Belvo's Payments products.
 
 Visit the [documentation](https://belvo-finance-opensource.github.io/payments-atoms/docs/) for more detailed instructions or [Storybook](https://belvo-finance-opensource.github.io/payments-atoms/storybook/) if you want to play around with the web components.
 
@@ -31,7 +31,7 @@ Visit the [documentation](https://belvo-finance-opensource.github.io/payments-at
 npm install @belvo/payments-atoms
 ```
 
-### Initialization
+### Web components initialization
 
 Add a default import from `@belvo/payments-atoms` and call its `init` function with a callback so you're able to retrieve the selected payer institution. For example:
 
@@ -55,12 +55,22 @@ Once initialized, simply add the desired web component wherever you wish in your
 <belvo-payments-grid />
 ```
 
+### Biometric PIX
+
+```js
+import { biometricPix } from '@belvo/payments-atoms'
+
+biometricPix.collectEnrollmentInformation(accountTenure)
+biometricPix.requestEnrollmentConfirmation(biometricRegistrationRequest)
+biometricPix.requestPaymentAuthorization(biometricPaymentRequest)
+```
+
 ## 🇹🇸 TypeScript
 
 Belvo Payments Atoms has TypeScript support and provides a set of types that you can import into your project. We export them by default and you are able to import them as named imports like:
 
 ```typescript
-import type { Callback, Country, Institution } from '@belvo/payments-atoms'
+import type { Callback, Country, Institution, BiometricRegistrationRequest } from '@belvo/payments-atoms'
 ```
 
 ## :busts_in_silhouette: Contributing
