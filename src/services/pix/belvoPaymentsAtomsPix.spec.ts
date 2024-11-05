@@ -25,7 +25,6 @@ vi.stubGlobal('navigator', {
   credentials: {
     create: vi.fn().mockResolvedValue({
       authenticatorAttachment: 'cross-platform',
-      id: '447Q86f_XlFK0IBPVdf-giJUXs8pwmFCqqp0M3Q2PqM',
       type: 'public',
       rawId: new Uint8Array([1, 2, 3, 4]),
       response: {
@@ -93,7 +92,6 @@ describe('BelvoPaymentsAtomsPix', () => {
         })
       ).toEqual({
         authenticatorAttachment: 'cross-platform',
-        id: '447Q86f_XlFK0IBPVdf-giJUXs8pwmFCqqp0M3Q2PqM',
         rawId: 'base64',
         response: {
           attestationObject: 'base64',

@@ -49,7 +49,6 @@ export type PublicKeyCredentialWithAuthenticatorAssertionResponse = {
 }
 
 export type PublicKeyCredentialWithAttestationAssertionResponse = {
-  id?: string
   rawId: string
   response: {
     attestationObject: string
