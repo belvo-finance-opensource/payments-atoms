@@ -1,9 +1,9 @@
 import {
-  CredentialSignals,
-  LoginOptions,
-  PublicKeyCredentialWithAttestationAssertionResponse,
-  PublicKeyCredentialWithAuthenticatorAssertionResponse,
-  RegisterOptions
+  BiometricAuthorization,
+  BiometricPaymentRequest,
+  BiometricRegistrationConfirmation,
+  BiometricRegistrationRequest,
+  EnrollmentInformation
 } from '@/types/pix'
 import FingerprintJS from '@fingerprintjs/fingerprintjs'
 import base64JS from 'base64-js'
@@ -37,7 +37,7 @@ const getDeviceId = async (): Promise<string> => {
   return result.visitorId
 }
 
-const buildSignals = async (accountTenure: string): Promise<CredentialSignals> => {
+const buildSignals = async (accountTenure: string): Promise<EnrollmentInformation> => {
   const userAgentParser = new UAParser(navigator.userAgent)
   const milisecondsToHours = (miliseconds: number): number => miliseconds / 1000 / 60 / 60
   const getUserTimeZoneOffset = () =>
@@ -62,9 +62,9 @@ const buildSignals = async (accountTenure: string): Promise<CredentialSignals> =
   }
 }
 
-const parseRegisterOptions = (
+const parseBiometricRegistrationRequest = (
   credential: PublicKeyCredential & { response: AuthenticatorAttestationResponse }
-): PublicKeyCredentialWithAttestationAssertionResponse => ({
+): BiometricRegistrationConfirmation => ({
   ...credential,
   rawId: base64JS.fromByteArray(new Uint8Array(credential.rawId)),
   response: {
@@ -76,7 +76,9 @@ const parseRegisterOptions = (
   }
 })
 
-const parseLoginOptions = (options: LoginOptions): PublicKeyCredentialRequestOptions => {
+const parseBiometricPaymentRequest = (
+  options: BiometricPaymentRequest
+): PublicKeyCredentialRequestOptions => {
   return {
     ...options,
     challenge: base64JS.toByteArray(options.challenge),
@@ -92,7 +94,7 @@ const parseLoginOptions = (options: LoginOptions): PublicKeyCredentialRequestOpt
 
 const parseLoginResponse = (
   credential: PublicKeyCredential & { response: AuthenticatorAssertionResponse }
-): PublicKeyCredentialWithAuthenticatorAssertionResponse => ({
+): BiometricAuthorization => ({
   id: credential.id,
   rawId: base64JS.fromByteArray(new Uint8Array(credential.rawId)),
   response: {
@@ -122,7 +124,7 @@ const registerCredential = async (
   }
 }
 
-const buildRegisterCredentialOptions = (options: RegisterOptions) =>
+const buildRegisterCredentialOptions = (options: BiometricRegistrationRequest) =>
   ({
     challenge: base64JS.toByteArray(options.challenge),
     rp: options.rp,
@@ -148,28 +150,30 @@ const getCredential = async (
 }
 
 export const register = async (
-  options: RegisterOptions
-): Promise<PublicKeyCredentialWithAttestationAssertionResponse> => {
+  options: BiometricRegistrationRequest
+): Promise<BiometricRegistrationConfirmation> => {
   if (!isWebAuthnAvailable()) throw new Error('WebAuthn is not available')
   if (!isValidBase64URL(options.challenge)) throw new Error('Invalid challenge')
   if (!isValidBase64URL(options.user.id)) throw new Error('Invalid user id')
 
-  return parseRegisterOptions(await registerCredential(buildRegisterCredentialOptions(options)))
+  return parseBiometricRegistrationRequest(
+    await registerCredential(buildRegisterCredentialOptions(options))
+  )
 }
 
 export const login = async (
-  options: LoginOptions
-): Promise<PublicKeyCredentialWithAuthenticatorAssertionResponse | null> => {
+  options: BiometricPaymentRequest
+): Promise<BiometricAuthorization | null> => {
   if (!isWebAuthnAvailable()) throw new Error('WebAuthn is not available')
 
-  const credential = await getCredential(parseLoginOptions(options))
+  const credential = await getCredential(parseBiometricPaymentRequest(options))
 
   if (!credential) throw new Error('Invalid credential')
 
   return parseLoginResponse(credential)
 }
 
-export const signals = async (accountTenure: string): Promise<CredentialSignals> => {
+export const signals = async (accountTenure: string): Promise<EnrollmentInformation> => {
   if (!isValidDate(accountTenure)) throw new Error('Invalid account tenure')
 
   return await buildSignals(accountTenure)

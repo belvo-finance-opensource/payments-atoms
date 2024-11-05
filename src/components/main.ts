@@ -14,10 +14,8 @@ export default {
     defineWebComponents([{ name: 'belvo-payments-grid', setup: BelvoPaymentsGrid as Component }])
   },
   biometricPix: {
-    credentials: {
-      collectEnrollmentInformation: signals,
-      requestEnrollmentConfirmation: register,
-      authorizePayment: login
-    }
+    collectEnrollmentInformation: signals,
+    requestEnrollmentConfirmation: register,
+    authorizePayment: login
   }
 }

@@ -37,11 +37,9 @@ describe('main.spec.ts', () => {
   describe('biometricPix', () => {
     it('should return signals and register', () => {
       expect(BelvoPaymentsAtoms.biometricPix).toEqual({
-        credentials: {
-          collectEnrollmentInformation: signals,
-          requestEnrollmentConfirmation: register,
-          authorizePayment: login
-        }
+        collectEnrollmentInformation: signals,
+        requestEnrollmentConfirmation: register,
+        authorizePayment: login
       })
     })
   })
