@@ -10,21 +10,21 @@ info:
 paths: {}
 components:
   schemas:
-    PixUser:
+    BiometricRegistrationRequestUser:
       properties:
         id:
-          title: PixUser.id
+          title: BiometricRegistrationRequestUser.id
           type: string
         name:
-          title: PixUser.name
+          title: BiometricRegistrationRequestUser.name
         displayName:
-          title: PixUser.displayName
+          title: BiometricRegistrationRequestUser.displayName
       required:
         - id
         - name
         - displayName
       additionalProperties: false
-      title: PixUser
+      title: BiometricRegistrationRequestUser
       type: object
     BiometricRegistrationRequest:
       properties:
@@ -34,7 +34,7 @@ components:
         rp:
           title: BiometricRegistrationRequest.rp
         user:
-          $ref: '#/components/schemas/PixUser'
+          $ref: '#/components/schemas/BiometricRegistrationRequestUser'
           title: BiometricRegistrationRequest.user
         pubKeyCredParams:
           title: BiometricRegistrationRequest.pubKeyCredParams

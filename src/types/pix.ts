@@ -1,4 +1,4 @@
-export type PixUser = {
+export type BiometricRegistrationRequestUser = {
   id: string
   name: PublicKeyCredentialCreationOptions['user']['name']
   displayName: PublicKeyCredentialCreationOptions['user']['displayName']
@@ -7,7 +7,7 @@ export type PixUser = {
 export type BiometricRegistrationRequest = {
   challenge: string
   rp: PublicKeyCredentialCreationOptions['rp']
-  user: PixUser
+  user: BiometricRegistrationRequestUser
   pubKeyCredParams: PublicKeyCredentialCreationOptions['pubKeyCredParams']
   accountTenure: string
   attestation?: PublicKeyCredentialCreationOptions['attestation']
