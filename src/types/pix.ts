@@ -11,6 +11,10 @@ export type BiometricRegistrationRequest = {
   pubKeyCredParams: PublicKeyCredentialCreationOptions['pubKeyCredParams']
   accountTenure: string
   attestation?: PublicKeyCredentialCreationOptions['attestation']
+  timeout?: PublicKeyCredentialCreationOptions['timeout']
+  excludeCredentials?: PublicKeyCredentialCreationOptions['excludeCredentials']
+  authenticatorSelection?: PublicKeyCredentialCreationOptions['authenticatorSelection']
+  extensions?: PublicKeyCredentialCreationOptions['extensions']
 }
 
 export type BiometricPaymentRequest = {
@@ -22,6 +26,7 @@ export type BiometricPaymentRequest = {
     type: string
   }[]
   userVerification: UserVerificationRequirement
+  extensions?: PublicKeyCredentialRequestOptions['extensions']
 }
 
 export type EnrollmentInformation = {
