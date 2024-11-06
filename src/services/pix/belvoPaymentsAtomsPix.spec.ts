@@ -2,10 +2,8 @@ import { login, register, signals } from './BelvoPaymentsAtomsPix'
 
 process.env.TZ = 'America/Sao_Paulo'
 
-vi.mock('@fingerprintjs/fingerprintjs', () => ({
-  default: {
-    load: vi.fn().mockResolvedValue({ get: vi.fn().mockResolvedValue({ visitorId: 'visitorId' }) })
-  }
+vi.mock('@fingerprintjs/fingerprintjs-pro', () => ({
+  load: vi.fn().mockResolvedValue({ get: vi.fn().mockResolvedValue({ visitorId: 'visitorId' }) })
 }))
 
 vi.mock('base64-js', () => ({

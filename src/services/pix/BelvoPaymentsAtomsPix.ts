@@ -5,7 +5,7 @@ import {
   BiometricRegistrationRequest,
   EnrollmentInformation
 } from '@/types/pix'
-import FingerprintJS from '@fingerprintjs/fingerprintjs'
+import * as FingerprintJS from '@fingerprintjs/fingerprintjs-pro'
 import base64JS from 'base64-js'
 import { isValid, parse } from 'date-fns'
 import { getTimezoneOffset } from 'date-fns-tz'
@@ -31,7 +31,7 @@ const isWebAuthnAvailable = (): boolean => {
 }
 
 const getDeviceId = async (): Promise<string> => {
-  const fp = await FingerprintJS.load()
+  const fp = await FingerprintJS.load({ apiKey: 'PUBLIC_API_KEY' })
   const result = await fp.get()
 
   return result.visitorId
