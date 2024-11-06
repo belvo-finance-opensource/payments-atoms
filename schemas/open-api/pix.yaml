@@ -43,6 +43,14 @@ components:
           type: string
         attestation:
           title: BiometricRegistrationRequest.attestation
+        timeout:
+          title: BiometricRegistrationRequest.timeout
+        excludeCredentials:
+          title: BiometricRegistrationRequest.excludeCredentials
+        authenticatorSelection:
+          title: BiometricRegistrationRequest.authenticatorSelection
+        extensions:
+          title: BiometricRegistrationRequest.extensions
       required:
         - challenge
         - rp
@@ -82,6 +90,8 @@ components:
           type: array
         userVerification:
           title: BiometricPaymentRequest.userVerification
+        extensions:
+          title: BiometricPaymentRequest.extensions
       required:
         - challenge
         - userVerification
