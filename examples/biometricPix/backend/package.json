@@ -1,0 +1,17 @@
+{
+  "name": "sdk-poc-server",
+  "module": "index.ts",
+  "type": "module",
+  "dependencies": {
+    "websi": "^0.3.0"
+  },
+  "scripts": {
+    "start": "bun --hot --inspect index.ts"
+  },
+  "devDependencies": {
+    "bun-types": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
