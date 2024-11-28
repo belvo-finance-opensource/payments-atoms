@@ -66,7 +66,7 @@ const parseBiometricRegistrationRequest = (
   credential: Credential & PublicKeyCredential & { response: AuthenticatorAttestationResponse }
 ): BiometricRegistrationConfirmation => ({
   authenticatorAttachment: credential.authenticatorAttachment || 'platform',
-  id: credential.id,
+  id: Buffer.from(credential.id).toString('base64url'),
   rawId: base64JS.fromByteArray(new Uint8Array(credential.rawId)),
   response: {
     ...credential.response,
@@ -120,7 +120,8 @@ const registerCredential = async (
       publicKey
     })
 
-    return credential as PublicKeyCredential & { response: AuthenticatorAttestationResponse }
+    return credential as Credential &
+      PublicKeyCredential & { response: AuthenticatorAttestationResponse }
   } catch (error) {
     throw new Error(`Error during sign up: ${error}`)
   }
