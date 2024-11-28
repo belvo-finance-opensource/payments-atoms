@@ -66,7 +66,7 @@ const parseBiometricRegistrationRequest = (
   credential: Credential & PublicKeyCredential & { response: AuthenticatorAttestationResponse }
 ): BiometricRegistrationConfirmation => ({
   authenticatorAttachment: credential.authenticatorAttachment || 'platform',
-  id: Buffer.from(credential.id).toString('base64url'),
+  id: btoa(credential.id),
   rawId: base64JS.fromByteArray(new Uint8Array(credential.rawId)),
   response: {
     ...credential.response,
