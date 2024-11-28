@@ -54,6 +54,8 @@ export type BiometricAuthorization = {
 }
 
 export type BiometricRegistrationConfirmation = {
+  id: string
+  authenticatorAttachment: string
   rawId: string
   response: {
     attestationObject: string

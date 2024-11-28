@@ -25,12 +25,12 @@ vi.stubGlobal('navigator', {
   credentials: {
     create: vi.fn().mockResolvedValue({
       authenticatorAttachment: 'cross-platform',
-      type: 'public',
+      type: 'public-key',
+      id: 'string',
       rawId: new Uint8Array([1, 2, 3, 4]),
       response: {
         attestationObject: new Uint8Array([1, 2, 3, 4]),
-        clientDataJSON: new Uint8Array([1, 2, 3, 4]),
-        type: 'public-key'
+        clientDataJSON: new Uint8Array([1, 2, 3, 4])
       }
     }),
     get: vi.fn().mockResolvedValue({
@@ -91,14 +91,14 @@ describe('BelvoPaymentsAtomsPix', () => {
           attestation: 'direct'
         })
       ).toEqual({
+        id: 'string',
         authenticatorAttachment: 'cross-platform',
         rawId: 'base64',
         response: {
           attestationObject: 'base64',
-          clientDataJSON: 'base64',
-          type: 'public-key'
+          clientDataJSON: 'base64'
         },
-        type: 'public'
+        type: 'public-key'
       })
     })
   })
