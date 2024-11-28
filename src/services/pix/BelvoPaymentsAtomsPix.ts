@@ -63,9 +63,10 @@ const buildSignals = async (accountTenure: string): Promise<EnrollmentInformatio
 }
 
 const parseBiometricRegistrationRequest = (
-  credential: PublicKeyCredential & { response: AuthenticatorAttestationResponse }
+  credential: Credential & PublicKeyCredential & { response: AuthenticatorAttestationResponse }
 ): BiometricRegistrationConfirmation => ({
-  ...credential,
+  authenticatorAttachment: credential.authenticatorAttachment || 'platform',
+  id: credential.id,
   rawId: base64JS.fromByteArray(new Uint8Array(credential.rawId)),
   response: {
     ...credential.response,
@@ -73,7 +74,8 @@ const parseBiometricRegistrationRequest = (
       new Uint8Array(credential.response.attestationObject)
     ),
     clientDataJSON: base64JS.fromByteArray(new Uint8Array(credential.response.clientDataJSON))
-  }
+  },
+  type: credential.type
 })
 
 const parseBiometricPaymentRequest = (
