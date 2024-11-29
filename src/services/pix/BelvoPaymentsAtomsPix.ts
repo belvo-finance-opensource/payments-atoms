@@ -19,15 +19,6 @@ const padTimeZoneOfsset = (number: number, totalDigits = 2, paddingCharacter = '
   ['', '-'][+(number < 0)] +
   (paddingCharacter.repeat(totalDigits) + Math.abs(number)).slice(-1 * totalDigits)
 
-const isValidBase64URL = (value: string): boolean => {
-  try {
-    window.atob(value)
-    return true
-  } catch {
-    return false
-  }
-}
-
 const isWebAuthnAvailable = (): boolean => {
   return !!window.PublicKeyCredential
 }
@@ -158,8 +149,6 @@ export const register = async (
   options: BiometricRegistrationRequest
 ): Promise<BiometricRegistrationConfirmation> => {
   if (!isWebAuthnAvailable()) throw new Error('WebAuthn is not available')
-  if (!isValidBase64URL(options.challenge)) throw new Error('Invalid challenge')
-  if (!isValidBase64URL(options.user.id)) throw new Error('Invalid user id')
 
   return parseBiometricRegistrationRequest(
     await registerCredential(buildRegisterCredentialOptions(options))
