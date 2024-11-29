@@ -53,7 +53,7 @@ const buildSignals = async (accountTenure: string): Promise<EnrollmentInformatio
     deviceId: await getDeviceId(),
     osVersion,
     userTimeZoneOffset: getUserTimeZoneOffset(),
-    language: navigator.language,
+    language: navigator.language.substring(0, 2),
     screenDimensions: {
       height: window.screen.height,
       width: window.screen.width

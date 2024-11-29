@@ -63,7 +63,7 @@ describe('BelvoPaymentsAtomsPix', () => {
         deviceId: 'visitorId',
         osVersion: 'Unix 7.1.0',
         userTimeZoneOffset: '-03',
-        language: 'pt-BR',
+        language: 'pt',
         screenDimensions: {
           height: 768,
           width: 1024
