@@ -12,6 +12,8 @@ import { getTimezoneOffset } from 'date-fns-tz'
 import { UAParser } from 'ua-parser-js'
 
 const isValidDate = (date: string): boolean => isValid(parse(date, 'yyyy-MM-dd', new Date()))
+const textEncoder = new TextEncoder()
+const textDecoder = new TextDecoder()
 
 const padTimeZoneOfsset = (number: number, totalDigits = 2, paddingCharacter = '0') =>
   ['', '-'][+(number < 0)] +
@@ -98,7 +100,7 @@ const parseLoginResponse = (
   credential: PublicKeyCredential & { response: AuthenticatorAssertionResponse }
 ): BiometricAuthorization => ({
   id: credential.id,
-  rawId: base64JS.fromByteArray(new Uint8Array(credential.rawId)),
+  rawId: textDecoder.decode(credential.rawId),
   response: {
     authenticatorData: base64JS.fromByteArray(
       new Uint8Array(credential.response.authenticatorData)
@@ -129,11 +131,11 @@ const registerCredential = async (
 
 const buildRegisterCredentialOptions = (options: BiometricRegistrationRequest) =>
   ({
-    challenge: base64JS.toByteArray(options.challenge),
+    challenge: textEncoder.encode(options.challenge),
     rp: options.rp,
     user: {
       ...options.user,
-      id: base64JS.toByteArray(options.user.id)
+      id: textEncoder.encode(options.user.id)
     },
     pubKeyCredParams: options.pubKeyCredParams,
     timeout: 60000,
