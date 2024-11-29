@@ -12,19 +12,12 @@ import { getTimezoneOffset } from 'date-fns-tz'
 import { UAParser } from 'ua-parser-js'
 
 const isValidDate = (date: string): boolean => isValid(parse(date, 'yyyy-MM-dd', new Date()))
+const textEncoder = new TextEncoder()
+const textDecoder = new TextDecoder()
 
 const padTimeZoneOfsset = (number: number, totalDigits = 2, paddingCharacter = '0') =>
   ['', '-'][+(number < 0)] +
   (paddingCharacter.repeat(totalDigits) + Math.abs(number)).slice(-1 * totalDigits)
-
-const isValidBase64URL = (value: string): boolean => {
-  try {
-    window.atob(value)
-    return true
-  } catch {
-    return false
-  }
-}
 
 const isWebAuthnAvailable = (): boolean => {
   return !!window.PublicKeyCredential
@@ -53,7 +46,7 @@ const buildSignals = async (accountTenure: string): Promise<EnrollmentInformatio
     deviceId: await getDeviceId(),
     osVersion,
     userTimeZoneOffset: getUserTimeZoneOffset(),
-    language: navigator.language,
+    language: navigator.language.substring(0, 2),
     screenDimensions: {
       height: window.screen.height,
       width: window.screen.width
@@ -98,7 +91,7 @@ const parseLoginResponse = (
   credential: PublicKeyCredential & { response: AuthenticatorAssertionResponse }
 ): BiometricAuthorization => ({
   id: credential.id,
-  rawId: base64JS.fromByteArray(new Uint8Array(credential.rawId)),
+  rawId: textDecoder.decode(credential.rawId),
   response: {
     authenticatorData: base64JS.fromByteArray(
       new Uint8Array(credential.response.authenticatorData)
@@ -129,11 +122,11 @@ const registerCredential = async (
 
 const buildRegisterCredentialOptions = (options: BiometricRegistrationRequest) =>
   ({
-    challenge: base64JS.toByteArray(options.challenge),
+    challenge: textEncoder.encode(options.challenge),
     rp: options.rp,
     user: {
       ...options.user,
-      id: base64JS.toByteArray(options.user.id)
+      id: textEncoder.encode(options.user.id)
     },
     pubKeyCredParams: options.pubKeyCredParams,
     timeout: 60000,
@@ -156,8 +149,6 @@ export const register = async (
   options: BiometricRegistrationRequest
 ): Promise<BiometricRegistrationConfirmation> => {
   if (!isWebAuthnAvailable()) throw new Error('WebAuthn is not available')
-  if (!isValidBase64URL(options.challenge)) throw new Error('Invalid challenge')
-  if (!isValidBase64URL(options.user.id)) throw new Error('Invalid user id')
 
   return parseBiometricRegistrationRequest(
     await registerCredential(buildRegisterCredentialOptions(options))

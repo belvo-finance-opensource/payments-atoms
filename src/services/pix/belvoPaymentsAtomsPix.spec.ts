@@ -11,7 +11,7 @@ vi.mock('@fingerprintjs/fingerprintjs', () => ({
 vi.mock('base64-js', () => ({
   default: {
     fromByteArray: vi.fn().mockReturnValue('base64'),
-    toByteArray: vi.fn().mockReturnValue(new Uint8Array([1, 2, 3, 4]))
+    toByteArray: vi.fn().mockReturnValue(new Uint8Array([72, 101, 108, 108, 111]))
   }
 }))
 
@@ -27,21 +27,21 @@ vi.stubGlobal('navigator', {
       authenticatorAttachment: 'cross-platform',
       type: 'public-key',
       id: 'string',
-      rawId: new Uint8Array([1, 2, 3, 4]),
+      rawId: new Uint8Array([72, 101, 108, 108, 111]),
       response: {
-        attestationObject: new Uint8Array([1, 2, 3, 4]),
-        clientDataJSON: new Uint8Array([1, 2, 3, 4])
+        attestationObject: new Uint8Array([72, 101, 108, 108, 111]),
+        clientDataJSON: new Uint8Array([72, 101, 108, 108, 111])
       }
     }),
     get: vi.fn().mockResolvedValue({
       authenticatorAttachment: 'cross-platform',
       id: 'string',
-      rawId: new Uint8Array([1, 2, 3, 4]),
+      rawId: new Uint8Array([72, 101, 108, 108, 111]),
       response: {
-        authenticatorData: new Uint8Array([1, 2, 3, 4]),
-        clientDataJSON: new Uint8Array([1, 2, 3, 4]),
-        signature: new Uint8Array([1, 2, 3, 4]),
-        userHandle: new Uint8Array([1, 2, 3, 4])
+        authenticatorData: new Uint8Array([72, 101, 108, 108, 111]),
+        clientDataJSON: new Uint8Array([72, 101, 108, 108, 111]),
+        signature: new Uint8Array([72, 101, 108, 108, 111]),
+        userHandle: new Uint8Array([72, 101, 108, 108, 111])
       },
       type: 'public-key'
     })
@@ -63,7 +63,7 @@ describe('BelvoPaymentsAtomsPix', () => {
         deviceId: 'visitorId',
         osVersion: 'Unix 7.1.0',
         userTimeZoneOffset: '-03',
-        language: 'pt-BR',
+        language: 'pt',
         screenDimensions: {
           height: 768,
           width: 1024
@@ -122,7 +122,7 @@ describe('BelvoPaymentsAtomsPix', () => {
         })
       ).toEqual({
         id: 'string',
-        rawId: 'base64',
+        rawId: 'Hello',
         response: {
           authenticatorData: 'base64',
           clientDataJSON: 'base64',
@@ -169,105 +169,6 @@ describe('BelvoPaymentsAtomsPix', () => {
       ).rejects.toThrowError('WebAuthn is not available')
     })
 
-    it('should not register credentials if the challenge is not a Base64 string', async () => {
-      vi.stubGlobal('PublicKeyCredential', { get: vi.fn() })
-      vi.stubGlobal('navigator', {
-        credentials: {
-          create: vi.fn().mockResolvedValue({
-            authenticatorAttachment: 'cross-platform',
-            id: '447Q86f_XlFK0IBPVdf-giJUXs8pwmFCqqp0M3Q2PqM',
-            rawId: new Uint8Array([1, 2, 3, 4]),
-            response: {
-              attestationObject: new Uint8Array([1, 2, 3, 4]),
-              clientDataJSON: new Uint8Array([1, 2, 3, 4]),
-              type: 'public-key'
-            }
-          }),
-          get: vi.fn().mockResolvedValue({})
-        },
-        userAgent:
-          'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36',
-        language: 'pt-BR'
-      })
-
-      await expect(
-        register({
-          challenge: '`a',
-          rp: { id: 'belvo.com', name: 'Belvo' },
-          user: { id: 'dXNlci1pZA==', name: 'name', displayName: 'displayName' },
-          pubKeyCredParams: [{ alg: -7, type: 'public-key' }],
-          accountTenure: '1',
-          attestation: 'direct'
-        })
-      ).rejects.toThrowError('Invalid challenge')
-    })
-
-    it('should not register credentials if the user ID is not a Base64 string', async () => {
-      vi.stubGlobal('PublicKeyCredential', { get: vi.fn() })
-      vi.stubGlobal('navigator', {
-        credentials: {
-          create: vi.fn().mockResolvedValue({
-            authenticatorAttachment: 'cross-platform',
-            id: '447Q86f_XlFK0IBPVdf-giJUXs8pwmFCqqp0M3Q2PqM',
-            rawId: new Uint8Array([1, 2, 3, 4]),
-            response: {
-              attestationObject: new Uint8Array([1, 2, 3, 4]),
-              clientDataJSON: new Uint8Array([1, 2, 3, 4]),
-              type: 'public-key'
-            }
-          }),
-          get: vi.fn().mockResolvedValue({})
-        },
-        userAgent:
-          'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36',
-        language: 'pt-BR'
-      })
-
-      await expect(
-        register({
-          challenge: 'base64',
-          rp: { id: 'belvo.com', name: 'Belvo' },
-          user: { id: 'à', name: 'name', displayName: 'displayName' },
-          pubKeyCredParams: [{ alg: -7, type: 'public-key' }],
-          accountTenure: '1',
-          attestation: 'direct'
-        })
-      ).rejects.toThrowError('Invalid user id')
-    })
-
-    it('should not register credentials if the payload is empty', async () => {
-      vi.stubGlobal('PublicKeyCredential', { get: vi.fn() })
-      vi.stubGlobal('navigator', {
-        credentials: {
-          create: vi.fn().mockResolvedValue({
-            authenticatorAttachment: 'cross-platform',
-            id: '447Q86f_XlFK0IBPVdf-giJUXs8pwmFCqqp0M3Q2PqM',
-            rawId: new Uint8Array([1, 2, 3, 4]),
-            response: {
-              attestationObject: new Uint8Array([1, 2, 3, 4]),
-              clientDataJSON: new Uint8Array([1, 2, 3, 4]),
-              type: 'public-key'
-            }
-          }),
-          get: vi.fn().mockResolvedValue({})
-        },
-        userAgent:
-          'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36',
-        language: 'pt-BR'
-      })
-
-      await expect(
-        register({
-          challenge: 'base64',
-          rp: { id: 'belvo.com', name: 'Belvo' },
-          user: { id: 'à', name: 'name', displayName: 'displayName' },
-          pubKeyCredParams: [{ alg: -7, type: 'public-key' }],
-          accountTenure: '1',
-          attestation: 'direct'
-        })
-      ).rejects.toThrowError('Invalid user id')
-    })
-
     it('should throw an error when WebAuthn API error while registering', async () => {
       vi.stubGlobal('PublicKeyCredential', { get: vi.fn() })
       vi.stubGlobal('navigator', {
@@ -282,9 +183,9 @@ describe('BelvoPaymentsAtomsPix', () => {
 
       await expect(
         register({
-          challenge: 'base64',
+          challenge: 'Y2hhbGxlbmdl',
           rp: { id: 'belvo.com', name: 'Belvo' },
-          user: { id: 'base64', name: 'name', displayName: 'displayName' },
+          user: { id: 'Y2hhbGxlbmdl', name: 'name', displayName: 'displayName' },
           pubKeyCredParams: [{ alg: -7, type: 'public-key' }],
           accountTenure: '1',
           attestation: 'direct'
@@ -299,10 +200,10 @@ describe('BelvoPaymentsAtomsPix', () => {
           create: vi.fn().mockResolvedValue({
             authenticatorAttachment: 'cross-platform',
             id: '447Q86f_XlFK0IBPVdf-giJUXs8pwmFCqqp0M3Q2PqM',
-            rawId: new Uint8Array([1, 2, 3, 4]),
+            rawId: new Uint8Array([72, 101, 108, 108, 111]),
             response: {
-              attestationObject: new Uint8Array([1, 2, 3, 4]),
-              clientDataJSON: new Uint8Array([1, 2, 3, 4]),
+              attestationObject: new Uint8Array([72, 101, 108, 108, 111]),
+              clientDataJSON: new Uint8Array([72, 101, 108, 108, 111]),
               type: 'public-key'
             }
           }),
@@ -319,7 +220,7 @@ describe('BelvoPaymentsAtomsPix', () => {
           rpId: 'belvo.com',
           allowCredentials: [
             {
-              id: 'base64',
+              id: 'Y2hhbGxlbmdl',
               type: 'public-key'
             }
           ],
