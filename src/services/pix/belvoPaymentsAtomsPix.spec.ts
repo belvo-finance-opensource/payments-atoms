@@ -2,6 +2,10 @@ import { login, register, signals } from './BelvoPaymentsAtomsPix'
 
 process.env.TZ = 'America/Sao_Paulo'
 
+const textEncoder = new TextEncoder()
+const clienteDataJSONMock =
+  '{"type":"webauthn.create","challenge":"X2FhMjBfWThGeTAwXzBDOU1kTWxYTm1NY0MxakttZk1YUnZmanVPX05sSQ","origin":"https://bio.localhost","crossOrigin":false}'
+
 vi.mock('@fingerprintjs/fingerprintjs', () => ({
   default: {
     load: vi.fn().mockResolvedValue({ get: vi.fn().mockResolvedValue({ visitorId: 'visitorId' }) })
@@ -23,7 +27,9 @@ vi.stubGlobal('navigator', {
       rawId: new Uint8Array([72, 101, 108, 108, 111]),
       response: {
         attestationObject: new Uint8Array([72, 101, 108, 108, 111]),
-        clientDataJSON: new Uint8Array([72, 101, 108, 108, 111])
+        clientDataJSON: textEncoder.encode(
+          '{"type":"webauthn.create","challenge":"X2FhMjBfWThGeTAwXzBDOU1kTWxYTm1NY0MxakttZk1YUnZmanVPX05sSQ","origin":"https://bio.localhost","crossOrigin":false}'
+        )
       }
     }),
     get: vi.fn().mockResolvedValue({
@@ -32,7 +38,7 @@ vi.stubGlobal('navigator', {
       rawId: new Uint8Array([72, 101, 108, 108, 111]),
       response: {
         authenticatorData: new Uint8Array([72, 101, 108, 108, 111]),
-        clientDataJSON: new Uint8Array([72, 101, 108, 108, 111]),
+        clientDataJSON: textEncoder.encode(clienteDataJSONMock),
         signature: new Uint8Array([72, 101, 108, 108, 111]),
         userHandle: new Uint8Array([72, 101, 108, 108, 111])
       },
@@ -84,12 +90,13 @@ describe('BelvoPaymentsAtomsPix', () => {
           attestation: 'direct'
         })
       ).toEqual({
-        id: 'string',
+        id: 'c3RyaW5n',
         authenticatorAttachment: 'cross-platform',
-        rawId: 'Hello',
+        rawId: 'SGVsbG8=',
         response: {
-          attestationObject: 'Hello',
-          clientDataJSON: 'Hello'
+          attestationObject: 'SGVsbG8=',
+          clientDataJSON:
+            'eyJ0eXBlIjoid2ViYXV0aG4uY3JlYXRlIiwiY2hhbGxlbmdlIjoiX2FhMjBfWThGeTAwXzBDOU1kTWxYTm1NY0MxakttZk1YUnZmanVPX05sSSIsIm9yaWdpbiI6Imh0dHBzOi8vYmlvLmxvY2FsaG9zdCIsImNyb3NzT3JpZ2luIjpmYWxzZX0='
         },
         type: 'public-key'
       })
@@ -107,7 +114,7 @@ describe('BelvoPaymentsAtomsPix', () => {
           rpId: 'belvo.com',
           allowCredentials: [
             {
-              id: 'base64',
+              id: 'c3RyaW5n',
               type: 'public-key'
             }
           ],
@@ -117,10 +124,11 @@ describe('BelvoPaymentsAtomsPix', () => {
         id: 'string',
         rawId: 'Hello',
         response: {
-          authenticatorData: 'Hello',
-          clientDataJSON: 'Hello',
-          signature: 'Hello',
-          userHandle: 'Hello'
+          authenticatorData: 'SGVsbG8=',
+          clientDataJSON:
+            'eyJ0eXBlIjoid2ViYXV0aG4uY3JlYXRlIiwiY2hhbGxlbmdlIjoiWDJGaE1qQmZXVGhHZVRBd1h6QkRPVTFrVFd4WVRtMU5ZME14YWt0dFprMVlVblptYW5WUFgwNXNTUSIsIm9yaWdpbiI6Imh0dHBzOi8vYmlvLmxvY2FsaG9zdCIsImNyb3NzT3JpZ2luIjpmYWxzZX0=',
+          signature: 'SGVsbG8=',
+          userHandle: 'SGVsbG8='
         },
         type: 'public-key'
       })
