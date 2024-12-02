@@ -8,13 +8,6 @@ vi.mock('@fingerprintjs/fingerprintjs', () => ({
   }
 }))
 
-vi.mock('base64-js', () => ({
-  default: {
-    fromByteArray: vi.fn().mockReturnValue('base64'),
-    toByteArray: vi.fn().mockReturnValue(new Uint8Array([72, 101, 108, 108, 111]))
-  }
-}))
-
 vi.mock('ua-parser-js', () => ({
   UAParser: vi.fn().mockReturnValue({
     getOS: vi.fn().mockReturnValue({ name: 'Unix', version: '7.1.0' })
@@ -91,12 +84,12 @@ describe('BelvoPaymentsAtomsPix', () => {
           attestation: 'direct'
         })
       ).toEqual({
-        id: 'c3RyaW5n',
+        id: 'string',
         authenticatorAttachment: 'cross-platform',
-        rawId: 'base64',
+        rawId: 'Hello',
         response: {
-          attestationObject: 'base64',
-          clientDataJSON: 'base64'
+          attestationObject: 'Hello',
+          clientDataJSON: 'Hello'
         },
         type: 'public-key'
       })
@@ -124,10 +117,10 @@ describe('BelvoPaymentsAtomsPix', () => {
         id: 'string',
         rawId: 'Hello',
         response: {
-          authenticatorData: 'base64',
-          clientDataJSON: 'base64',
-          signature: 'base64',
-          userHandle: 'base64'
+          authenticatorData: 'Hello',
+          clientDataJSON: 'Hello',
+          signature: 'Hello',
+          userHandle: 'Hello'
         },
         type: 'public-key'
       })
