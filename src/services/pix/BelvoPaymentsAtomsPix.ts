@@ -6,6 +6,7 @@ import {
   EnrollmentInformation
 } from '@/types/pix'
 import FingerprintJS from '@fingerprintjs/fingerprintjs'
+import base64JS from 'base64-js'
 import { isValid, parse } from 'date-fns'
 import { getTimezoneOffset } from 'date-fns-tz'
 import { UAParser } from 'ua-parser-js'
@@ -54,16 +55,29 @@ const buildSignals = async (accountTenure: string): Promise<EnrollmentInformatio
   }
 }
 
-const parseBiometricRegistrationRequest = (
+const parseBiometricRegistrationResponse = (
   credential: Credential & PublicKeyCredential & { response: AuthenticatorAttestationResponse }
 ): BiometricRegistrationConfirmation => ({
   authenticatorAttachment: credential.authenticatorAttachment || 'platform',
-  id: credential.id,
-  rawId: textDecoder.decode(credential.rawId),
+  id: btoa(credential.id),
+  rawId: base64JS.fromByteArray(new Uint8Array(credential.rawId)),
   response: {
     ...credential.response,
-    attestationObject: textDecoder.decode(credential.response.attestationObject),
-    clientDataJSON: textDecoder.decode(credential.response.clientDataJSON)
+    attestationObject: base64JS.fromByteArray(
+      new Uint8Array(credential.response.attestationObject)
+    ),
+    clientDataJSON: btoa(
+      JSON.stringify({
+        ...JSON.parse(
+          atob(base64JS.fromByteArray(new Uint8Array(credential.response.clientDataJSON)))
+        ),
+        challenge: atob(
+          JSON.parse(
+            atob(base64JS.fromByteArray(new Uint8Array(credential.response.clientDataJSON)))
+          ).challenge
+        )
+      })
+    )
   },
   type: credential.type
 })
@@ -73,11 +87,11 @@ const parseBiometricPaymentRequest = (
 ): PublicKeyCredentialRequestOptions => {
   return {
     ...options,
-    challenge: textEncoder.encode(options.challenge),
+    challenge: base64JS.toByteArray(options.challenge),
     allowCredentials: options.allowCredentials?.map(
       (credential) =>
         ({
-          id: textEncoder.encode(credential.id),
+          id: base64JS.toByteArray(credential.id),
           type: credential.type
         }) as PublicKeyCredentialDescriptor
     )
@@ -90,11 +104,13 @@ const parseLoginResponse = (
   id: credential.id,
   rawId: textDecoder.decode(credential.rawId),
   response: {
-    authenticatorData: textDecoder.decode(credential.response.authenticatorData),
-    clientDataJSON: textDecoder.decode(credential.response.clientDataJSON),
-    signature: textDecoder.decode(credential.response.signature),
+    authenticatorData: base64JS.fromByteArray(
+      new Uint8Array(credential.response.authenticatorData)
+    ),
+    clientDataJSON: base64JS.fromByteArray(new Uint8Array(credential.response.clientDataJSON)),
+    signature: base64JS.fromByteArray(new Uint8Array(credential.response.signature)),
     userHandle: credential.response.userHandle
-      ? textDecoder.decode(credential.response.userHandle)
+      ? base64JS.fromByteArray(new Uint8Array(credential.response.userHandle))
       : null
   },
   type: credential.type
@@ -145,7 +161,7 @@ export const register = async (
 ): Promise<BiometricRegistrationConfirmation> => {
   if (!isWebAuthnAvailable()) throw new Error('WebAuthn is not available')
 
-  return parseBiometricRegistrationRequest(
+  return parseBiometricRegistrationResponse(
     await registerCredential(buildRegisterCredentialOptions(options))
   )
 }
