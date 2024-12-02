@@ -6,7 +6,6 @@ import {
   EnrollmentInformation
 } from '@/types/pix'
 import FingerprintJS from '@fingerprintjs/fingerprintjs'
-import base64JS from 'base64-js'
 import { isValid, parse } from 'date-fns'
 import { getTimezoneOffset } from 'date-fns-tz'
 import { UAParser } from 'ua-parser-js'
@@ -59,14 +58,12 @@ const parseBiometricRegistrationRequest = (
   credential: Credential & PublicKeyCredential & { response: AuthenticatorAttestationResponse }
 ): BiometricRegistrationConfirmation => ({
   authenticatorAttachment: credential.authenticatorAttachment || 'platform',
-  id: btoa(credential.id),
-  rawId: base64JS.fromByteArray(new Uint8Array(credential.rawId)),
+  id: credential.id,
+  rawId: textDecoder.decode(credential.rawId),
   response: {
     ...credential.response,
-    attestationObject: base64JS.fromByteArray(
-      new Uint8Array(credential.response.attestationObject)
-    ),
-    clientDataJSON: base64JS.fromByteArray(new Uint8Array(credential.response.clientDataJSON))
+    attestationObject: textDecoder.decode(credential.response.attestationObject),
+    clientDataJSON: textDecoder.decode(credential.response.clientDataJSON)
   },
   type: credential.type
 })
@@ -76,11 +73,11 @@ const parseBiometricPaymentRequest = (
 ): PublicKeyCredentialRequestOptions => {
   return {
     ...options,
-    challenge: base64JS.toByteArray(options.challenge),
+    challenge: textEncoder.encode(options.challenge),
     allowCredentials: options.allowCredentials?.map(
       (credential) =>
         ({
-          id: base64JS.toByteArray(credential.id),
+          id: textEncoder.encode(credential.id),
           type: credential.type
         }) as PublicKeyCredentialDescriptor
     )
@@ -93,13 +90,11 @@ const parseLoginResponse = (
   id: credential.id,
   rawId: textDecoder.decode(credential.rawId),
   response: {
-    authenticatorData: base64JS.fromByteArray(
-      new Uint8Array(credential.response.authenticatorData)
-    ),
-    clientDataJSON: base64JS.fromByteArray(new Uint8Array(credential.response.clientDataJSON)),
-    signature: base64JS.fromByteArray(new Uint8Array(credential.response.signature)),
+    authenticatorData: textDecoder.decode(credential.response.authenticatorData),
+    clientDataJSON: textDecoder.decode(credential.response.clientDataJSON),
+    signature: textDecoder.decode(credential.response.signature),
     userHandle: credential.response.userHandle
-      ? base64JS.fromByteArray(new Uint8Array(credential.response.userHandle))
+      ? textDecoder.decode(credential.response.userHandle)
       : null
   },
   type: credential.type
