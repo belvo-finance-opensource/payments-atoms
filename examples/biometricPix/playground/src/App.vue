@@ -56,6 +56,28 @@ const biometricPaymentRequestJson = computed({
   }
 });
 
+const biometricRegistrationConfirmationJson = computed({
+  get: () => (JSON.stringify(biometricRegistrationConfirmation.value)),
+  set: (value) => {
+    try {
+      biometricRegistrationConfirmation.value = JSON.parse(value);
+    } catch (e) {
+      console.error(e);
+    }
+  }
+});
+
+const biometricAuthorizationJson = computed({
+  get: () => (JSON.stringify(biometricAuthorization.value)),
+  set: (value) => {
+    try {
+      biometricAuthorization.value = JSON.parse(value);
+    } catch (e) {
+      console.error(e);
+    }
+  }
+})
+
 const collectEnrollmentInformation = () => BelvoPaymentAtoms.biometricPix.collectEnrollmentInformation(accountTenure.value);
 
 const addAccount = async () => {
@@ -89,30 +111,48 @@ const payWithMyBank = async () => {
     <input type="text" v-model="accountTenure" placeholder="Account tenure" />
 
     <h4>Biometric Registration Request (add account)</h4>
-    <textarea style="min-width: 400px;" rows="10" v-model="biometricRegistrationRequestJson"></textarea>
+    <textarea class="responsive-textarea" rows="10" v-model="biometricRegistrationRequestJson"></textarea>
 
     <h4>Biometric Payment Request (pay with my bank)</h4>
-    <textarea style="min-width: 400px;" rows="10" v-model="biometricPaymentRequestJson"></textarea>
+    <textarea class="responsive-textarea" rows="10" v-model="biometricPaymentRequestJson"></textarea>
 
     <div style="max-width: 400px; word-wrap: break-word" v-if="enrollmentInformation || biometricAuthorization || biometricRegistrationConfirmation">
       <h2>Responses:</h2>
-      <template v-if="enrollmentInformation"><h3>Enrollment information:</h3>
-      <hr />
-      {{ enrollmentInformation }}</template>
-      <template v-if="biometricAuthorization"><hr />
-      <h3>Biometric Authorization Response</h3>
-      <hr />
-      {{ biometricAuthorization }}</template>
+      <template v-if="enrollmentInformation">
+        <h3>Enrollment information:</h3>
+        <hr />
+        {{ enrollmentInformation }}
+      </template>
+      <template v-if="biometricAuthorization">
+        <hr />
+        <h3>Biometric Authorization Response</h3>
+        <hr />
+        <textarea class="responsive-textarea" rows="10" v-model="biometricAuthorizationJson"></textarea>
+      </template>
       <template v-if="biometricRegistrationConfirmation">
-      <hr />
-      <h3>Biometric Registration Confirmation Response</h3>
-      <hr />
-      {{ biometricRegistrationConfirmation }}</template>
+        <hr />
+        <h3>Biometric Registration Confirmation Response</h3>
+        <hr />
+        <textarea class="responsive-textarea" rows="10" v-model="biometricRegistrationConfirmationJson"></textarea>
+      </template>
     </div>
   </main>
 </template>
 
 <style scoped>
+.responsive-textarea {
+  width: 100%;
+  min-width: 200px;
+  max-width: 400px;
+}
+
+@media (max-width: 768px) {
+  .responsive-textarea {
+    width: 90%;
+    min-width: unset;
+  }
+}
+
 header {
   line-height: 1.5;
 }
