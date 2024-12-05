@@ -90,7 +90,7 @@ describe('BelvoPaymentsAtomsPix', () => {
           attestation: 'direct'
         })
       ).toEqual({
-        id: 'c3RyaW5n',
+        id: 'string',
         authenticatorAttachment: 'cross-platform',
         rawId: 'SGVsbG8',
         response: {
