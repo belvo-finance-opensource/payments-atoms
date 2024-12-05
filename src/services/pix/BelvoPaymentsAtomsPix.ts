@@ -9,6 +9,7 @@ import FingerprintJS from '@fingerprintjs/fingerprintjs'
 import base64JS from 'base64-js'
 import { isValid, parse } from 'date-fns'
 import { getTimezoneOffset } from 'date-fns-tz'
+import { base64, base64url } from 'rfc4648'
 import { UAParser } from 'ua-parser-js'
 
 const isValidDate = (date: string): boolean => isValid(parse(date, 'yyyy-MM-dd', new Date()))
@@ -60,21 +61,20 @@ const parseBiometricRegistrationResponse = (
 ): BiometricRegistrationConfirmation => ({
   authenticatorAttachment: credential.authenticatorAttachment || 'platform',
   id: btoa(credential.id),
-  rawId: base64JS.fromByteArray(new Uint8Array(credential.rawId)),
+  rawId: base64url.stringify(new Uint8Array(credential.rawId), { pad: false }),
   response: {
     ...credential.response,
-    attestationObject: base64JS.fromByteArray(
-      new Uint8Array(credential.response.attestationObject)
-    ),
+    attestationObject: base64url.stringify(new Uint8Array(credential.response.attestationObject), {
+      pad: false
+    }),
     clientDataJSON: btoa(
       JSON.stringify({
         ...JSON.parse(
-          atob(base64JS.fromByteArray(new Uint8Array(credential.response.clientDataJSON)))
+          atob(base64url.stringify(new Uint8Array(credential.response.clientDataJSON)))
         ),
         challenge: atob(
-          JSON.parse(
-            atob(base64JS.fromByteArray(new Uint8Array(credential.response.clientDataJSON)))
-          ).challenge
+          JSON.parse(atob(base64url.stringify(new Uint8Array(credential.response.clientDataJSON))))
+            .challenge
         )
       })
     )
@@ -87,11 +87,11 @@ const parseBiometricPaymentRequest = (
 ): PublicKeyCredentialRequestOptions => {
   return {
     ...options,
-    challenge: base64JS.toByteArray(options.challenge),
+    challenge: base64.parse(options.challenge),
     allowCredentials: options.allowCredentials?.map(
       (credential) =>
         ({
-          id: base64JS.toByteArray(credential.id),
+          id: base64.parse(credential.id),
           type: credential.type
         }) as PublicKeyCredentialDescriptor
     )

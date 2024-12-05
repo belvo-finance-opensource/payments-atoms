@@ -92,9 +92,9 @@ describe('BelvoPaymentsAtomsPix', () => {
       ).toEqual({
         id: 'c3RyaW5n',
         authenticatorAttachment: 'cross-platform',
-        rawId: 'SGVsbG8=',
+        rawId: 'SGVsbG8',
         response: {
-          attestationObject: 'SGVsbG8=',
+          attestationObject: 'SGVsbG8',
           clientDataJSON:
             'eyJ0eXBlIjoid2ViYXV0aG4uY3JlYXRlIiwiY2hhbGxlbmdlIjoiX2FhMjBfWThGeTAwXzBDOU1kTWxYTm1NY0MxakttZk1YUnZmanVPX05sSSIsIm9yaWdpbiI6Imh0dHBzOi8vYmlvLmxvY2FsaG9zdCIsImNyb3NzT3JpZ2luIjpmYWxzZX0='
         },
