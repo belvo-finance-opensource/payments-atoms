@@ -9,7 +9,7 @@ import FingerprintJS from '@fingerprintjs/fingerprintjs'
 import base64JS from 'base64-js'
 import { isValid, parse } from 'date-fns'
 import { getTimezoneOffset } from 'date-fns-tz'
-import { base64, base64url } from 'rfc4648'
+import { base64url } from 'rfc4648'
 import { UAParser } from 'ua-parser-js'
 
 const isValidDate = (date: string): boolean => isValid(parse(date, 'yyyy-MM-dd', new Date()))
@@ -67,17 +67,7 @@ const parseBiometricRegistrationResponse = (
     attestationObject: base64url.stringify(new Uint8Array(credential.response.attestationObject), {
       pad: false
     }),
-    clientDataJSON: btoa(
-      JSON.stringify({
-        ...JSON.parse(
-          atob(base64url.stringify(new Uint8Array(credential.response.clientDataJSON)))
-        ),
-        challenge: atob(
-          JSON.parse(atob(base64url.stringify(new Uint8Array(credential.response.clientDataJSON))))
-            .challenge
-        )
-      })
-    )
+    clientDataJSON: base64url.stringify(new Uint8Array(credential.response.clientDataJSON))
   },
   type: credential.type
 })
@@ -87,11 +77,11 @@ const parseBiometricPaymentRequest = (
 ): PublicKeyCredentialRequestOptions => {
   return {
     ...options,
-    challenge: base64.parse(options.challenge),
+    challenge: new TextEncoder().encode(options.challenge),
     allowCredentials: options.allowCredentials?.map(
       (credential) =>
         ({
-          id: base64.parse(credential.id),
+          id: new TextEncoder().encode(credential.id),
           type: credential.type
         }) as PublicKeyCredentialDescriptor
     )
