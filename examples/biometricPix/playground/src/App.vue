@@ -1,14 +1,13 @@
 <script setup>
 import BelvoPaymentAtoms from '@belvo/payments-atoms';
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 
-const beautifyJson = (value, targetRef) => {
-  try {
-    const parsedValue = JSON.parse(value);
-    targetRef.value = parsedValue;
-  } catch (e) {
-    console.error(e);
-  }
+const generateUUID = () => {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    const r = Math.random() * 16 | 0;
+    const v = c === 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
 };
 
 const enrollmentInformation = ref(null);
@@ -17,31 +16,39 @@ const biometricRegistrationConfirmation = ref(null);
 
 const accountTenure = ref('2023-04-05');
 
+const generateRandomChallenge = () => {
+  const array = new Uint8Array(32);
+  crypto.getRandomValues(array);
+  return btoa(String.fromCharCode.apply(null, array))
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=/g, '');
+};
+
 const biometricRegistrationRequest = ref({
-  challenge: 'Y2hhbGxlbmdlMQ==',
+  challenge: generateRandomChallenge(),
   rp: {
       name: 'Belvo Merchant',
       id: 'bio.localhost',
   },
   user: {
-      id: 'dXNlcmlk',
+      id: generateUUID(),
       name: 'john.doe@bio.localhost',
       displayName: 'John Doe',
   },
-  pubKeyCredParams: [{alg: -7, type: 'public-key'}],
+  pubKeyCredParams: [
+    { type: "public-key", alg: -7 }, // ES256
+    { type: "public-key", alg: -257 } // RS256
+  ],
+  authenticatorSelection: {
+    authenticatorAttachment: "platform",
+    userVerification: "preferred"
+  },
   timeout: 60000,
   attestation: 'direct'
 });
-const biometricRegistrationRequestJson = computed({
-  get: () => (JSON.stringify(biometricRegistrationRequest.value, null, 2)),
-  set: (value) => {
-    try {
-      biometricRegistrationRequest.value = JSON.parse(value);
-    } catch (e) {
-      console.error(e);
-    }
-  }
-});
+const biometricRegistrationRequestText = ref(JSON.stringify(biometricRegistrationRequest.value, null, 2));
+
 const biometricRegistrationConfirmationJson = computed({
   get: () => {
     if (!biometricRegistrationConfirmation.value) return '';
@@ -57,26 +64,17 @@ const biometricRegistrationConfirmationJson = computed({
 });
 
 const biometricPaymentRequest = ref({
-  challenge: 'Y2hhbGxlbmdlMg==',
-  timeout: 60000,
+  challenge: generateRandomChallenge(),
   rpId: 'bio.localhost',
-  allowCredentials: [{
-      id: 'BkfAdxZdYfVg0bMVWhiP9yZGeSJ9aYH6czseAOzLGZI=',
-      type: 'public-key',
-      transports: ['internal']
-  }],
-  userVerification: 'preferred'
+  allowCredentials: [],
+  authenticatorSelection: {
+    authenticatorAttachment: "platform"
+  },
+  userVerification: "preferred",
+  timeout: 60000,
 });
-const biometricPaymentRequestJson = computed({
-  get: () => (JSON.stringify(biometricPaymentRequest.value, null, 2)),
-  set: (value) => {
-    try {
-      biometricPaymentRequest.value = JSON.parse(value);
-    } catch (e) {
-      console.error(e);
-    }
-  }
-});
+const biometricPaymentRequestText = ref(JSON.stringify(biometricPaymentRequest.value, null, 2));
+
 const biometricAuthorizationJson = computed({
   get: () => {
     if (!biometricAuthorization.value) return '';
@@ -109,6 +107,40 @@ const payWithMyBank = async () => {
     alert(error);
   }
 };
+
+watch(biometricRegistrationRequestText, (newValue) => {
+  try {
+    biometricRegistrationRequest.value = JSON.parse(newValue);
+  } catch (e) {
+    console.error(e);
+  }
+});
+
+watch(biometricPaymentRequestText, (newValue) => {
+  try {
+    biometricPaymentRequest.value = JSON.parse(newValue);
+  } catch (e) {
+    console.error(e);
+  }
+});
+
+const beautifyRegistrationJson = () => {
+  try {
+    const parsed = JSON.parse(biometricRegistrationRequestText.value);
+    biometricRegistrationRequestText.value = JSON.stringify(parsed, null, 2);
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+const beautifyPaymentJson = () => {
+  try {
+    const parsed = JSON.parse(biometricPaymentRequestText.value);
+    biometricPaymentRequestText.value = JSON.stringify(parsed, null, 2);
+  } catch (e) {
+    console.error(e);
+  }
+};
 </script>
 
 <template>
@@ -122,18 +154,18 @@ const payWithMyBank = async () => {
       <h1 class="page-title">Biometric Pix Playground</h1>
     </header>
     <main class="three-column-layout">
-      <section>
-        <h2>1. Generate Risk Signals</h2>
+      <section class="flow-step">
+        <h2 class="flow-step-title">1. Generate Risk Signals</h2>
         <div>
-          <h4>Risk Signal - Account Tenure</h4>
+          <h4 class="io-label">Risk Signal - Account Tenure</h4>
           <div class="input-button-group">
             <input type="text" v-model="accountTenure" placeholder="Account tenure" />
             <a href="#" @click="generateRiskSignals">Generate Risk Signals</a>
           </div>
           <div class="mt-4">
-            <h4>Generated Risk Signals</h4>
+            <h4 class="io-label">Generated Risk Signals</h4>
             <textarea 
-              class="json-display" 
+              class="json-output" 
               readonly 
               :value="enrollmentInformation ? JSON.stringify(enrollmentInformation, null, 2) : 'Risk signals have not been generated yet...'"
               rows="10"
@@ -142,23 +174,25 @@ const payWithMyBank = async () => {
         </div>
       </section>
 
-      <section>
-        <h2>2. Create Enrollment</h2>
+      <section class="flow-step">
+        <h2 class="flow-step-title">2. Create Enrollment</h2>
         <div>
-          <h4>Biometric Registration (Enrollment) Request</h4>
+          <h4 class="io-label">Biometric Registration (Enrollment) Request</h4>
           <textarea 
-            class="responsive-textarea" 
+            class="json-input" 
             rows="10" 
-            v-model="biometricRegistrationRequestJson"
-            @blur="() => beautifyJson(biometricRegistrationRequestJson, biometricRegistrationRequest)"
+            v-model="biometricRegistrationRequestText"
           ></textarea>
-          <div class="mt-4">
-            <a href="#" @click="addAccount">Register Account Biometrics</a>
+          <div class="format-button-wrapper">
+            <button class="format-button" @click="beautifyRegistrationJson">Format JSON</button>
           </div>
           <div class="mt-4">
-            <h4>Biometric Registration (Enrollment) Response</h4>
+            <a href="#" @click="addAccount" class="action-button">Register Account Biometrics</a>
+          </div>
+          <div class="mt-4">
+            <h4 class="io-label">Biometric Registration (Enrollment) Response</h4>
             <textarea 
-              class="json-display" 
+              class="json-output" 
               rows="10" 
               readonly
               :value="biometricRegistrationConfirmationJson || 'Registration response will appear here...'"
@@ -167,23 +201,25 @@ const payWithMyBank = async () => {
         </div>
       </section>
 
-      <section>
-        <h2>3. Make Payment</h2>
+      <section class="flow-step">
+        <h2 class="flow-step-title">3. Make Payment</h2>
         <div>
-          <h4>Biometric Authorization (Payment) Request</h4>
+          <h4 class="io-label">Biometric Authorization (Payment) Request</h4>
           <textarea 
-            class="responsive-textarea" 
+            class="json-input" 
             rows="10" 
-            v-model="biometricPaymentRequestJson"
-            @blur="() => beautifyJson(biometricPaymentRequestJson, biometricPaymentRequest)"
+            v-model="biometricPaymentRequestText"
           ></textarea>
-          <div class="mt-4">
-            <a href="#" @click="payWithMyBank">Authorize Biometric Payment</a>
+          <div class="format-button-wrapper">
+            <button class="format-button" @click="beautifyPaymentJson">Format JSON</button>
           </div>
           <div class="mt-4">
-            <h4>Biometric Authorization (Payment) Response</h4>
+            <a href="#" @click="payWithMyBank" class="action-button">Authorize Biometric Payment</a>
+          </div>
+          <div class="mt-4">
+            <h4 class="io-label">Biometric Authorization (Payment) Response</h4>
             <textarea 
-              class="json-display" 
+              class="json-output" 
               rows="10" 
               readonly
               :value="biometricAuthorizationJson || 'Authorization response will appear here...'"
@@ -196,14 +232,6 @@ const payWithMyBank = async () => {
 </template>
 
 <style scoped>
-@font-face {
-  font-family: 'Source Sans';
-  src: url('https://belvo.com/wp-content/themes/belvo/assets/fonts/source-sans-regular.woff2') format('woff2');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
 #app {
   font-family: 'Source Sans', sans-serif;
   width: 100%;
@@ -211,53 +239,58 @@ const payWithMyBank = async () => {
   margin: 0;
 }
 
-.three-column-layout {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 2rem;
-  padding: 2rem;
+.header {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 2rem;
+  position: relative;
+}
+
+.belvo-logo {
+  height: 2rem;
+  position: absolute;
+  left: 2rem;
+}
+
+.page-title {
+  text-align: center;
+  color: var(--color-brand-primary);
+  font-size: 2rem;
+  font-weight: 600;
   width: 100%;
 }
 
-section {
+.three-column-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1.5rem;
+  padding: 1rem 2rem;
+  width: 100%;
+}
+
+.flow-step {
   padding: 1.5rem;
-  background-color: var(--color-background);
+  background-color: var(--color-page-background);
   border: 1px solid var(--color-border);
   border-radius: 8px;
   box-shadow: 0 2px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06), 0 -1px 2px 0 rgba(0, 0, 0, 0.03);
 }
 
-section h2 {
-  color: var(--color-brand);
+.flow-step-title {
+  color: var(--color-brand-primary);
   margin-bottom: 1rem;
   font-size: 1.25rem;
   font-weight: 600;
 }
 
-section h4 {
-  color: var(--color-brand);
+.io-label {
+  color: var(--color-brand-primary);
   margin: 1rem 0 0.5rem;
   font-size: 0.875rem;
   font-weight: 500;
 }
 
-a {
-  display: inline-block;
-  padding: 0.5rem 1rem;
-  background-color: var(--color-brand);
-  color: var(--color-white);
-  border-radius: 4px;
-  text-decoration: none;
-  font-weight: 600;
-  transition: background-color 0.2s ease;
-  line-height: 1.5;
-}
-
-a:hover {
-  background-color: #054FC7; /* Slightly darker shade for hover */
-}
-
-input[type="text"], .responsive-textarea, .json-display {
+input[type="text"], .json-input, .json-output {
   width: 100%;
   padding: 0.5rem 1rem;
   border: 1px solid #B3CFFD;
@@ -267,13 +300,13 @@ input[type="text"], .responsive-textarea, .json-display {
   line-height: 1.5;
 }
 
-input[type="text"]:focus, .responsive-textarea:focus {
+input[type="text"]:focus, .json-input:focus {
   outline: none;
   border-color: #0066FF;
   box-shadow: 0 0 0 2px rgba(0, 102, 255, 0.1);
 }
 
-.responsive-textarea {
+.json-input {
   width: 100%;
   min-height: 180px;
   resize: vertical;
@@ -284,22 +317,8 @@ input[type="text"]:focus, .responsive-textarea:focus {
   font-size: 0.875rem;
   line-height: 1.4;
   background-color: var(--color-grey-50);
-}
-
-.response-section {
-  margin: 2rem;
-  padding: 1.5rem;
-  background-color: var(--color-background);
-  border: 1px solid var(--color-border);
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
-.response-section h3 {
-  color: var(--color-brand);
-  margin-bottom: 1rem;
-  font-size: 1rem;
-  font-weight: 600;
+  overflow-x: auto;
+  white-space: nowrap;
 }
 
 /* Responsive design for smaller screens */
@@ -314,13 +333,13 @@ input[type="text"]:focus, .responsive-textarea:focus {
   margin-top: 1rem;
 }
 
-.json-display {
+.json-output {
   width: 100%;
   min-height: 180px;
   padding: 0.75rem;
   border: 1px solid #B3CFFD;
   border-radius: 4px;
-  font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+  font-family: monospace;
   font-size: 0.875rem;
   line-height: 1.4;
   background-color: var(--color-grey-50);
@@ -328,21 +347,6 @@ input[type="text"]:focus, .responsive-textarea:focus {
   resize: none;
   white-space: pre;
   overflow-x: auto;
-}
-
-/* Optional: Style the scrollbar for better appearance */
-.json-display::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-.json-display::-webkit-scrollbar-track {
-  background: var(--color-grey-50);
-}
-
-.json-display::-webkit-scrollbar-thumb {
-  background: var(--color-grey-200);
-  border-radius: 4px;
 }
 
 .input-button-group {
@@ -359,25 +363,42 @@ input[type="text"]:focus, .responsive-textarea:focus {
   white-space: nowrap;
 }
 
-.header {
+.format-button-wrapper {
   display: flex;
-  align-items: center;
-  padding: 2rem;
-  position: relative;
+  justify-content: flex-end;
+  margin-top: 0.5rem;
 }
 
-.belvo-logo {
-  height: 2rem;
-  position: absolute;
-  left: 2rem;
+.format-button {
+  padding: 0.25rem 0.5rem;
+  background-color: var(--color-grey-100);
+  color: var(--color-grey-700);
+  border: 1px solid var(--color-grey-200);
+  border-radius: 4px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
-.page-title {
-  text-align: center;
-  color: var(--color-brand);
-  font-size: 2rem;
-  font-weight: 600;
+.format-button:hover {
+  background-color: var(--color-grey-200);
+}
+
+.action-button {
+  display: block;
   width: 100%;
-  font-family: 'Source Sans', sans-serif;
+  padding: 0.5rem 1rem;
+  background-color: var(--color-brand-primary);
+  color: var(--color-white);
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: 600;
+  text-align: center;
+  transition: background-color 0.2s ease;
+  line-height: 1.5;
+}
+
+.action-button:hover {
+  background-color: var(--color-button-hover);
 }
 </style>
