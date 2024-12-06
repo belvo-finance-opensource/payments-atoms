@@ -1,8 +1,6 @@
-/* color palette from <https://github.com/vuejs/theme> */
 :root {
   /* Brand colors */
-  --color-brand: #0663F9;
-  --color-brand-hover: rgba(6, 99, 249, 0.1);
+  --color-brand-primary: #0663F9;
   
   /* Neutral colors */
   --color-white: #ffffff;
@@ -10,36 +8,25 @@
   --color-grey-100: #f1f3f5;
   --color-grey-200: #e9ecef;
   --color-grey-700: #495057;
-  --color-grey-900: #212529;
 
   /* Semantic colors */
-  --color-background: var(--color-white);
-  --color-background-soft: var(--color-grey-50);
-  --color-text: var(--color-grey-900);
-  --color-text-light: var(--color-grey-700);
+  --color-page-background: var(--color-white);
   --color-border: var(--color-grey-200);
 
-  /* Additional global variables */
-  --section-gap: 160px;
-  --color-primary: hsla(160, 100%, 37%, 1);
-  --color-primary-hover: hsla(160, 100%, 37%, 0.2);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-background: var(--vt-c-black);
-    --color-background-soft: var(--vt-c-black-soft);
-    --color-background-mute: var(--vt-c-black-mute);
-
-    --color-border: var(--vt-c-divider-dark-2);
-    --color-border-hover: var(--vt-c-divider-dark-1);
-
-    --color-heading: var(--vt-c-text-dark-1);
-    --color-text: var(--vt-c-text-dark-2);
-  }
+  /* Button colors */
+  --color-button: var(--color-brand-primary);
+  --color-button-hover: #054FC7;
 }
 
 /* Global styles */
+@font-face {
+  font-family: 'Source Sans';
+  src: url('https://belvo.com/wp-content/themes/belvo/assets/fonts/source-sans-regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 *,
 *::before,
 *::after {
@@ -51,7 +38,7 @@
 body {
   min-height: 100vh;
   color: var(--color-text);
-  background: var(--color-background);
+  background: var(--color-page-background);
   transition: color 0.5s, background-color 0.5s;
   line-height: 1.6;
   font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
@@ -60,4 +47,20 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background-color: var(--color-brand-primary);
+  color: var(--color-white);
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background-color 0.2s ease;
+  line-height: 1.5;
+}
+
+a:hover {
+  background-color: var(--color-button-hover);
 }
