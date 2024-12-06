@@ -1,7 +1,9 @@
 # biometric-pix-backend
+
 We created this backend API example to illustrate and help you understand the Biometric PIX API flow.
 
 ## Requirements
+
 Make sure to install [Bun](https://bun.sh/docs/installation).
 
 ### Installing dependencies
