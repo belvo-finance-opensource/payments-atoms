@@ -77,11 +77,11 @@ import type { Callback, Country, Institution, BiometricRegistrationRequest } fro
 
 If you wish to submit a pull request, please be sure check the items on this list:
 
-- [ ] Open an issue to discuss about the proposed changes
-- [ ] Tests related to the changed code were executed
-- [ ] The source code has been coded following the OWASP security best
+* [ ] Open an issue to discuss about the proposed changes
+* [ ] Tests related to the changed code were executed
+* [ ] The source code has been coded following the OWASP security best
       practices (<https://owasp.org/www-pdf-archive/OWASP_SCP_Quick_Reference_Guide_v2.pdf>).
-- [ ] Commit message following the [conventional commits specification](https://www.conventionalcommits.org/en/v1.0.0/#summary).
+* [ ] Commit message following the [conventional commits specification](https://www.conventionalcommits.org/en/v1.0.0/#summary).
 
 ### Setting up the project
 

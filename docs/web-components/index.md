@@ -7,6 +7,7 @@ permalink: /web-components/
 ---
 
 # Web Components
+
 {: .fs-9 }
 
 In order to have a library compatible with the whole JavaScript ecossystem, we provide our components as native web components.
