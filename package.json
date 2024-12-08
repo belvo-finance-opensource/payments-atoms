@@ -48,7 +48,7 @@
     "@commitlint/cli": "19.5.0",
     "@commitlint/config-conventional": "19.5.0",
     "@fingerprintjs/fingerprintjs": "4.5.1",
-    "@release-it/conventional-changelog": "9.0.2",
+    "@release-it/conventional-changelog": "9.0.3",
     "@storybook/addon-essentials": "8.4.1",
     "@storybook/addon-interactions": "8.4.1",
     "@storybook/addon-links": "8.4.1",
