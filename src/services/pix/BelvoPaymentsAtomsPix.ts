@@ -6,31 +6,34 @@ import {
   EnrollmentInformation
 } from '@/types/pix'
 import FingerprintJS from '@fingerprintjs/fingerprintjs'
-import base64JS from 'base64-js'
+import {
+  AuthenticationPublicKeyCredential,
+  AuthenticationResponseJSON,
+  CredentialCreationOptionsJSON,
+  CredentialRequestOptionsJSON,
+  parseCreationOptionsFromJSON,
+  parseRequestOptionsFromJSON,
+  RegistrationPublicKeyCredential,
+  RegistrationResponseJSON,
+  create as webauthnCreate,
+  get as webauthnGet,
+  supported as webauthnSupported
+} from '@github/webauthn-json/browser-ponyfill'
 import { isValid, parse } from 'date-fns'
 import { getTimezoneOffset } from 'date-fns-tz'
-import { base64url } from 'rfc4648'
 import { UAParser } from 'ua-parser-js'
 
+// Risk Signals
 const isValidDate = (date: string): boolean => isValid(parse(date, 'yyyy-MM-dd', new Date()))
-const textEncoder = new TextEncoder()
-const textDecoder = new TextDecoder()
-
 const padTimeZoneOfsset = (number: number, totalDigits = 2, paddingCharacter = '0') =>
   ['', '-'][+(number < 0)] +
   (paddingCharacter.repeat(totalDigits) + Math.abs(number)).slice(-1 * totalDigits)
-
-const isWebAuthnAvailable = (): boolean => {
-  return !!window.PublicKeyCredential
-}
-
 const getDeviceId = async (): Promise<string> => {
   const fp = await FingerprintJS.load()
   const result = await fp.get()
 
   return result.visitorId
 }
-
 const buildSignals = async (accountTenure: string): Promise<EnrollmentInformation> => {
   const userAgentParser = new UAParser(navigator.userAgent)
   const milisecondsToHours = (miliseconds: number): number => miliseconds / 1000 / 60 / 60
@@ -56,118 +59,132 @@ const buildSignals = async (accountTenure: string): Promise<EnrollmentInformatio
   }
 }
 
-const parseBiometricRegistrationResponse = (
-  credential: Credential & PublicKeyCredential & { response: AuthenticatorAttestationResponse }
-): BiometricRegistrationConfirmation => ({
-  authenticatorAttachment: credential.authenticatorAttachment || 'platform',
-  id: credential.id,
-  rawId: base64url.stringify(new Uint8Array(credential.rawId), { pad: false }),
-  response: {
-    ...credential.response,
-    attestationObject: base64url.stringify(new Uint8Array(credential.response.attestationObject), {
-      pad: false
-    }),
-    clientDataJSON: base64url.stringify(new Uint8Array(credential.response.clientDataJSON))
-  },
-  type: credential.type
-})
+// Creation
+const createCredential = async (
+  options: CredentialCreationOptions
+): Promise<RegistrationPublicKeyCredential & { response: AuthenticatorAttestationResponse }> => {
+  try {
+    const credential = await webauthnCreate(options)
 
-const parseBiometricPaymentRequest = (
-  options: BiometricPaymentRequest
-): PublicKeyCredentialRequestOptions => {
+    return credential as RegistrationPublicKeyCredential & {
+      response: AuthenticatorAttestationResponse
+    }
+  } catch (error) {
+    throw new Error(`Error during credential registration: ${error}`)
+  }
+}
+const buildCredentialCreationOptions = (
+  registrationRequest: BiometricRegistrationRequest
+): CredentialCreationOptions => {
+  const json = {
+    publicKey: {
+      challenge: registrationRequest.challenge,
+      rp: registrationRequest.rp,
+      user: registrationRequest.user,
+      pubKeyCredParams: registrationRequest.pubKeyCredParams,
+      timeout: 60000,
+      attestation: registrationRequest.attestation
+    }
+  } as CredentialCreationOptionsJSON
+
+  return parseCreationOptionsFromJSON(json) as CredentialCreationOptions & {
+    publicKey: PublicKeyCredentialCreationOptions
+  }
+}
+const buildCredentialCreationResult = (
+  credential: RegistrationPublicKeyCredential & { response: AuthenticatorAttestationResponse }
+): BiometricRegistrationConfirmation => {
+  const json: RegistrationResponseJSON = credential.toJSON()
+
   return {
-    ...options,
-    challenge: new TextEncoder().encode(options.challenge),
-    allowCredentials: options.allowCredentials?.map(
-      (credential) =>
-        ({
-          id: new TextEncoder().encode(credential.id),
-          type: credential.type
-        }) as PublicKeyCredentialDescriptor
-    )
-  }
-}
-
-const parseLoginResponse = (
-  credential: PublicKeyCredential & { response: AuthenticatorAssertionResponse }
-): BiometricAuthorization => ({
-  id: credential.id,
-  rawId: textDecoder.decode(credential.rawId),
-  response: {
-    authenticatorData: base64JS.fromByteArray(
-      new Uint8Array(credential.response.authenticatorData)
-    ),
-    clientDataJSON: base64JS.fromByteArray(new Uint8Array(credential.response.clientDataJSON)),
-    signature: base64JS.fromByteArray(new Uint8Array(credential.response.signature)),
-    userHandle: credential.response.userHandle
-      ? base64JS.fromByteArray(new Uint8Array(credential.response.userHandle))
-      : null
-  },
-  type: credential.type
-})
-
-const registerCredential = async (
-  publicKey: PublicKeyCredentialCreationOptions
-): Promise<PublicKeyCredential & { response: AuthenticatorAttestationResponse }> => {
-  try {
-    const credential = await navigator.credentials.create({
-      publicKey
-    })
-
-    return credential as Credential &
-      PublicKeyCredential & { response: AuthenticatorAttestationResponse }
-  } catch (error) {
-    throw new Error(`Error during sign up: ${error}`)
-  }
-}
-
-const buildRegisterCredentialOptions = (options: BiometricRegistrationRequest) =>
-  ({
-    challenge: textEncoder.encode(options.challenge),
-    rp: options.rp,
-    user: {
-      ...options.user,
-      id: textEncoder.encode(options.user.id)
+    id: json.id,
+    rawId: json.rawId,
+    response: {
+      clientDataJSON: json.response.clientDataJSON,
+      attestationObject: json.response.attestationObject
     },
-    pubKeyCredParams: options.pubKeyCredParams,
-    timeout: 60000,
-    attestation: options.attestation
-  }) as PublicKeyCredentialCreationOptions
+    authenticatorAttachment: json.authenticatorAttachment,
+    type: json.type
+  } as BiometricRegistrationConfirmation
+}
 
-const getCredential = async (
-  publicKey: CredentialRequestOptions['publicKey']
-): Promise<(PublicKeyCredential & { response: AuthenticatorAssertionResponse }) | null> => {
+// Authentication
+const authenticateCredential = async (
+  options: CredentialRequestOptions
+): Promise<
+  (AuthenticationPublicKeyCredential & { response: AuthenticatorAssertionResponse }) | null
+> => {
   try {
-    return (await navigator.credentials.get({
-      publicKey
-    })) as PublicKeyCredential & { response: AuthenticatorAssertionResponse }
+    const credential = await webauthnGet(options)
+
+    return credential as AuthenticationPublicKeyCredential & {
+      response: AuthenticatorAssertionResponse
+    }
   } catch (error) {
-    throw new Error(`Error during login: ${error}`)
+    throw new Error(`Error during credential authentication: ${error}`)
   }
 }
+const buildCredentialAuthenticationOptions = (
+  authenticationRequest: BiometricPaymentRequest
+): CredentialRequestOptions => {
+  const json = {
+    publicKey: {
+      ...authenticationRequest,
+      allowCredentials: authenticationRequest.allowCredentials?.map(
+        (credential) =>
+          ({
+            id: new TextEncoder().encode(credential.id),
+            type: credential.type
+          }) as PublicKeyCredentialDescriptor
+      )
+    }
+  } as CredentialRequestOptionsJSON
 
-export const register = async (
-  options: BiometricRegistrationRequest
-): Promise<BiometricRegistrationConfirmation> => {
-  if (!isWebAuthnAvailable()) throw new Error('WebAuthn is not available')
+  return parseRequestOptionsFromJSON(json) as CredentialRequestOptions & {
+    publicKey: PublicKeyCredentialRequestOptions
+  }
+}
+const buildCredentialAuthenticationResult = (
+  credential: AuthenticationPublicKeyCredential & { response: AuthenticatorAssertionResponse }
+): BiometricAuthorization => {
+  const json: AuthenticationResponseJSON = credential.toJSON()
 
-  return parseBiometricRegistrationResponse(
-    await registerCredential(buildRegisterCredentialOptions(options))
-  )
+  return {
+    id: json.id,
+    rawId: json.rawId,
+    response: {
+      authenticatorData: json.response.authenticatorData,
+      clientDataJSON: json.response.clientDataJSON,
+      signature: json.response.signature,
+      userHandle: json.response.userHandle || null
+    },
+    type: json.type
+  } as BiometricAuthorization
 }
 
-export const login = async (
-  options: BiometricPaymentRequest
-): Promise<BiometricAuthorization | null> => {
-  if (!isWebAuthnAvailable()) throw new Error('WebAuthn is not available')
+// Exported API
+export const register = async (
+  registrationRequest: BiometricRegistrationRequest
+): Promise<BiometricRegistrationConfirmation> => {
+  if (!webauthnSupported()) throw new Error('WebAuthn is not available')
 
-  const credential = await getCredential(parseBiometricPaymentRequest(options))
-
+  const options = buildCredentialCreationOptions(registrationRequest)
+  const credential = await createCredential(options)
   if (!credential) throw new Error('Invalid credential')
 
-  return parseLoginResponse(credential)
+  return buildCredentialCreationResult(credential)
 }
+export const login = async (
+  authenticationRequest: BiometricPaymentRequest
+): Promise<BiometricAuthorization | null> => {
+  if (!webauthnSupported()) throw new Error('WebAuthn is not available')
 
+  const options = buildCredentialAuthenticationOptions(authenticationRequest)
+  const credential = await authenticateCredential(options)
+  if (!credential) throw new Error('Invalid credential')
+
+  return buildCredentialAuthenticationResult(credential)
+}
 export const signals = async (accountTenure: string): Promise<EnrollmentInformation> => {
   if (!isValidDate(accountTenure)) throw new Error('Invalid account tenure')
 
