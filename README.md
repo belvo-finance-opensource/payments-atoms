@@ -23,6 +23,11 @@ Visit the [documentation](https://belvo-finance-opensource.github.io/payments-at
 * [Code](https://github.com/belvo-finance-opensource/payments-atoms/tree/main/examples/next-js)
 * [Live](https://belvo-finance-opensource.github.io/payments-atoms/examples/next-js/)
 
+### Biometric PIX Playground
+
+* [Code](https://github.com/belvo-finance-opensource/payments-atoms/tree/main/examples/biometricPix/playground)
+* [Live](https://belvo-finance-opensource.github.io/payments-atoms/examples/biometric-pix/)
+
 ## 🚀 Getting started
 
 ### Installation
