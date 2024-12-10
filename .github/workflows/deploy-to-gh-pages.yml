@@ -21,9 +21,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Setup Ruby
-        uses: ruby/setup-ruby@8575951200e472d5f2d95c625da0c7bec8217c42
+        uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.1'
+          ruby-version: '3.2'
           bundler-cache: true
           cache-version: 0
       - name: Setup Pages
@@ -42,6 +42,9 @@ jobs:
       - name: Build React example
         run: npm ci && npm run build
         working-directory: ./examples/react
+      - name: Build BiometricPix Playground example
+        run: npm run build
+        working-directory: ./examples/biometricPix/playground
       - name: Move static pages to gh-pages folder
         run: |
           mkdir gh-pages && mkdir gh-pages/examples
@@ -49,6 +52,7 @@ jobs:
           mv storybook-static gh-pages/storybook
           mv examples/next-js/out gh-pages/examples/next-js
           mv examples/react/build gh-pages/examples/react
+          mv examples/biometricPix/playground gh-pages/examples/biometric-pix
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
