@@ -43,7 +43,7 @@ jobs:
         run: npm ci && npm run build
         working-directory: ./examples/react
       - name: Build BiometricPix Playground example
-        run: npm run build
+        run: npm ci && npm run build
         working-directory: ./examples/biometricPix/playground
       - name: Move static pages to gh-pages folder
         run: |
