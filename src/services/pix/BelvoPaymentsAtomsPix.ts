@@ -124,6 +124,7 @@ const authenticateCredential = async (
     throw new Error(`Error during credential authentication: ${error}`)
   }
 }
+
 const buildCredentialAuthenticationOptions = (
   authenticationRequest: BiometricPaymentRequest
 ): CredentialRequestOptions => {
