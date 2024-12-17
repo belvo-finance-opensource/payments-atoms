@@ -124,19 +124,17 @@ const authenticateCredential = async (
     throw new Error(`Error during credential authentication: ${error}`)
   }
 }
+
 const buildCredentialAuthenticationOptions = (
   authenticationRequest: BiometricPaymentRequest
 ): CredentialRequestOptions => {
   const json = {
     publicKey: {
       ...authenticationRequest,
-      allowCredentials: authenticationRequest.allowCredentials?.map(
-        (credential) =>
-          ({
-            id: new TextEncoder().encode(credential.id),
-            type: credential.type
-          }) as PublicKeyCredentialDescriptor
-      )
+      allowCredentials: authenticationRequest.allowCredentials?.map((credential) => ({
+        id: credential.id,
+        type: credential.type
+      }))
     }
   } as CredentialRequestOptionsJSON
 
