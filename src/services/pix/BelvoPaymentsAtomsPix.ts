@@ -130,11 +130,7 @@ const buildCredentialAuthenticationOptions = (
 ): CredentialRequestOptions => {
   const json = {
     publicKey: {
-      ...authenticationRequest,
-      allowCredentials: authenticationRequest.allowCredentials?.map((credential) => ({
-        id: credential.id,
-        type: credential.type
-      }))
+      ...authenticationRequest
     }
   } as CredentialRequestOptionsJSON
 
