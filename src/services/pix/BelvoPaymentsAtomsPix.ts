@@ -150,7 +150,7 @@ const buildCredentialAuthenticationResult = (
       authenticatorData: json.response.authenticatorData,
       clientDataJSON: json.response.clientDataJSON,
       signature: json.response.signature,
-      userHandle: json.response.userHandle || null
+      userHandle: json.response.userHandle || ''
     },
     type: json.type
   } as BiometricAuthorization
