@@ -5,7 +5,7 @@ import {
   BiometricRegistrationRequest,
   EnrollmentInformation
 } from '@/types/pix'
-import FingerprintJS from '@fingerprintjs/fingerprintjs'
+import FingerprintJS from '@fingerprintjs/fingerprintjs-pro'
 import {
   AuthenticationPublicKeyCredential,
   AuthenticationResponseJSON,
@@ -29,7 +29,15 @@ const padTimeZoneOfsset = (number: number, totalDigits = 2, paddingCharacter = '
   ['', '-'][+(number < 0)] +
   (paddingCharacter.repeat(totalDigits) + Math.abs(number)).slice(-1 * totalDigits)
 const getDeviceId = async (): Promise<string> => {
-  const fp = await FingerprintJS.load()
+  /**
+   * This API Key is a public key, it's not a secret.
+   * It's used to submit requests to the FingerprintJS API.
+   *
+   * In the FingerprintJS Dashboard, we have configured an origin allowlist
+   * so we can only submit requests from our own domains. Any request from
+   * a different origin will be rejected to prevent misuse of the API.
+   */
+  const fp = await FingerprintJS.load({ apiKey: 'nVbyx8oY47QzBtYJg0wX' })
   const result = await fp.get()
 
   return result.visitorId
@@ -124,7 +132,6 @@ const authenticateCredential = async (
     throw new Error(`Error during credential authentication: ${error}`)
   }
 }
-
 const buildCredentialAuthenticationOptions = (
   authenticationRequest: BiometricPaymentRequest
 ): CredentialRequestOptions => {
