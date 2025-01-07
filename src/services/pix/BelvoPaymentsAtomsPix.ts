@@ -191,3 +191,5 @@ export const signals = async (accountTenure: string): Promise<EnrollmentInformat
 
   return await buildSignals(accountTenure)
 }
+
+export const isWebAuthnSupported = (): boolean => webauthnSupported()
