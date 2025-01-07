@@ -1,6 +1,6 @@
 import BelvoPaymentsGrid from '@/components/paymentsGrid/BelvoPaymentsGrid.ce.vue'
 import BelvoPaymentsAtomsOptions from '@/services/options/BelvoPaymentsAtomsOptions'
-import { login, register, signals } from '@/services/pix/BelvoPaymentsAtomsPix'
+import { isWebAuthnSupported, login, register, signals } from '@/services/pix/BelvoPaymentsAtomsPix'
 import { defineWebComponents } from '@/utils/webComponents/webComponentsUtils'
 import BelvoPaymentsAtoms, { InitializationOptions } from './main'
 
@@ -39,7 +39,8 @@ describe('main.spec.ts', () => {
       expect(BelvoPaymentsAtoms.biometricPix).toEqual({
         collectEnrollmentInformation: signals,
         requestEnrollmentConfirmation: register,
-        authorizePayment: login
+        authorizePayment: login,
+        isWebAuthnSupported
       })
     })
   })
