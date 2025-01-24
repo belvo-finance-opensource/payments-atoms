@@ -37,7 +37,14 @@ const getDeviceId = async (): Promise<string> => {
    * so we can only submit requests from our own domains. Any request from
    * a different origin will be rejected to prevent misuse of the API.
    */
-  const fp = await FingerprintJS.load({ apiKey: 'nVbyx8oY47QzBtYJg0wX' })
+  const fp = await FingerprintJS.load({
+    apiKey: 'nVbyx8oY47QzBtYJg0wX',
+    endpoint: ['https://pix-biometria-metrics.belvo.com', FingerprintJS.defaultEndpoint],
+    scriptUrlPattern: [
+      'https://pix-biometria-metrics.belvo.com/web/v<version>/<apiKey>/loader_v<loaderVersion>.js',
+      FingerprintJS.defaultScriptUrlPattern
+    ]
+  })
   const result = await fp.get()
 
   return result.visitorId
