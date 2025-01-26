@@ -75,7 +75,7 @@
     "commitlint-plugin-function-rules": "4.0.0",
     "date-fns": "4.1.0",
     "date-fns-tz": "3.2.0",
-    "eslint": "9.13.0",
+    "eslint": "9.19.0",
     "eslint-plugin-no-only-tests": "3.3.0",
     "eslint-plugin-storybook": "0.10.2",
     "eslint-plugin-unused-imports": "4.1.4",
