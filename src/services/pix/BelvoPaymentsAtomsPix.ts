@@ -98,9 +98,7 @@ const buildCredentialCreationOptions = (
       user: registrationRequest.user,
       pubKeyCredParams: registrationRequest.pubKeyCredParams,
       timeout: 60000,
-      attestation: registrationRequest.attestation,
-      authenticatorSelection: registrationRequest.authenticatorSelection,
-      excludeCredentials: registrationRequest.excludeCredentials
+      attestation: registrationRequest.attestation
     }
   } as CredentialCreationOptionsJSON
 
