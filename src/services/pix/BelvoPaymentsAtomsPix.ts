@@ -22,6 +22,7 @@ import {
 import { isValid, parse } from 'date-fns'
 import { getTimezoneOffset } from 'date-fns-tz'
 import { UAParser } from 'ua-parser-js'
+import { handleBiometricError, handleCredentialNotFound } from './errors'
 
 // Risk Signals
 const isValidDate = (date: string): boolean => isValid(parse(date, 'yyyy-MM-dd', new Date()))
@@ -78,14 +79,9 @@ const buildSignals = async (accountTenure: string): Promise<EnrollmentInformatio
 const createCredential = async (
   options: CredentialCreationOptions
 ): Promise<RegistrationPublicKeyCredential & { response: AuthenticatorAttestationResponse }> => {
-  try {
-    const credential = await webauthnCreate(options)
-
-    return credential as RegistrationPublicKeyCredential & {
-      response: AuthenticatorAttestationResponse
-    }
-  } catch (error) {
-    throw new Error(`Error during credential registration: ${error}`)
+  const credential = await webauthnCreate(options)
+  return credential as RegistrationPublicKeyCredential & {
+    response: AuthenticatorAttestationResponse
   }
 }
 const buildCredentialCreationOptions = (
@@ -126,17 +122,10 @@ const buildCredentialCreationResult = (
 // Authentication
 const authenticateCredential = async (
   options: CredentialRequestOptions
-): Promise<
-  (AuthenticationPublicKeyCredential & { response: AuthenticatorAssertionResponse }) | null
-> => {
-  try {
-    const credential = await webauthnGet(options)
-
-    return credential as AuthenticationPublicKeyCredential & {
-      response: AuthenticatorAssertionResponse
-    }
-  } catch (error) {
-    throw new Error(`Error during credential authentication: ${error}`)
+): Promise<AuthenticationPublicKeyCredential & { response: AuthenticatorAssertionResponse }> => {
+  const credential = await webauthnGet(options)
+  return credential as AuthenticationPublicKeyCredential & {
+    response: AuthenticatorAssertionResponse
   }
 }
 const buildCredentialAuthenticationOptions = (
@@ -174,25 +163,35 @@ const buildCredentialAuthenticationResult = (
 export const register = async (
   registrationRequest: BiometricRegistrationRequest
 ): Promise<BiometricRegistrationConfirmation> => {
-  if (!webauthnSupported()) throw new Error('WebAuthn is not available')
-
   const options = buildCredentialCreationOptions(registrationRequest)
-  const credential = await createCredential(options)
-  if (!credential) throw new Error('Invalid credential')
+  try {
+    const credential = await createCredential(options)
+    if (!credential) {
+      throw handleCredentialNotFound()
+    }
 
-  return buildCredentialCreationResult(credential)
+    return buildCredentialCreationResult(credential)
+  } catch (error) {
+    throw handleBiometricError(error)
+  }
 }
+
 export const login = async (
   authenticationRequest: BiometricPaymentRequest
 ): Promise<BiometricAuthorization | null> => {
-  if (!webauthnSupported()) throw new Error('WebAuthn is not available')
-
   const options = buildCredentialAuthenticationOptions(authenticationRequest)
-  const credential = await authenticateCredential(options)
-  if (!credential) throw new Error('Invalid credential')
+  try {
+    const credential = await authenticateCredential(options)
+    if (!credential) {
+      throw handleCredentialNotFound()
+    }
 
-  return buildCredentialAuthenticationResult(credential)
+    return buildCredentialAuthenticationResult(credential)
+  } catch (error) {
+    throw handleBiometricError(error)
+  }
 }
+
 export const signals = async (accountTenure: string): Promise<EnrollmentInformation> => {
   if (!isValidDate(accountTenure)) throw new Error('Invalid account tenure')
 
