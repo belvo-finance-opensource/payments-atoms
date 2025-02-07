@@ -5,6 +5,7 @@ import type { InitializationOptions } from '@/types/lib'
 import { defineWebComponents, type Component } from '@/utils/webComponents/webComponentsUtils'
 
 export * from '@/types/components'
+export * from '@/types/errors'
 export * from '@/types/lib'
 
 export default {
