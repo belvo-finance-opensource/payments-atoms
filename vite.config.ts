@@ -7,7 +7,13 @@ import { configDefaults } from 'vitest/dist/config.js'
 
 export default defineConfig({
   plugins: [
-    vue(),
+    vue({
+      template: {
+        compilerOptions: {
+          isCustomElement: (tag) => tag.startsWith('belvo-')
+        }
+      }
+    }),
     dts({
       insertTypesEntry: true,
       tsconfigPath: 'tsconfig.app.json'
@@ -16,14 +22,14 @@ export default defineConfig({
   build: {
     cssCodeSplit: true,
     lib: {
-      entry: 'src/components/main.ts',
+      entry: 'src/index.ts',
       name: 'BelvoPaymentsAtoms',
       formats: ['es', 'cjs', 'umd'],
       fileName: 'belvo-payments-atoms'
     },
     rollupOptions: {
       input: {
-        main: path.resolve(__dirname, 'src/components/main.ts')
+        main: path.resolve(__dirname, 'src/index.ts')
       },
       external: ['vue'],
       output: {

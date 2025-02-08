@@ -1,13 +1,13 @@
-import BelvoPaymentsGrid from '@/components/paymentsGrid/BelvoPaymentsGrid.ce.vue'
 import BelvoPaymentsAtomsOptions from '@/services/options/BelvoPaymentsAtomsOptions'
 import { isWebAuthnSupported, login, register, signals } from '@/services/pix/BelvoPaymentsAtomsPix'
-import { defineWebComponents } from '@/utils/webComponents/webComponentsUtils'
-import BelvoPaymentsAtoms, { InitializationOptions } from './main'
+import type { InitializationOptions } from '@/types/lib'
+import BelvoPaymentsAtoms from '.'
+import { registerWebComponents } from './webComponents'
 
 vitest.mock('@/services/options/BelvoPaymentsAtomsOptions')
-vitest.mock('@/utils/webComponents/webComponentsUtils')
+vitest.mock('@/webComponents')
 
-describe('main.spec.ts', () => {
+describe('index.ts', () => {
   describe('init', () => {
     it('should initialize BelvoPaymentsAtomsOptions', () => {
       const mockInitOptions = {
@@ -20,7 +20,7 @@ describe('main.spec.ts', () => {
       expect(BelvoPaymentsAtomsOptions.getInstance).toHaveBeenCalledWith(mockInitOptions)
     })
 
-    it('should define web components', () => {
+    it('should register web components', () => {
       const mockInitOptions = {
         bankShortcuts: {
           callback: vitest.fn()
@@ -28,9 +28,7 @@ describe('main.spec.ts', () => {
       } as unknown as InitializationOptions
       BelvoPaymentsAtoms.init(mockInitOptions)
 
-      expect(defineWebComponents).toHaveBeenCalledWith([
-        { name: 'belvo-payments-grid', setup: BelvoPaymentsGrid }
-      ])
+      expect(registerWebComponents).toHaveBeenCalled()
     })
   })
 

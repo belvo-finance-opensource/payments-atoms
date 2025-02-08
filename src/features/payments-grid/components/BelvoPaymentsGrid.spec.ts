@@ -76,6 +76,12 @@ describe('BelvoPaymentsGrid', () => {
   it('should handle institution selection correctly', async () => {
     const callbackMock = vitest.fn()
     BelvoPaymentsAtomsOptions.getInstance({
+      pix: {
+        credentials: {
+          signUp: () => {},
+          signIn: () => {}
+        }
+      },
       bankShortcuts: {
         callback: callbackMock
       }
@@ -97,6 +103,12 @@ describe('BelvoPaymentsGrid', () => {
   it('should handle another institution selection correctly', async () => {
     const callbackMock = vitest.fn()
     BelvoPaymentsAtomsOptions.getInstance({
+      pix: {
+        credentials: {
+          signUp: () => {},
+          signIn: () => {}
+        }
+      },
       bankShortcuts: {
         callback: callbackMock
       }
