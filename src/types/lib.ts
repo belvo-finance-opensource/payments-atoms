@@ -1,3 +1,4 @@
+import { Component } from '@/sdk/types/components'
 import { UUID } from './utils'
 
 export type Institution = {
@@ -14,10 +15,13 @@ export type Country = 'COL' | 'BRA'
 export type Callback = (institution?: Institution) => void
 
 export type InitializationOptions = {
+  defineWebComponents?: {
+    components: { name: string; setup: () => Component }[]
+  }
   bankShortcuts: {
     callback: Callback
   }
-  pix: {
+  pix?: {
     credentials: {
       signUp: () => void
       signIn: () => void

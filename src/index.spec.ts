@@ -1,49 +1,56 @@
-import {
-  isWebAuthnSupported,
-  login,
-  register,
-  signals
-} from '@/features/biometric-payments/BelvoPaymentsAtomsPix'
-import BelvoPaymentsAtomsOptions from '@/features/options/BelvoPaymentsAtomsOptions'
-import type { InitializationOptions } from '@/types/lib'
-import BelvoPaymentsAtoms from '.'
-import { registerWebComponents } from './webComponents'
-
-vitest.mock('@/services/options/BelvoPaymentsAtomsOptions')
-vitest.mock('@/webComponents')
+import { mount } from '@vue/test-utils'
+import BelvoPaymentsAtoms, { InitializationOptions } from '.'
+import BelvoPaymentsAtomsOptions from './features/options/BelvoPaymentsAtomsOptions'
+import BelvoPaymentsGrid from './features/payments-grid/component/BelvoPaymentsGrid.ce.vue'
 
 describe('index.ts', () => {
-  describe('init', () => {
-    it('should initialize BelvoPaymentsAtomsOptions', () => {
-      const mockInitOptions = {
-        bankShortcuts: {
-          callback: vitest.fn()
-        }
-      } as unknown as InitializationOptions
-      BelvoPaymentsAtoms.init(mockInitOptions)
-
-      expect(BelvoPaymentsAtomsOptions.getInstance).toHaveBeenCalledWith(mockInitOptions)
+  describe('BelvoPaymentsAtoms.init()', () => {
+    beforeEach(() => {
+      BelvoPaymentsAtomsOptions.resetInstance()
     })
 
-    it('should register web components', () => {
+    it('should allow components to access the options', () => {
+      const mockCallback = vitest.fn()
+      const mockInitOptions = {
+        bankShortcuts: {
+          callback: mockCallback
+        }
+      } as unknown as InitializationOptions
+
+      BelvoPaymentsAtoms.init(mockInitOptions)
+
+      const wrapper = mount(BelvoPaymentsGrid)
+      wrapper.find('li').trigger('click')
+
+      expect(mockCallback).toHaveBeenCalled()
+    })
+
+    it('should register web components successfully', () => {
       const mockInitOptions = {
         bankShortcuts: {
           callback: vitest.fn()
         }
       } as unknown as InitializationOptions
+
       BelvoPaymentsAtoms.init(mockInitOptions)
 
-      expect(registerWebComponents).toHaveBeenCalled()
+      const element = document.createElement('belvo-payments-grid')
+      document.body.appendChild(element)
+
+      expect(customElements.get('belvo-payments-grid')).toBeDefined()
     })
   })
 
-  describe('biometricPix', () => {
-    it('should return signals and register', () => {
-      expect(BelvoPaymentsAtoms.biometricPix).toEqual({
-        collectEnrollmentInformation: signals,
-        requestEnrollmentConfirmation: register,
-        authorizePayment: login,
-        isWebAuthnSupported
+  describe('SDK Contract', () => {
+    it('should expose the correct contract', () => {
+      expect(BelvoPaymentsAtoms).toMatchObject({
+        init: expect.any(Function),
+        biometricPix: {
+          collectEnrollmentInformation: expect.any(Function),
+          requestEnrollmentConfirmation: expect.any(Function),
+          authorizePayment: expect.any(Function),
+          isWebAuthnSupported: expect.any(Function)
+        }
       })
     })
   })

@@ -1,11 +1,11 @@
-import BelvoPaymentsGrid from '@/features/payments-grid/components/BelvoPaymentsGrid.ce.vue'
+import BelvoPaymentsGrid from '@/features/payments-grid'
 import { ReactAttributes } from './utils'
 
 // Needed to enable type inference for our custom elements
 // @see https://vuejs.org/guide/extras/web-components.html#web-components-and-typescript
 declare module 'vue' {
   export interface GlobalComponents {
-    'belvo-payments-grid': typeof BelvoPaymentsGrid
+    BelvoPaymentsGrid: typeof BelvoPaymentsGrid
   }
 }
 
