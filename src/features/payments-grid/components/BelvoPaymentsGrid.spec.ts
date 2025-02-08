@@ -1,5 +1,5 @@
 import institutionsData from '@/data/institutions.json'
-import BelvoPaymentsAtomsOptions from '@/services/options/BelvoPaymentsAtomsOptions'
+import BelvoPaymentsAtomsOptions from '@/features/options/BelvoPaymentsAtomsOptions'
 import { Institutions } from '@/types/lib'
 import { ComponentProps } from '@/types/utils'
 import { mount } from '@vue/test-utils'

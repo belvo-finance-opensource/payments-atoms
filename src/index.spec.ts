@@ -4,7 +4,7 @@ import {
   register,
   signals
 } from '@/features/biometric-payments/BelvoPaymentsAtomsPix'
-import BelvoPaymentsAtomsOptions from '@/services/options/BelvoPaymentsAtomsOptions'
+import BelvoPaymentsAtomsOptions from '@/features/options/BelvoPaymentsAtomsOptions'
 import type { InitializationOptions } from '@/types/lib'
 import BelvoPaymentsAtoms from '.'
 import { registerWebComponents } from './webComponents'

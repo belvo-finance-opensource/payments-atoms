@@ -22,7 +22,7 @@
 
 <script lang="ts" setup>
 import institutionsData from '@/data/institutions.json'
-import BelvoPaymentsAtomsOptions from '@/services/options/BelvoPaymentsAtomsOptions'
+import BelvoPaymentsAtomsOptions from '@/features/options/BelvoPaymentsAtomsOptions'
 import type { Country, Institution } from '@/types/lib'
 import { Institutions } from '@/types/lib'
 import { PropType, computed, ref } from 'vue'
