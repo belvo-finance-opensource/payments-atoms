@@ -1,5 +1,10 @@
+import {
+  isWebAuthnSupported,
+  login,
+  register,
+  signals
+} from '@/features/biometric-payments/BelvoPaymentsAtomsPix'
 import BelvoPaymentsAtomsOptions from '@/services/options/BelvoPaymentsAtomsOptions'
-import { isWebAuthnSupported, login, register, signals } from '@/services/pix/BelvoPaymentsAtomsPix'
 import type { InitializationOptions } from '@/types/lib'
 import BelvoPaymentsAtoms from '.'
 import { registerWebComponents } from './webComponents'

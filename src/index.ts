@@ -1,6 +1,11 @@
+import {
+  isWebAuthnSupported,
+  login,
+  register,
+  signals
+} from '@/features/biometric-payments/BelvoPaymentsAtomsPix'
 import BelvoPaymentsAtomsOptions from '@/services/options/BelvoPaymentsAtomsOptions'
 import type { InitializationOptions } from '@/types/lib'
-import { isWebAuthnSupported, login, register, signals } from './services/pix/BelvoPaymentsAtomsPix'
 import { registerWebComponents } from './webComponents'
 
 // Export Vue Components separately
