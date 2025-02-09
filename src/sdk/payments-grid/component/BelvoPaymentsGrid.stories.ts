@@ -7,7 +7,7 @@ import type { Meta, StoryFn } from '@storybook/vue3'
 import { computed } from 'vue'
 
 export default {
-  title: 'features/payments-grid/BelvoPaymentsGrid'
+  title: 'sdk/payments-grid/BelvoPaymentsGrid'
 } as Meta
 
 const Template: StoryFn = (args, { argTypes }) => ({

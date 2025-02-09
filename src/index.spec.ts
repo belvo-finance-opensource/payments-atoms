@@ -1,7 +1,7 @@
+import BelvoPaymentsAtoms, { InitializationOptions } from '@/index'
+import BelvoPaymentsAtomsOptions from '@/sdk/options/BelvoPaymentsAtomsOptions'
+import BelvoPaymentsGrid from '@/sdk/payments-grid/component/BelvoPaymentsGrid.ce.vue'
 import { mount } from '@vue/test-utils'
-import BelvoPaymentsAtoms, { InitializationOptions } from '.'
-import BelvoPaymentsAtomsOptions from './features/options/BelvoPaymentsAtomsOptions'
-import BelvoPaymentsGrid from './features/payments-grid/component/BelvoPaymentsGrid.ce.vue'
 
 describe('index.ts', () => {
   describe('BelvoPaymentsAtoms.init()', () => {

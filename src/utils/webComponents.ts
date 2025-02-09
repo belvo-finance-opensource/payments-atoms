@@ -1,10 +1,10 @@
-import type { Component } from '@/sdk/types/components'
+import type { BelvoComponent } from '@/utils/types/components'
 import { defineCustomElement } from 'vue'
 
 /**
  * Manually defines a single web component.
  */
-function defineWebComponent(name: string, setup: () => Component) {
+function defineWebComponent(name: string, setup: () => BelvoComponent) {
   if (customElements.get(name)) return
 
   const customElement = defineCustomElement(setup())
@@ -14,7 +14,7 @@ function defineWebComponent(name: string, setup: () => Component) {
 /**
  * Manually defines multiple web components.
  */
-export function defineWebComponents(components: { name: string; setup: () => Component }[]) {
+export function defineWebComponents(components: { name: string; setup: () => BelvoComponent }[]) {
   components.forEach(({ name, setup }) => {
     defineWebComponent(name, setup)
   })
@@ -25,8 +25,10 @@ export function defineWebComponents(components: { name: string; setup: () => Com
  */
 export function defineAllWebComponents() {
   // Auto-import all definitions
-  const importedModules: Record<string, { default: { name: string; setup: () => Component } }> =
-    import.meta.glob('../features/**/define.ts', { eager: true })
+  const importedModules: Record<
+    string,
+    { default: { name: string; setup: () => BelvoComponent } }
+  > = import.meta.glob('../features/**/define.ts', { eager: true })
 
   const components = Object.values(importedModules).map((module) => module.default)
   defineWebComponents(components)

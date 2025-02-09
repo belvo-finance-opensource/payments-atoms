@@ -1,8 +1,8 @@
-import type { Component } from '@/sdk/types/components'
+import type { BelvoComponent } from '@/utils/types/components'
 import { defineWebComponents } from './webComponents'
 
 describe('webComponentsUtils', () => {
-  const mockComponent: Component = {} as Component
+  const mockComponent: BelvoComponent = {} as BelvoComponent
 
   describe('defineWebComponent', () => {
     it('should define a custom element if it does not exist', () => {

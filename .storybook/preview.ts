@@ -4,11 +4,5 @@ import { action } from '@storybook/addon-actions'
 import './styles.css'
 
 BelvoPaymentsAtoms.init({
-  bankShortcuts: { callback: action('bankShortcuts') },
-  pix: {
-    credentials: {
-      signUp: () => {},
-      signIn: () => {}
-    }
-  }
+  bankShortcuts: { callback: action('bankShortcuts') }
 })

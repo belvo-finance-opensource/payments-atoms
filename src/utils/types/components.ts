@@ -1,5 +1,8 @@
-import BelvoPaymentsGrid from '@/features/payments-grid'
-import { ReactAttributes } from './utils'
+import BelvoPaymentsGrid from '@/sdk/payments-grid'
+import { ReactAttributes } from '@/utils/types/props'
+import { DefineComponent } from 'vue'
+
+export type BelvoComponent = DefineComponent<{}, {}, any> // eslint-disable-line
 
 // Needed to enable type inference for our custom elements
 // @see https://vuejs.org/guide/extras/web-components.html#web-components-and-typescript

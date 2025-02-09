@@ -1,7 +1,7 @@
 import institutionsData from '@/data/institutions.json'
-import BelvoPaymentsAtomsOptions from '@/features/options/BelvoPaymentsAtomsOptions'
+import BelvoPaymentsAtomsOptions from '@/sdk/options/BelvoPaymentsAtomsOptions'
 import { Institutions } from '@/types/lib'
-import { ComponentProps } from '@/types/utils'
+import { ComponentProps } from '@/types/uuid'
 import { mount } from '@vue/test-utils'
 import BelvoPaymentsGrid from './BelvoPaymentsGrid.ce.vue'
 
