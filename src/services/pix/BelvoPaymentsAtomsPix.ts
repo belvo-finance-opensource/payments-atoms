@@ -172,6 +172,7 @@ export const register = async (
 
     return buildCredentialCreationResult(credential)
   } catch (error) {
+    console.log(error)
     throw handleBiometricError(error)
   }
 }
@@ -188,6 +189,7 @@ export const login = async (
 
     return buildCredentialAuthenticationResult(credential)
   } catch (error) {
+    console.log(error)
     throw handleBiometricError(error)
   }
 }
