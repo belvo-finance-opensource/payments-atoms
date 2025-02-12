@@ -100,9 +100,6 @@ components:
       type: object
     EnrollmentInformation:
       properties:
-        deviceId:
-          title: EnrollmentInformation.deviceId
-          type: string
         osVersion:
           title: EnrollmentInformation.osVersion
           type: string
