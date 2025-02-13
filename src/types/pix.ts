@@ -30,7 +30,6 @@ export type BiometricPaymentRequest = {
 }
 
 export type EnrollmentInformation = {
-  deviceId: string
   osVersion: string
   userTimeZoneOffset: string
   language: string
@@ -62,4 +61,9 @@ export type BiometricRegistrationConfirmation = {
     clientDataJSON: string
   }
   type: string
+}
+
+export type DeviceInformation = {
+  visitorId: string
+  sealedResult?: string
 }

@@ -3,6 +3,7 @@ import {
   BiometricPaymentRequest,
   BiometricRegistrationConfirmation,
   BiometricRegistrationRequest,
+  DeviceInformation,
   EnrollmentInformation
 } from '@/types/pix'
 import FingerprintJS from '@fingerprintjs/fingerprintjs-pro'
@@ -26,30 +27,11 @@ import { handleBiometricError, handleCredentialNotFound } from './errors'
 
 // Risk Signals
 const isValidDate = (date: string): boolean => isValid(parse(date, 'yyyy-MM-dd', new Date()))
+
 const padTimeZoneOfsset = (number: number, totalDigits = 2, paddingCharacter = '0') =>
   ['', '-'][+(number < 0)] +
   (paddingCharacter.repeat(totalDigits) + Math.abs(number)).slice(-1 * totalDigits)
-const getDeviceId = async (): Promise<string> => {
-  /**
-   * This API Key is a public key, it's not a secret.
-   * It's used to submit requests to the FingerprintJS API.
-   *
-   * In the FingerprintJS Dashboard, we have configured an origin allowlist
-   * so we can only submit requests from our own domains. Any request from
-   * a different origin will be rejected to prevent misuse of the API.
-   */
-  const fp = await FingerprintJS.load({
-    apiKey: 'nVbyx8oY47QzBtYJg0wX',
-    endpoint: ['https://pix-biometria-metrics.belvo.com', FingerprintJS.defaultEndpoint],
-    scriptUrlPattern: [
-      'https://pix-biometria-metrics.belvo.com/web/v<version>/<apiKey>/loader_v<loaderVersion>.js',
-      FingerprintJS.defaultScriptUrlPattern
-    ]
-  })
-  const result = await fp.get()
 
-  return result.visitorId
-}
 const buildSignals = async (accountTenure: string): Promise<EnrollmentInformation> => {
   const userAgentParser = new UAParser(navigator.userAgent)
   const milisecondsToHours = (miliseconds: number): number => miliseconds / 1000 / 60 / 60
@@ -63,7 +45,6 @@ const buildSignals = async (accountTenure: string): Promise<EnrollmentInformatio
   const osVersion = `${userAgentParser.getOS().name} ${userAgentParser.getOS().version}`
 
   return {
-    deviceId: await getDeviceId(),
     osVersion,
     userTimeZoneOffset: getUserTimeZoneOffset(),
     language: navigator.language.substring(0, 2),
@@ -84,6 +65,7 @@ const createCredential = async (
     response: AuthenticatorAttestationResponse
   }
 }
+
 const buildCredentialCreationOptions = (
   registrationRequest: BiometricRegistrationRequest
 ): CredentialCreationOptions => {
@@ -102,6 +84,7 @@ const buildCredentialCreationOptions = (
     publicKey: PublicKeyCredentialCreationOptions
   }
 }
+
 const buildCredentialCreationResult = (
   credential: RegistrationPublicKeyCredential & { response: AuthenticatorAttestationResponse }
 ): BiometricRegistrationConfirmation => {
@@ -124,10 +107,12 @@ const authenticateCredential = async (
   options: CredentialRequestOptions
 ): Promise<AuthenticationPublicKeyCredential & { response: AuthenticatorAssertionResponse }> => {
   const credential = await webauthnGet(options)
+
   return credential as AuthenticationPublicKeyCredential & {
     response: AuthenticatorAssertionResponse
   }
 }
+
 const buildCredentialAuthenticationOptions = (
   authenticationRequest: BiometricPaymentRequest
 ): CredentialRequestOptions => {
@@ -141,6 +126,7 @@ const buildCredentialAuthenticationOptions = (
     publicKey: PublicKeyCredentialRequestOptions
   }
 }
+
 const buildCredentialAuthenticationResult = (
   credential: AuthenticationPublicKeyCredential & { response: AuthenticatorAssertionResponse }
 ): BiometricAuthorization => {
@@ -160,10 +146,36 @@ const buildCredentialAuthenticationResult = (
 }
 
 // Exported API
+export const getDevice = async (): Promise<DeviceInformation> => {
+  /**
+   * This API Key is a public key, it's not a secret.
+   * It's used to submit requests to the FingerprintJS API.
+   *
+   * In the FingerprintJS Dashboard, we have configured an origin allowlist
+   * so we can only submit requests from our own domains. Any request from
+   * a different origin will be rejected to prevent misuse of the API.
+   */
+  const fp = await FingerprintJS.load({
+    apiKey: 'nVbyx8oY47QzBtYJg0wX',
+    endpoint: ['https://pix-biometria-metrics.belvo.com', FingerprintJS.defaultEndpoint],
+    scriptUrlPattern: [
+      'https://pix-biometria-metrics.belvo.com/web/v<version>/<apiKey>/loader_v<loaderVersion>.js',
+      FingerprintJS.defaultScriptUrlPattern
+    ]
+  })
+  const result = await fp.get()
+
+  return {
+    visitorId: result.visitorId,
+    sealedResult: result.sealedResult
+  } as DeviceInformation
+}
+
 export const register = async (
   registrationRequest: BiometricRegistrationRequest
 ): Promise<BiometricRegistrationConfirmation> => {
   const options = buildCredentialCreationOptions(registrationRequest)
+
   try {
     const credential = await createCredential(options)
     if (!credential) {
@@ -181,6 +193,7 @@ export const login = async (
   authenticationRequest: BiometricPaymentRequest
 ): Promise<BiometricAuthorization | null> => {
   const options = buildCredentialAuthenticationOptions(authenticationRequest)
+
   try {
     const credential = await authenticateCredential(options)
     if (!credential) {
