@@ -47,7 +47,7 @@
   },
   "devDependencies": {
     "@commitlint/cli": "19.5.0",
-    "@commitlint/config-conventional": "19.5.0",
+    "@commitlint/config-conventional": "19.7.1",
     "@fingerprintjs/fingerprintjs-pro": "3.11.5",
     "@release-it/conventional-changelog": "9.0.2",
     "@storybook/addon-essentials": "8.4.1",
