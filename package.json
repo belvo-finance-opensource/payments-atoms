@@ -46,7 +46,7 @@
     "vue": "3.5.12"
   },
   "devDependencies": {
-    "@commitlint/cli": "19.5.0",
+    "@commitlint/cli": "19.7.1",
     "@commitlint/config-conventional": "19.5.0",
     "@fingerprintjs/fingerprintjs-pro": "3.11.5",
     "@release-it/conventional-changelog": "9.0.2",
