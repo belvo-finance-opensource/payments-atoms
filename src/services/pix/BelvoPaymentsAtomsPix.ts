@@ -20,41 +20,8 @@ import {
   get as webauthnGet,
   supported as webauthnSupported
 } from '@github/webauthn-json/browser-ponyfill'
-import { isValid, parse } from 'date-fns'
-import { getTimezoneOffset } from 'date-fns-tz'
-import { UAParser } from 'ua-parser-js'
 import { handleBiometricError, handleCredentialNotFound } from './errors'
-
-// Risk Signals
-const isValidDate = (date: string): boolean => isValid(parse(date, 'yyyy-MM-dd', new Date()))
-
-const padTimeZoneOfsset = (number: number, totalDigits = 2, paddingCharacter = '0') =>
-  ['', '-'][+(number < 0)] +
-  (paddingCharacter.repeat(totalDigits) + Math.abs(number)).slice(-1 * totalDigits)
-
-const buildSignals = async (accountTenure: string): Promise<EnrollmentInformation> => {
-  const userAgentParser = new UAParser(navigator.userAgent)
-  const milisecondsToHours = (miliseconds: number): number => miliseconds / 1000 / 60 / 60
-  const getUserTimeZoneOffset = () =>
-    padTimeZoneOfsset(
-      milisecondsToHours(
-        getTimezoneOffset(Intl.DateTimeFormat().resolvedOptions().timeZone, new Date())
-      ),
-      2
-    )
-  const osVersion = `${userAgentParser.getOS().name} ${userAgentParser.getOS().version}`
-
-  return {
-    osVersion,
-    userTimeZoneOffset: getUserTimeZoneOffset(),
-    language: navigator.language.substring(0, 2),
-    screenDimensions: {
-      height: window.screen.height,
-      width: window.screen.width
-    },
-    accountTenure
-  }
-}
+import { buildSignals } from './riskSignals'
 
 // Creation
 const createCredential = async (
@@ -208,8 +175,6 @@ export const login = async (
 }
 
 export const signals = async (accountTenure: string): Promise<EnrollmentInformation> => {
-  if (!isValidDate(accountTenure)) throw new Error('Invalid account tenure')
-
   return await buildSignals(accountTenure)
 }
 
