@@ -1,51 +1,57 @@
 <script setup>
 import BelvoPaymentAtoms from '@belvo/payments-atoms';
 import { computed, ref, watch } from 'vue';
+import { generateUUID, generateRandomChallenge } from './utils';
 
-const generateUUID = () => {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-    const r = Math.random() * 16 | 0;
-    const v = c === 'x' ? r : (r & 0x3 | 0x8);
-    return v.toString(16);
-  });
-};
+const DEFAULT_RP_ID = 'settling-workable-glider.ngrok-free.app';
+
+const accountTenure = ref('2023-04-05');
 
 const enrollmentInformation = ref(null);
 const biometricAuthorization = ref(null);
 const biometricRegistrationConfirmation = ref(null);
 
-const accountTenure = ref('2023-04-05');
-
-const generateRandomChallenge = () => {
-  const array = new Uint8Array(32);
-  crypto.getRandomValues(array);
-  return btoa(String.fromCharCode.apply(null, array))
-    .replace(/\+/g, '-')
-    .replace(/\//g, '_')
-    .replace(/=/g, '');
-};
-
 const biometricRegistrationRequest = ref({
-  challenge: generateRandomChallenge(),
   rp: {
-      name: 'Belvo Merchant',
-      id: 'bio.localhost',
+      name: 'Belvo',
+      id: DEFAULT_RP_ID,
   },
   user: {
       id: generateUUID(),
       name: 'john.doe@bio.localhost',
       displayName: 'John Doe',
   },
+  challenge: generateRandomChallenge(),
   pubKeyCredParams: [
     { type: "public-key", alg: -7 }, // ES256
     { type: "public-key", alg: -257 } // RS256
   ],
+  timeout: 60000,
+  excludeCredentials: [
+    {
+      type: "public-key",
+      id: "CREDENTIAL-ID-HERE",
+    }
+  ],
   authenticatorSelection: {
     authenticatorAttachment: "platform",
-    userVerification: "preferred"
+    residentKey: "discouraged",
+    requireResidentKey: false,
+    userVerification: "required"
   },
-  timeout: 60000,
-  attestation: 'direct'
+  attestation: 'direct',
+  attestationFormats: [
+    'android-safetynet',
+    'android-key',
+    'apple',
+    'fido-u2f',
+    'packed',
+    'tpm',
+    'none'
+  ],
+  extensions: {
+    credProps: true
+  }
 });
 const biometricRegistrationRequestText = ref(JSON.stringify(biometricRegistrationRequest.value, null, 2));
 
@@ -65,13 +71,18 @@ const biometricRegistrationConfirmationJson = computed({
 
 const biometricPaymentRequest = ref({
   challenge: generateRandomChallenge(),
-  rpId: 'bio.localhost',
-  allowCredentials: [],
-  authenticatorSelection: {
-    authenticatorAttachment: "platform"
-  },
-  userVerification: "preferred",
   timeout: 60000,
+  rpId: DEFAULT_RP_ID,
+  allowCredentials: [
+    {
+      type: "public-key",
+      id: "CREDENTIAL-ID-HERE",
+      transports: ["internal", "hybrid"],
+    }
+  ],
+  userVerification: "required",
+  hints: [],
+  extensions: {}
 });
 const biometricPaymentRequestText = ref(JSON.stringify(biometricPaymentRequest.value, null, 2));
 
