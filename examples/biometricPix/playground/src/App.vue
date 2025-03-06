@@ -157,11 +157,6 @@ const beautifyPaymentJson = () => {
 <template>
   <div id="app">
     <header class="header">
-      <img 
-        src="https://belvo.com/wp-content/themes/belvo/assets/img/belvo.svg" 
-        alt="Belvo Logo" 
-        class="belvo-logo"
-      />
       <h1 class="page-title">Biometric Pix Playground</h1>
     </header>
     <main class="three-column-layout">
@@ -255,12 +250,6 @@ const beautifyPaymentJson = () => {
   align-items: center;
   padding: 0.75rem 2rem;
   position: relative;
-}
-
-.belvo-logo {
-  height: 2rem;
-  position: absolute;
-  left: 2rem;
 }
 
 .page-title {
