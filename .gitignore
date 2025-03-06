@@ -33,3 +33,6 @@ coverage
 
 # Storybook
 storybook-static
+
+# Environment variables
+.env

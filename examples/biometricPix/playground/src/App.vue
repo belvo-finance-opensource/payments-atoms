@@ -1,60 +1,21 @@
 <script setup>
 import BelvoPaymentAtoms from '@belvo/payments-atoms';
 import { computed, ref, watch } from 'vue';
-import { generateUUID, generateRandomChallenge } from './utils';
+import { 
+  DEFAULT_ACCOUNT_TENURE,
+  DEFAULT_AUTHENTICATION_OPTIONS,
+  DEFAULT_REGISTRATION_OPTIONS,
+} from './constants';
 
-const DEFAULT_RP_ID = 'settling-workable-glider.ngrok-free.app';
 
-const accountTenure = ref('2023-04-05');
-
+// Risk Signals
+const accountTenure = ref(DEFAULT_ACCOUNT_TENURE);
 const enrollmentInformation = ref(null);
-const biometricAuthorization = ref(null);
+
+// Enrollment / Registration
 const biometricRegistrationConfirmation = ref(null);
-
-const biometricRegistrationRequest = ref({
-  rp: {
-      name: 'Belvo',
-      id: DEFAULT_RP_ID,
-  },
-  user: {
-      id: generateUUID(),
-      name: 'john.doe@bio.localhost',
-      displayName: 'John Doe',
-  },
-  challenge: generateRandomChallenge(),
-  pubKeyCredParams: [
-    { type: "public-key", alg: -7 }, // ES256
-    { type: "public-key", alg: -257 } // RS256
-  ],
-  timeout: 60000,
-  excludeCredentials: [
-    {
-      type: "public-key",
-      id: "CREDENTIAL-ID-HERE",
-    }
-  ],
-  authenticatorSelection: {
-    authenticatorAttachment: "platform",
-    residentKey: "discouraged",
-    requireResidentKey: false,
-    userVerification: "required"
-  },
-  attestation: 'direct',
-  attestationFormats: [
-    'android-safetynet',
-    'android-key',
-    'apple',
-    'fido-u2f',
-    'packed',
-    'tpm',
-    'none'
-  ],
-  extensions: {
-    credProps: true
-  }
-});
+const biometricRegistrationRequest = ref(DEFAULT_REGISTRATION_OPTIONS);
 const biometricRegistrationRequestText = ref(JSON.stringify(biometricRegistrationRequest.value, null, 2));
-
 const biometricRegistrationConfirmationJson = computed({
   get: () => {
     if (!biometricRegistrationConfirmation.value) return '';
@@ -69,23 +30,10 @@ const biometricRegistrationConfirmationJson = computed({
   }
 });
 
-const biometricPaymentRequest = ref({
-  challenge: generateRandomChallenge(),
-  timeout: 60000,
-  rpId: DEFAULT_RP_ID,
-  allowCredentials: [
-    {
-      type: "public-key",
-      id: "CREDENTIAL-ID-HERE",
-      transports: ["internal", "hybrid"],
-    }
-  ],
-  userVerification: "required",
-  hints: [],
-  extensions: {}
-});
+// Payment / Authorization
+const biometricAuthorization = ref(null);
+const biometricPaymentRequest = ref(DEFAULT_AUTHENTICATION_OPTIONS);
 const biometricPaymentRequestText = ref(JSON.stringify(biometricPaymentRequest.value, null, 2));
-
 const biometricAuthorizationJson = computed({
   get: () => {
     if (!biometricAuthorization.value) return '';

@@ -56,6 +56,22 @@ caddy trust
 
 That is all. You should now be able to navigate to <https://bio.localhost> and start playing around. Have fun!
 
+## Environment Setup
+
+Copy the environment example file to create your local environment file:
+
+```bash
+cp .env.example .env
+```
+
+Configure your environment variables in according to the table below.
+
+### Environment variables
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `RP_ID` | The Relying Party ID for WebAuthn | `bio.localhost` |
+
 ## Testing on mobile
 
 There are several ways to test the Playground on mobile devices. We recommend using [ngrok](https://ngrok.com/docs/getting-started/), which will create a secure public HTTPS URL for you to easily access the Playground from any device.
