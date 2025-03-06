@@ -1,33 +1,9 @@
-export type BiometricRegistrationRequestUser = {
-  id: string
-  name: PublicKeyCredentialCreationOptions['user']['name']
-  displayName: PublicKeyCredentialCreationOptions['user']['displayName']
-}
-
-export type BiometricRegistrationRequest = {
-  challenge: string
-  rp: PublicKeyCredentialCreationOptions['rp']
-  user: BiometricRegistrationRequestUser
-  pubKeyCredParams: PublicKeyCredentialCreationOptions['pubKeyCredParams']
-  accountTenure: string
-  attestation?: PublicKeyCredentialCreationOptions['attestation']
-  timeout?: PublicKeyCredentialCreationOptions['timeout']
-  excludeCredentials?: PublicKeyCredentialCreationOptions['excludeCredentials']
-  authenticatorSelection?: PublicKeyCredentialCreationOptions['authenticatorSelection']
-  extensions?: PublicKeyCredentialCreationOptions['extensions']
-}
-
-export type BiometricPaymentRequest = {
-  challenge: string
-  timeout?: number
-  rpId?: string
-  allowCredentials?: {
-    id: string
-    type: string
-  }[]
-  userVerification: UserVerificationRequirement
-  extensions?: PublicKeyCredentialRequestOptions['extensions']
-}
+import {
+  AuthenticationResponseJSON,
+  CredentialCreationOptionsJSON,
+  CredentialRequestOptionsJSON,
+  RegistrationResponseJSON
+} from '@github/webauthn-json/browser-ponyfill'
 
 export type EnrollmentInformation = {
   osVersion: string
@@ -40,30 +16,43 @@ export type EnrollmentInformation = {
   accountTenure: string
 }
 
-export type BiometricAuthorization = {
-  id: string
-  rawId: string
-  response: {
-    authenticatorData: string
-    clientDataJSON: string
-    signature: string
-    userHandle: string | null
-  }
-  type: string
-}
-
-export type BiometricRegistrationConfirmation = {
-  id: string
-  authenticatorAttachment: string
-  rawId: string
-  response: {
-    attestationObject: string
-    clientDataJSON: string
-  }
-  type: string
-}
-
 export type DeviceInformation = {
   visitorId: string
   sealedResult?: string
+}
+
+/**
+ * @see {@link https://www.w3.org/TR/webauthn-3/#dictdef-publickeycredentialcreationoptionsjson}
+ */
+export type BiometricRegistrationRequest = CredentialCreationOptionsJSON['publicKey'] & {
+  /**
+   * TODO: Remove this type extension once the full TypeScript WebAuthn Level 3 types are available.
+   */
+  attestationFormats?: string[]
+}
+
+/**
+ * TODO: replace RegistrationResponseJSON with the TypeScript DOM once TS fully supports WebAuthn Level 3.
+ * @see {@link https://www.w3.org/TR/webauthn-3/#dictdef-registrationresponsejson}
+ */
+export type BiometricRegistrationConfirmation = RegistrationResponseJSON
+
+/**
+ * @see {@link https://www.w3.org/TR/webauthn-3/#dictdef-publickeycredentialrequestoptionsjson}
+ */
+export type BiometricPaymentRequest = Required<Pick<CredentialRequestOptionsJSON, 'publicKey'>> &
+  CredentialRequestOptionsJSON['publicKey']
+
+/**
+ * TODO: replace AuthenticationResponseJSON with the TypeScript DOM once TS fully supports WebAuthn Level 3.
+ * @see {@link https://www.w3.org/TR/webauthn-3/#dictdef-authenticationresponsejson}
+ */
+export type BiometricAuthorization = AuthenticationResponseJSON & {
+  response: {
+    /**
+     * For Open Finance, the user handle must be a valid base-64url encoded string (not null).
+     * @see {@link https://openbanking-brasil.github.io/openapi/swagger-apis/enrollments/?urls.primaryName=2.1.0#/Consentimento/authorizeConsent}
+     */
+    userHandle: string
+  }
 }
