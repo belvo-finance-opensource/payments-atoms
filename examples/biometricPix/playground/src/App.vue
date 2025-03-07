@@ -1,54 +1,21 @@
 <script setup>
 import BelvoPaymentAtoms from '@belvo/payments-atoms';
 import { computed, ref, watch } from 'vue';
+import { 
+  DEFAULT_ACCOUNT_TENURE,
+  DEFAULT_AUTHENTICATION_OPTIONS,
+  DEFAULT_REGISTRATION_OPTIONS,
+} from './constants';
 
-const generateUUID = () => {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-    const r = Math.random() * 16 | 0;
-    const v = c === 'x' ? r : (r & 0x3 | 0x8);
-    return v.toString(16);
-  });
-};
 
+// Risk Signals
+const accountTenure = ref(DEFAULT_ACCOUNT_TENURE);
 const enrollmentInformation = ref(null);
-const biometricAuthorization = ref(null);
+
+// Enrollment / Registration
 const biometricRegistrationConfirmation = ref(null);
-
-const accountTenure = ref('2023-04-05');
-
-const generateRandomChallenge = () => {
-  const array = new Uint8Array(32);
-  crypto.getRandomValues(array);
-  return btoa(String.fromCharCode.apply(null, array))
-    .replace(/\+/g, '-')
-    .replace(/\//g, '_')
-    .replace(/=/g, '');
-};
-
-const biometricRegistrationRequest = ref({
-  challenge: generateRandomChallenge(),
-  rp: {
-      name: 'Belvo Merchant',
-      id: 'bio.localhost',
-  },
-  user: {
-      id: generateUUID(),
-      name: 'john.doe@bio.localhost',
-      displayName: 'John Doe',
-  },
-  pubKeyCredParams: [
-    { type: "public-key", alg: -7 }, // ES256
-    { type: "public-key", alg: -257 } // RS256
-  ],
-  authenticatorSelection: {
-    authenticatorAttachment: "platform",
-    userVerification: "preferred"
-  },
-  timeout: 60000,
-  attestation: 'direct'
-});
+const biometricRegistrationRequest = ref(DEFAULT_REGISTRATION_OPTIONS);
 const biometricRegistrationRequestText = ref(JSON.stringify(biometricRegistrationRequest.value, null, 2));
-
 const biometricRegistrationConfirmationJson = computed({
   get: () => {
     if (!biometricRegistrationConfirmation.value) return '';
@@ -63,18 +30,10 @@ const biometricRegistrationConfirmationJson = computed({
   }
 });
 
-const biometricPaymentRequest = ref({
-  challenge: generateRandomChallenge(),
-  rpId: 'bio.localhost',
-  allowCredentials: [],
-  authenticatorSelection: {
-    authenticatorAttachment: "platform"
-  },
-  userVerification: "preferred",
-  timeout: 60000,
-});
+// Payment / Authorization
+const biometricAuthorization = ref(null);
+const biometricPaymentRequest = ref(DEFAULT_AUTHENTICATION_OPTIONS);
 const biometricPaymentRequestText = ref(JSON.stringify(biometricPaymentRequest.value, null, 2));
-
 const biometricAuthorizationJson = computed({
   get: () => {
     if (!biometricAuthorization.value) return '';
@@ -146,11 +105,6 @@ const beautifyPaymentJson = () => {
 <template>
   <div id="app">
     <header class="header">
-      <img 
-        src="https://belvo.com/wp-content/themes/belvo/assets/img/belvo.svg" 
-        alt="Belvo Logo" 
-        class="belvo-logo"
-      />
       <h1 class="page-title">Biometric Pix Playground</h1>
     </header>
     <main class="three-column-layout">
@@ -244,12 +198,6 @@ const beautifyPaymentJson = () => {
   align-items: center;
   padding: 0.75rem 2rem;
   position: relative;
-}
-
-.belvo-logo {
-  height: 2rem;
-  position: absolute;
-  left: 2rem;
 }
 
 .page-title {

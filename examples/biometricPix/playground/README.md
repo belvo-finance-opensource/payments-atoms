@@ -6,7 +6,7 @@ This playground was created to help you debug the [Webauthn API](https://develop
 
 Make sure to have Node.js installed.
 
-## Project Setup
+## Getting started
 
 As you may know, you need a SSL connection and a valid domain to be able to test the Webauthn API.
 
@@ -28,7 +28,13 @@ After that, you can build the project with:
 npm run build
 ```
 
-And then, go to your `./dist` folder and run:
+or
+
+```sh
+npm run watch
+```
+
+Then, go to your `./dist` folder and run:
 
 ```sh
 npx http-server
@@ -42,10 +48,35 @@ After that, it's time to run Caddy. Open a new terminal window, go to the playgr
 caddy run
 ```
 
-You might need to open a new terminal window to allow caddy to create the certificates for you. You should run the following command (just one time) while having Caddy running:
+You might need to open a second terminal window to allow caddy to create the certificates for you. You should run the following command (one-time only) while having Caddy running:
 
 ```sh
 caddy trust
 ```
 
 That is all. You should now be able to navigate to <https://bio.localhost> and start playing around. Have fun!
+
+## Environment Setup
+
+Copy the environment example file to create your local environment file:
+
+```bash
+cp .env.example .env
+```
+
+Configure your environment variables in according to the table below.
+
+### Environment variables
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `RP_ID` | The Relying Party ID for WebAuthn | `bio.localhost` |
+
+## Testing on mobile
+
+There are several ways to test the Playground on mobile devices. We recommend using [ngrok](https://ngrok.com/docs/getting-started/), which will create a secure public HTTPS URL for you to easily access the Playground from any device.
+Follow ngrok's installation instructions and run it locally with the following command:
+
+```sh
+ngrok http 8080 --url=my-free-url.ngrok-free.app
+```
