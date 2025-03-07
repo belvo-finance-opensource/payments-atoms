@@ -38,10 +38,12 @@ export type BiometricRegistrationRequest = CredentialCreationOptionsJSON['public
 export type BiometricRegistrationConfirmation = RegistrationResponseJSON
 
 /**
+ * Create a new type that ensures the publicKey field is required.
  * @see {@link https://www.w3.org/TR/webauthn-3/#dictdef-publickeycredentialrequestoptionsjson}
  */
-export type BiometricPaymentRequest = Required<Pick<CredentialRequestOptionsJSON, 'publicKey'>> &
-  CredentialRequestOptionsJSON['publicKey']
+export type BiometricPaymentRequest = Required<
+  Pick<CredentialRequestOptionsJSON, 'publicKey'>
+>['publicKey']
 
 /**
  * TODO: replace AuthenticationResponseJSON with the TypeScript DOM once TS fully supports WebAuthn Level 3.
