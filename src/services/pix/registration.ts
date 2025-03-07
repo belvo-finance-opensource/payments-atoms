@@ -10,7 +10,7 @@ import { BiometricRegistrationConfirmation, BiometricRegistrationRequest } from 
 import { create, parseCreationOptionsFromJSON } from '@github/webauthn-json/browser-ponyfill'
 import { PublicKeyCredentialCreationOptionsJSON } from '@github/webauthn-json/dist/types/basic/json'
 import { optionalField } from '../utils'
-import { BELVO_RP_ID } from './constants'
+import { BELVO_RP_ID, BELVO_RP_ID_COM } from './constants'
 import { handleBiometricError, handleCredentialNotFound } from './errors'
 import { WebauthnCredentialCreationOptions } from './types'
 
@@ -20,10 +20,10 @@ import { WebauthnCredentialCreationOptions } from './types'
  * @see {@link https://openbanking-brasil.github.io/openapi/swagger-apis/enrollments/?urls.primaryName=2.1.0#/V%C3%ADnculo%20de%20dispositivo/enrollmentCreateFidoRegistrationOptions}
  */
 const _enforceBelvoRpId = (rp: BiometricRegistrationRequest['rp']) =>
-  rp.id !== BELVO_RP_ID
+  !BELVO_RP_ID.includes(rp.id || '')
     ? {
         ...rp,
-        id: BELVO_RP_ID
+        id: BELVO_RP_ID_COM
       }
     : rp
 

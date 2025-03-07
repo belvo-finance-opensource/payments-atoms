@@ -1,9 +1,9 @@
+import { authenticateCredential } from '@/services/pix/authentication'
+import { registerCredential } from '@/services/pix/registration'
+import { buildSignals } from '@/services/pix/riskSignals'
 import { DeviceInformation, EnrollmentInformation } from '@/types/pix'
 import FingerprintJS from '@fingerprintjs/fingerprintjs-pro'
 import { supported as webauthnSupported } from '@github/webauthn-json/browser-ponyfill'
-import { authenticateCredential } from './authentication'
-import { registerCredential } from './registration'
-import { buildSignals } from './riskSignals'
 
 // Exported API
 export const getDevice = async (): Promise<DeviceInformation> => {
