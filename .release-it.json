@@ -12,7 +12,8 @@
   },
   "npm": {
     "publish": true,
-    "ignoreVersion": true
+    "ignoreVersion": true,
+    "skipChecks": true
   },
   "github": {
     "release": true
