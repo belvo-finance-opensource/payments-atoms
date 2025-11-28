@@ -91,7 +91,10 @@ export const handleCredentialNotFound = (): BiometricError => {
 
 export const handleBiometricError = (error: unknown): BiometricError => {
   if (error instanceof Error && error.name in WebAuthnErrorMap) {
-    return new BiometricError(...WebAuthnErrorMap[error.name])
+    const errorData = WebAuthnErrorMap[error.name]
+    if (errorData) {
+      return new BiometricError(...errorData)
+    }
   }
   return new BiometricError(BiometricErrorCode.UNKNOWN, `Unknown error: ${String(error)}`)
 }

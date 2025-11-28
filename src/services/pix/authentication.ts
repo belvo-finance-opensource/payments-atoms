@@ -14,7 +14,7 @@ import {
 } from '@github/webauthn-json/browser-ponyfill'
 import { PublicKeyCredentialRequestOptionsJSON } from '@github/webauthn-json/dist/types/basic/json'
 import { optionalField } from '../utils'
-import { BELVO_RP_ID } from './constants'
+import { BELVO_RP_ID_COM } from './constants'
 import { handleBiometricError, handleCredentialNotFound } from './errors'
 import { PublicKeyCredentialWithAssertionResponse, WebauthnCredentialRequestOptions } from './types'
 
@@ -23,7 +23,7 @@ import { PublicKeyCredentialWithAssertionResponse, WebauthnCredentialRequestOpti
  * This field is optional, but we enforce it to ensure compatibility with the Open Finance use case.
  * @see {@link https://openbanking-brasil.github.io/openapi/swagger-apis/enrollments/?urls.primaryName=2.1.0#/V%C3%ADnculo%20de%20dispositivo/enrollmentCreateFidoSigningOptions}
  */
-const _enforceBelvoRpId = () => BELVO_RP_ID
+const _enforceBelvoRpId = () => BELVO_RP_ID_COM
 
 /**
  * Ensure we use the correct user verification method.
