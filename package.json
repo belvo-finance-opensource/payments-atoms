@@ -34,13 +34,15 @@
     "coverage": "vitest run --coverage",
     "type-check": "vue-tsc --noEmit -p tsconfig.app.json --composite false",
     "lint": "eslint . --fix",
-    "format": "prettier --write src/",
+    "format:fix": "prettier --write 'src/'",
+    "format:check": "prettier --check 'src/'",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "precommit": "lint-staged",
     "prepare": "is-ci || husky",
     "release": "release-it --verbose --ci",
-    "typeconv": "npx typeconv -f ts -t oapi -o schemas/open-api 'src/types/**/pix.ts'"
+    "typeconv": "npx typeconv -f ts -t oapi -o schemas/open-api 'src/types/**/pix.ts'",
+    "verify": "npm run lint && npm run format:check && npm run type-check"
   },
   "dependencies": {
     "@github/webauthn-json": "^2.1.1",
