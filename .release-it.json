@@ -1,11 +1,11 @@
 {
   "git": {
-    "requireCleanWorkingDir": false,
+    "requireCleanWorkingDir": true,
     "requireBranch": false,
     "commit": false,
     "requireCommits": false,
-    "tag": true,
-    "push": true
+    "tag": false,
+    "push": false
   },
   "hooks": {
     "before:init": ["npm run lint", "npm run type-check", "npm run test:ci", "npm run build"]
@@ -16,7 +16,7 @@
     "skipChecks": true
   },
   "github": {
-    "release": true
+    "release": false
   },
   "plugins": {
     "@release-it/conventional-changelog": {
